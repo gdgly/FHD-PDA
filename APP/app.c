@@ -191,24 +191,19 @@ WM_HWIN g_hWin_Err;
 WM_HWIN g_hWin_TimeBar;  //主页时间
 WM_HWIN g_hWin_Date;     //显示日期
 WM_HWIN g_hWin_Input;    //各种输入小框体
-
-WM_HWIN g_hWin_SDInfo;
+WM_HWIN g_hWin_SysTime;
+WM_HWIN g_hWin_SysSet;
 
 /**********
 
 防晃电
 
-***********/
+**********/
 
-WM_HWIN g_hWin_CalPara;
-WM_HWIN g_hWin_ParaRdWt;
-WM_HWIN g_hWin_SysLog;
-WM_HWIN g_hWin_RestartLog;
-WM_HWIN g_hWin_FHDLog;
-WM_HWIN g_hWin_SysState;
-WM_HWIN g_hWin_SysCtl;
-WM_HWIN g_hWin_SysTime;
-
+WM_HWIN g_hWin_TrmCal;
+WM_HWIN g_hWin_TrmConf;
+WM_HWIN g_hWin_TrmState;
+WM_HWIN g_hWin_TrmLog;
 
 //int test_multiedit;
 

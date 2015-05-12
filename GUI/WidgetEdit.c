@@ -39,21 +39,21 @@ void Select_Focus(void)
         WM_SetFocus(g_hWin_TimeSet);
     }
  
-    if(g_hWin_CalPara > 0)
+    if(g_hWin_TrmCal > 0)
     {
-        WM_SetFocus(g_hWin_CalPara);
+        WM_SetFocus(g_hWin_TrmCal);
        //CPS_FocusSel();
     }
 
-    if(g_hWin_ParaRdWt > 0)
+    if(g_hWin_TrmConf > 0)
     {
-        WM_SetFocus(g_hWin_ParaRdWt);
+        WM_SetFocus(g_hWin_TrmConf);
         PRW_FocusSel();
     }
 
-    if(g_hWin_SysState > 0)
+    if(g_hWin_TrmState > 0)
     {
-        WM_SetFocus(g_hWin_SysState);
+        WM_SetFocus(g_hWin_TrmState);
         SSD_FocusSel();
     }
 }
@@ -89,8 +89,8 @@ static void SelectInputEdit(int  EditNum)
             break;
         case EDT_DEV_ADDR:
             EDIT_GetText(hItem, tmpTextBuf,5);
-            hItem = PRW_GetDevAddr();
             g_sys_ctrl.dev_addr = atoi(tmpTextBuf);
+            hItem = PRW_GetDevAddr();
             break;
         case EDT_YEAR:
             EDIT_GetText(hItem, tmpTextBuf, 3);
@@ -133,12 +133,12 @@ static void _init_edit(WM_MESSAGE *pMsg,int EditNum)
     u8 tmpZero[13];
     int RowSel;
     int i;
-    float tmpFloatVal;
+    //float tmpFloatVal;
     switch(EditNum)
     {
         case EDT_VOLTAGE_REFER:
             hItem = CPS_GetReferVtg();
-            tmpFloatVal = EDIT_GetFloatValue(hItem);
+            EDIT_GetText(hItem, tmpTextBuf,4);
             break;
         case EDT_ANIP_TIME:
             hItem = PRW_GetPrtTime();
@@ -177,15 +177,8 @@ static void _init_edit(WM_MESSAGE *pMsg,int EditNum)
      }
      FRAMEWIN_SetText(pMsg->hWin,EditFrameTitle[EditNum]);
      hItem=WM_GetDialogItem(pMsg->hWin,ID_EDIT_0);
-     if(EditNum == EDT_VOLTAGE_REFER)
-     {
-         //EDIT_SetFloatValue(hItem, tmpFloatVal);
-         EDIT_SetText(hItem,".");
-     }
-     else
-     {
-          EDIT_SetText(hItem,tmpTextBuf);
-     }
+     EDIT_SetText(hItem,tmpTextBuf);
+
         
 }
 

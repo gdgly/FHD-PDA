@@ -63,6 +63,7 @@ extern GUI_CONST_STORAGE GUI_BITMAP bmtime;
 extern GUI_CONST_STORAGE GUI_BITMAP bmRdWt;
 extern GUI_CONST_STORAGE GUI_BITMAP bmSysState; 
 extern GUI_CONST_STORAGE GUI_BITMAP bmCalPara;
+extern GUI_CONST_STORAGE GUI_BITMAP bmSysSet;
 
 //icon信息结构体
 typedef struct {
@@ -90,12 +91,12 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 static const BITMAP_ITEM _aBitmapItem[] = 
 {
   
-  {&bmCalPara,    ParaChk     },  
-  {&bmRdWt,      ParaRdWt    },  
+  {&bmCalPara,    TrmChk     },  
+  {&bmRdWt,      TrmRdWt    },  
   {&bmSysState,   SysState    }, 
   {&bmprotocal,   SysLog      },  //通信规约调试
   {&bmtime,       TimeSet     },  
-  {&bmTFcard,     MemInfo     },
+  {&bmSysSet,     SysSet     },
  
 };
 
@@ -272,9 +273,23 @@ void Battery_State(int pwr_val)
         //TEXT_SetText(hItem,Battery_Charge);
         TEXT_SetTextColor(hItem,GUI_GREEN);
     }
+}
 
-
-
+void SetBeepState(void);
+void SetBeepState(void)
+{
+    WM_HWIN hItem;
+    hItem = WM_GetDialogItem(g_hWin_task,ID_TEXT_10);
+    TEXT_SetTextColor(hItem,GUI_WHITE);
+    TEXT_SetFont(hItem,&GUI_Font_Battery_40);
+    if(SYS_BEEP_ON == g_rom_prm.beep_switch)
+    {
+        TEXT_SetText(hItem, BeepOn);
+    }
+    else
+    {
+        TEXT_SetText(hItem, BeepOff);
+    }
 }
 
 //任务栏回调函数
@@ -297,29 +312,18 @@ static void _cbTaskDialog(WM_MESSAGE * pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin,ID_TEXT_6);
         TEXT_SetTextColor(hItem,GUI_WHITE);
 
-        hItem = WM_GetDialogItem(pMsg->hWin,ID_TEXT_10);
-        TEXT_SetFont(hItem,&GUI_Font_Battery_40);
-        if(CHANNEL_WIRELESS == g_rom_prm.channel)
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_10);
+        TEXT_SetTextColor(hItem,GUI_BLACK);
+        TEXT_SetFont(hItem, &GUI_Font_Battery_40);
+
+        if(SYS_BEEP_ON == g_rom_prm.beep_switch)
         {
-            TEXT_SetText(hItem, TSK_Wireless);
-            TEXT_SetTextColor(hItem,GUI_GREEN);
+            TEXT_SetText(hItem, BeepOn);
         }
-#if 0
-        hItem = WM_GetDialogItem(pMsg->hWin,ID_TEXT_1);
-        if(g_send_para_pkg.cmdType==PLC_CMD_TYPE_R2L)
+        else
         {
-            TEXT_SetText(hItem,"PLC-L");
+            TEXT_SetText(hItem, BeepOff);
         }
-        else if((g_send_para_pkg.cmdType == PLC_CMD_TYPE_L2R)
-               ||(g_send_para_pkg.cmdType == PLC_CMD_TYPE_COMMON))
-        {
-            TEXT_SetText(hItem,"PLC-R");
-        }
-        else if(g_send_para_pkg.cmdType==PLC_CMD_TYPE_NODE)
-        {
-            TEXT_SetText(hItem,"PLC-N");
-        }
-#endif
         
 #if 1
         //TSK_Set_Protocol_Text();
@@ -377,17 +381,17 @@ static void _cbIconWin(WM_MESSAGE * pMsg)
 					switch(IconViewIndex)
 					{	
 						case 0:
-							g_hWin_CalPara = CreateCommSet();
+							g_hWin_TrmCal = CreateCal();
                             //WM_BringToBottom(g_hWin_msg);
                             WM_HideWindow(g_hWin_TimeBar);
                             WM_HideWindow(g_hWin_Date);
                             //hItem = CPS_GetOverTime();
-                            WM_SetFocus(g_hWin_CalPara);
+                            WM_SetFocus(g_hWin_TrmCal);
                             //CPS_ColorChange();
 							break;
 
                         case 1:
-			                g_hWin_ParaRdWt=CreateParaRdWt();
+			                g_hWin_TrmConf=CreateParaConf();
                             //WM_BringToBottom(g_hWin_msg);
                             WM_HideWindow(g_hWin_TimeBar);
                             WM_HideWindow(g_hWin_Date);
@@ -398,7 +402,7 @@ static void _cbIconWin(WM_MESSAGE * pMsg)
 							break;
                             
 						case 2:
-                            g_hWin_SysState=CreateSysState();
+                            g_hWin_TrmState=CreateTrmState();
                             //WM_BringToBottom(g_hWin_msg);
                             WM_HideWindow(g_hWin_TimeBar);
                             WM_HideWindow(g_hWin_Date);
@@ -408,15 +412,15 @@ static void _cbIconWin(WM_MESSAGE * pMsg)
 							break;
 
                         case 5:
-                            //g_hWin_SysState
-							g_hWin_SDInfo = CreateSDInfo();
+                            //g_hWin_TrmState
+							g_hWin_SysSet = CreateSysSet();
                             //WM_BringToBottom(g_hWin_msg);
                             WM_HideWindow(g_hWin_TimeBar);
                             WM_HideWindow(g_hWin_Date);
-                            WM_SetFocus(g_hWin_SDInfo);
+                            WM_SetFocus(g_hWin_SysSet);
 							break;
 						case 3:
-                            g_hWin_SysLog = CreateSysLog();
+                            g_hWin_TrmLog = CreateTrmLog();
                             //WM_BringToBottom(g_hWin_msg);
                             WM_HideWindow(g_hWin_TimeBar);
                             WM_HideWindow(g_hWin_Date);

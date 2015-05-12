@@ -73,13 +73,13 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, InterElecPrt,          ID_TEXT_0, 7, 10, 122, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_1,   5,   40,  128, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, DevAddr,          ID_TEXT_2, 5, 71, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "OK",         ID_BUTTON_0, 8,   262, 70, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, SetPara,         ID_BUTTON_0, 8,   262, 70, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 160, 262, 70, 25, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, ReadData,     ID_BUTTON_2, 81,  262, 81, 25, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ReadPara,        ID_TEXT_3,   5,   101,  80, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "F1",         ID_BUTTON_3, 155,   101, 80, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, SetPara,        ID_TEXT_4,   5,   131,  80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "F2",         ID_BUTTON_4, 155,   131, 80, 20, 0, 0x0, 0 },
+  //{ TEXT_CreateIndirect, SetPara,        ID_TEXT_4,   5,   131,  80, 20, 0, 0x0, 0 },
+  //{ BUTTON_CreateIndirect, "F2",         ID_BUTTON_4, 155,   131, 80, 20, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -99,14 +99,14 @@ void PRW_SelectUp(void)
     WM_HWIN hItem;
     if(PRW_KeyCnt == 0)
     {
-        hItem=WM_GetDialogItem(g_hWin_ParaRdWt, ID_EDIT_2);
+        hItem=WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_2);
         WM_SetFocus(hItem);
         PRW_KeyCnt = (PRW_EDT_NUMBER - 1);
     }
     else
     {
         PRW_KeyCnt--;
-        hItem=WM_GetDialogItem(g_hWin_ParaRdWt,(ID_EDIT_0 + PRW_KeyCnt));
+        hItem=WM_GetDialogItem(g_hWin_TrmConf,(ID_EDIT_0 + PRW_KeyCnt));
         WM_SetFocus(hItem);
     }
 }
@@ -116,14 +116,14 @@ void PRW_SelectDown(void)
     WM_HWIN hItem;
     if(PRW_KeyCnt == (PRW_EDT_NUMBER - 1))
     {
-        hItem=WM_GetDialogItem(g_hWin_ParaRdWt,ID_EDIT_0);
+        hItem=WM_GetDialogItem(g_hWin_TrmConf,ID_EDIT_0);
         WM_SetFocus(hItem);
         PRW_KeyCnt = 0;
     }
     else
     {
         PRW_KeyCnt++;
-        hItem=WM_GetDialogItem(g_hWin_ParaRdWt,(ID_EDIT_0 + PRW_KeyCnt));
+        hItem=WM_GetDialogItem(g_hWin_TrmConf,(ID_EDIT_0 + PRW_KeyCnt));
         WM_SetFocus(hItem);
     }
 }
@@ -134,7 +134,7 @@ void PRW_ColorChange(void)
     int i;
     for(i = 0;i < PRW_EDT_NUMBER;i++)
     {
-        hItem =  WM_GetDialogItem(g_hWin_ParaRdWt, (ID_EDIT_0 + i));
+        hItem =  WM_GetDialogItem(g_hWin_TrmConf, (ID_EDIT_0 + i));
         if( 1 == WM_HasFocus(hItem))
         {
             EDIT_SetBkColor(hItem, 0, GUI_GREEN);
@@ -149,7 +149,7 @@ void PRW_ColorChange(void)
 void PRW_FocusSel(void)
 {
     WM_HWIN hItem;
-    hItem = WM_GetDialogItem(g_hWin_ParaRdWt, (ID_EDIT_0 + PRW_KeyCnt));
+    hItem = WM_GetDialogItem(g_hWin_TrmConf, (ID_EDIT_0 + PRW_KeyCnt));
     WM_SetFocus(hItem);
 }
     
@@ -168,7 +168,7 @@ static void _init_ParaDialog(WM_MESSAGE * pMsg)
     WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
-    EDIT_SetText(hItem, "2000");
+    EDIT_SetText(hItem, "800");
     WM_DisableWindow(hItem);
 
     sprintf(buf, "%d", g_sys_ctrl.dev_addr);
@@ -199,19 +199,19 @@ static void _init_ParaDialog(WM_MESSAGE * pMsg)
 //晃电保护开关
 WM_HWIN PRW_GetElecPrtSwth(void)
 {
-    return WM_GetDialogItem(g_hWin_ParaRdWt,ID_EDIT_0);
+    return WM_GetDialogItem(g_hWin_TrmConf,ID_EDIT_0);
 }
 
 //晃电保护时长
 WM_HWIN PRW_GetPrtTime(void)
 {
-    return WM_GetDialogItem(g_hWin_ParaRdWt,ID_EDIT_1);
+    return WM_GetDialogItem(g_hWin_TrmConf,ID_EDIT_1);
 }
 
 //设备地址
 WM_HWIN PRW_GetDevAddr(void)
 {
-    return WM_GetDialogItem(g_hWin_ParaRdWt,ID_EDIT_2);
+    return WM_GetDialogItem(g_hWin_TrmConf,ID_EDIT_2);
 }
 
 
@@ -250,13 +250,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key) 
         {
             case GUI_KEY_YELLOW:
-                 WM_DeleteWindow(g_hWin_ParaRdWt);
-                 g_hWin_ParaRdWt=HBWIN_NULL;
+                 WM_DeleteWindow(g_hWin_TrmConf);
+                 g_hWin_TrmConf = HBWIN_NULL;
                  WM_SetFocus(g_hWin_menu);
                  WM_ShowWindow(g_hWin_TimeBar);
                  WM_ShowWindow(g_hWin_Date);
                  PRW_KeyCnt = 0;
                 break;
+#if 0
             case GUI_KEY_GREEN:
                 WM_DeleteWindow(g_hWin_ParaRdWt);
                 g_hWin_ParaRdWt=HBWIN_NULL;
@@ -265,6 +266,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 WM_ShowWindow(g_hWin_Date);
                 PRW_KeyCnt = 0;
                 break;
+#endif
             case GUI_KEY_UP:
                 PRW_SelectUp();
                 PRW_ColorChange();
@@ -280,12 +282,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                              
                 break;
                 
-            case GUI_KEY_F2:
+            case GUI_KEY_GREEN:
                 u8 buf[16], index;
                 u16 temp;
                 
                 
-                hItem = WM_GetDialogItem(g_hWin_ParaRdWt, ID_EDIT_0);
+                hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_0);
                 EDIT_GetText(hItem, buf, 16);
                 temp = atoi(buf);
 
@@ -302,13 +304,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 
                 index++;
 
-                hItem = WM_GetDialogItem(g_hWin_ParaRdWt, ID_EDIT_1);
+                hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_1);
                 EDIT_GetText(hItem, buf, 16);
                 temp = atoi(buf);
                 memcpy(&g_gui_prm.data_buf[index], (u8 *)&temp, 2);
                 index += 2;
 
-                hItem = WM_GetDialogItem(g_hWin_ParaRdWt, ID_EDIT_2);
+                hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_2);
                 EDIT_GetText(hItem, buf, 16);
                 temp = atoi(buf);
                 memcpy(&g_gui_prm.data_buf[index], (u8 *)&temp, 2);
@@ -328,15 +330,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 {
                     case ID_EDIT_0:
                         g_sys_ctrl.selectWidget = LST_ANIP_SWITCH;
-                        g_hWin_Input = Create_ListBox_Set(g_hWin_ParaRdWt);
+                        g_hWin_Input = Create_ListBox_Set(g_hWin_TrmConf);
                         break;
                     case ID_EDIT_1:
                         g_sys_ctrl.selectWidget = EDT_ANIP_TIME;
-                        g_hWin_Input = Create_Edit_Set(g_hWin_ParaRdWt);
+                        g_hWin_Input = Create_Edit_Set(g_hWin_TrmConf);
                         break;
                     case ID_EDIT_2:
                         g_sys_ctrl.selectWidget = EDT_DEV_ADDR;
-                        g_hWin_Input = Create_Edit_Set(g_hWin_ParaRdWt);
+                        g_hWin_Input = Create_Edit_Set(g_hWin_TrmConf);
                         break;
                 }
                 break;
@@ -363,8 +365,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 *
 *       CreateParaRdWt
 */
-WM_HWIN CreateParaRdWt(void);
-WM_HWIN CreateParaRdWt(void) {
+WM_HWIN CreateParaConf(void);
+WM_HWIN CreateParaConf(void) {
   WM_HWIN hWin;
 
   hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_menu, 0, 0);
@@ -402,7 +404,7 @@ void GUI_Conf_Proc(void)
             sprintf(buf, SwitchOff);
         }
         
-        hItem = WM_GetDialogItem(g_hWin_ParaRdWt, ID_EDIT_0);
+        hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_0);
         EDIT_SetText(hItem, buf); 
         
         tmp2 = (tmp1 >> 1) & 0x00000001;
@@ -413,7 +415,7 @@ void GUI_Conf_Proc(void)
 
         sprintf(buf, "%d", tmp1);
         
-        hItem = WM_GetDialogItem(g_hWin_ParaRdWt, ID_EDIT_1);
+        hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_1);
         EDIT_SetText(hItem, buf);
 
         tmp1 = mb_swap(*((u16 *)pdata));
@@ -430,7 +432,7 @@ void GUI_Conf_Proc(void)
 
         sprintf(buf, "%d", tmp1);
         
-        hItem = WM_GetDialogItem(g_hWin_ParaRdWt, ID_EDIT_2);
+        hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_2);
         EDIT_SetText(hItem, buf);
         break;
         

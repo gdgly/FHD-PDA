@@ -21,7 +21,7 @@ ActionState=1
 Enabled=0
 ShowSource=1
 [DebugChecksum]
-Checksum=-1944703807
+Checksum=-1042136885
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -112,10 +112,6 @@ GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
 SumSortOrder=0
-[Disassemble mode]
-mode=0
-[Breakpoints2]
-Count=0
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -123,18 +119,6 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
-[Aliases]
-A0=_ "C:\Users\Administrator\Desktop\PDA_2015.01.19\PDA\APP\app.c" ""
-A1=_ "C:\Users\Administrator\Desktop\PDA_2015.01.19\PDA\drv\SI4438.c" ""
-A2=_ "C:\Users\Administrator\Desktop\PDA_2015.01.19\PDA\drv\Src\stm32f2xx_hal_flash.c" ""
-A3=_ "C:\Users\Administrator\Desktop\PDA_2015.01.19\PDA\uCOS-II\Source\os_tmr.c" ""
-A4=_ "E:\palmtop0129\palmtop0127\APP\app.c" ""
-A5=_ "E:\palmtop0129\palmtop0127\FatFs\ff.c" ""
-A6=_ "E:\palmtop0129\palmtop0127\drv\Src\stm32f2xx_hal_flash.c" ""
-A7=_ "E:\palmtop0129\palmtop0127\drv\sd.c" ""
-A8=_ "E:\palmtop0129\palmtop0127\uCOS-II\Source\os_tmr.c" ""
-Count=9
-SuppressDialog=0
 [PowerProbe]
 Frequency=10000
 Probe0=I0
@@ -147,3 +131,19 @@ Mode=3
 Graph=0
 Symbiont=0
 Exclusions=
+[Disassemble mode]
+mode=0
+[Breakpoints2]
+Count=0
+[Aliases]
+A0=_ "C:\Users\Administrator\Desktop\PDA_2015.01.19\PDA\APP\app.c" ""
+A1=_ "C:\Users\Administrator\Desktop\PDA_2015.01.19\PDA\drv\SI4438.c" ""
+A2=_ "C:\Users\Administrator\Desktop\PDA_2015.01.19\PDA\drv\Src\stm32f2xx_hal_flash.c" ""
+A3=_ "C:\Users\Administrator\Desktop\PDA_2015.01.19\PDA\uCOS-II\Source\os_tmr.c" ""
+A4=_ "E:\palmtop0129\palmtop0127\APP\app.c" ""
+A5=_ "E:\palmtop0129\palmtop0127\FatFs\ff.c" ""
+A6=_ "E:\palmtop0129\palmtop0127\drv\Src\stm32f2xx_hal_flash.c" ""
+A7=_ "E:\palmtop0129\palmtop0127\drv\sd.c" ""
+A8=_ "E:\palmtop0129\palmtop0127\uCOS-II\Source\os_tmr.c" ""
+Count=9
+SuppressDialog=0

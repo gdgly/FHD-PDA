@@ -71,24 +71,22 @@
     */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "CommSet",   ID_WINDOW_0, 0,   0,   240, 295, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   ReferVtg,    ID_TEXT_0,   15,  17,  80, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   VtgValue,    ID_TEXT_1,   15,  48,  80, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   VoltageRead, ID_TEXT_2,   15,  82,  80, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   VoltageChk,  ID_TEXT_3,   15,  113, 80, 20, 0, 0x0, 0 },
-  { EDIT_CreateIndirect,   "Edit",      ID_EDIT_0,   142, 14,  80, 20, 0, 0x64, 0 },
-  { EDIT_CreateIndirect,   "Edit",      ID_EDIT_1,   142, 46,  80, 20, 0, 0x64, 0 },
-  { BUTTON_CreateIndirect, "F1",        ID_BUTTON_0, 142, 80,  80, 20, 0, 0x0, 0 },
-  //{ BUTTON_CreateIndirect, "*",         ID_BUTTON_5, 142, 80,  80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "F2",        ID_BUTTON_1, 142, 111, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "OK",     ID_BUTTON_2, 6,   261, 70, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,        ID_BUTTON_3, 161, 261, 70, 25, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   RdSysTime,   ID_TEXT_4,   15,  150, 120, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "*",         ID_BUTTON_4, 142, 146, 80, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   TimeCrt,     ID_TEXT_5,   15,  180, 80, 20, 0, 0x0, 0 }, 
-  { BUTTON_CreateIndirect, "#",         ID_BUTTON_5, 142, 180,  80, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   ReferVtg,    ID_TEXT_0,   15,  17,  120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   VtgValue,    ID_TEXT_1,   15,  48,  120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   RdSysTime,   ID_TEXT_2,   15,  82,  120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   TimeCrt,     ID_TEXT_3,   15,  113, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   VoltageChk,  ID_TEXT_4,   15,  150, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   TrmTime,     ID_TEXT_5,   15,  192, 120, 20, 0, 0x0, 0 },
+    
+  { EDIT_CreateIndirect,   "Edit",      ID_EDIT_0,   142, 14,  80,  20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect,   "Edit",      ID_EDIT_1,   142, 46,  80,  20, 0, 0x64, 0 },
   { EDIT_CreateIndirect,   "Edit",      ID_EDIT_2,   15,  220, 210, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  // USER START (Optionally insert additional widgets)
-  // USER END
+    
+  { BUTTON_CreateIndirect, "F1",        ID_BUTTON_0, 142, 80,  80, 20, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "F2",        ID_BUTTON_1, 142, 111, 80, 20, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, VoltageRead, ID_BUTTON_2, 6,   261, 80, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, Quit,        ID_BUTTON_3, 151, 261, 80, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "*",         ID_BUTTON_4, 142, 146, 80, 20, 0, 0x0, 0 },
 };
 
 
@@ -105,7 +103,8 @@ static void _initDialog(WM_MESSAGE * pMsg)
     WM_HWIN hItem;
     //int i;
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
-    EDIT_SetFloatMode(hItem, 220.00, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
+    //EDIT_SetFloatMode(hItem, 220.00, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
+    EDIT_SetText(hItem, "220");
     WM_DisableWindow(hItem);
     EDIT_SetBkColor(hItem, 0, GUI_GREEN);
     //
@@ -157,7 +156,7 @@ static void _initDialog(WM_MESSAGE * pMsg)
 
 WM_HWIN CPS_GetReferVtg(void)
 {
-    return WM_GetDialogItem(g_hWin_CalPara,ID_EDIT_0);
+    return WM_GetDialogItem(g_hWin_TrmCal,ID_EDIT_0);
 }
 
 
@@ -194,33 +193,46 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key) 
         {
             case GUI_KEY_YELLOW:
-                WM_DeleteWindow(g_hWin_CalPara);
-                g_hWin_CalPara=HBWIN_NULL;
+                WM_DeleteWindow(g_hWin_TrmCal);
+                g_hWin_TrmCal=HBWIN_NULL;
                 WM_SetFocus(g_hWin_menu);
                 WM_ShowWindow(g_hWin_TimeBar);
                 WM_ShowWindow(g_hWin_Date);
+                break;
+                
+            case GUI_KEY_F2:
+                SYS_TIME sys_time;
+                
+                RtcTimeToSysTime(&sys_time);
+                sys_time.year += 2000;
+                memcpy(g_gui_prm.data_buf, &sys_time, sizeof(sys_time));
+                g_gui_prm.data_len = sizeof(sys_time);
+                g_gui_prm.state = FHD_GUI_TRM_CAL;
+                g_gui_prm.cmd = FHD_CMD_CALIBRATE_TRM_TIME;
+                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);   
+#if 0
+                WM_DeleteWindow(g_hWin_TrmCal);
+                g_hWin_TrmCal=HBWIN_NULL;
+                WM_SetFocus(g_hWin_menu);
+                WM_ShowWindow(g_hWin_TimeBar);
+                WM_ShowWindow(g_hWin_Date);
+#endif
                 break;
                 
             case GUI_KEY_GREEN:
-                WM_DeleteWindow(g_hWin_CalPara);
-                g_hWin_CalPara=HBWIN_NULL;
-                WM_SetFocus(g_hWin_menu);
-                WM_ShowWindow(g_hWin_TimeBar);
-                WM_ShowWindow(g_hWin_Date);
-                break;
-                
-            case GUI_KEY_F1:
                 g_gui_prm.state = FHD_GUI_TRM_CAL;
                 g_gui_prm.cmd = FHD_CMD_READ_TRM_VOLTAGE;
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                
                 break;
                 
-            case GUI_KEY_F2:
+            case '*':
                 u32 temp;
-
+                u8  tmpBuf[16];
                 
-                hItem = WM_GetDialogItem(g_hWin_CalPara, ID_EDIT_0);
-                temp = EDIT_GetFloatValue(hItem) * 100;
+                hItem = WM_GetDialogItem(g_hWin_TrmCal, ID_EDIT_0);
+                //temp = EDIT_GetFloatValue(hItem) * 100;
+                EDIT_GetText(hItem, tmpBuf, 7);
+                temp = atoi(tmpBuf) * 100;
                 memcpy(g_gui_prm.data_buf, &temp, sizeof(temp));
                 g_gui_prm.data_len = sizeof(temp);
                 g_gui_prm.state = FHD_GUI_TRM_CAL;
@@ -228,13 +240,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                  
                 break;
                 
-            case '*':
+            case GUI_KEY_F1:
                 g_gui_prm.state = FHD_GUI_TRM_CAL;
                 g_gui_prm.cmd = FHD_CMD_READ_TRM_TIME;
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                 
                 break;
                 
             case '#':   
+#if 0
                 SYS_TIME sys_time;
                 
 
@@ -242,9 +255,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 sys_time.year += 2000;
                 memcpy(g_gui_prm.data_buf, &sys_time, sizeof(sys_time));
                 g_gui_prm.data_len = sizeof(sys_time);
-                g_gui_prm.state = FHD_GUI_TRM_CAL;
-                g_gui_prm.cmd = FHD_CMD_CALIBRATE_TRM_TIME;
-                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                 
+                g_gui_prm.state = FHD_GUI_CALIBRATE;
+                g_gui_prm.cmd = FHD_CMD_CALIBRATE_TIME;
+                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm); 
+#endif
                 break;
                 
             case GUI_KEY_ENTER:
@@ -252,7 +266,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 {
                     case ID_EDIT_0:
                         g_sys_ctrl.selectWidget = EDT_VOLTAGE_REFER;
-                        g_hWin_Input = Create_Edit_Set(g_hWin_CalPara);
+                        g_hWin_Input = Create_Edit_Set(g_hWin_TrmCal);
                         break;
                 }
                 break;
@@ -275,8 +289,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 *
 *       CreateCommSet
 */
-WM_HWIN CreateCommSet(void);
-WM_HWIN CreateCommSet(void) {
+WM_HWIN CreateCal(void);
+WM_HWIN CreateCal(void) {
   WM_HWIN hWin;
 
   hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_menu, 0, 0);
@@ -301,10 +315,11 @@ void GUI_Calibrate_Proc(void)
         
         pdata = (u32 *)g_fhd_prm.data_buf;
         
-            //sprintf(buf, "%0.2f", 1.0 * (float)(*pdata) / 100);
+        //sprintf(buf, "%0.2f", 1.0 * (float)(*pdata));
         
-        hItem = WM_GetDialogItem(g_hWin_CalPara, ID_EDIT_1);
-            EDIT_SetFloatValue(hItem, 1.0 * (*pdata) / 100); 
+        hItem = WM_GetDialogItem(g_hWin_TrmCal, ID_EDIT_1);
+        EDIT_SetFloatValue(hItem, 1.0 * ((float)(*pdata)) / 100);
+        //EDIT_SetText(hItem, buf);
         break;
         
     case FHD_CMD_CALIBRATE_TRM_VOLTAGE:
@@ -324,7 +339,7 @@ void GUI_Calibrate_Proc(void)
                 *((u8 *)((u32)ptr + 6)),
                 *((u8 *)((u32)ptr + 7)));
         
-        hItem = WM_GetDialogItem(g_hWin_CalPara, ID_EDIT_2);
+        hItem = WM_GetDialogItem(g_hWin_TrmCal, ID_EDIT_2);
         EDIT_SetText(hItem, buf);
         break;
         

@@ -80,10 +80,10 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_3,   153, 93,  80, 20, 0, 0x64, 0 },
   //{ EDIT_CreateIndirect, "Edit",         ID_EDIT_4,   153, 121, 80, 20, 0, 0x64, 0 },
   //{ EDIT_CreateIndirect, "Edit",         ID_EDIT_5,   153, 150, 80, 20, 0, 0x64, 0 },
-  { BUTTON_CreateIndirect, "OK",         ID_BUTTON_0, 7,   260, 60, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, ReadData,         ID_BUTTON_0, 7,   260, 60, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,         ID_BUTTON_2, 172, 260, 60, 25, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, ReadSysState,   ID_TEXT_5,   8,   126, 100, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "F1",         ID_BUTTON_1, 153,  126, 80, 20, 0, 0x0, 0 },
+  //{ TEXT_CreateIndirect, ReadSysState,   ID_TEXT_5,   8,   126, 100, 20, 0, 0x0, 0 },
+  //{ BUTTON_CreateIndirect, "F1",         ID_BUTTON_1, 153,  126, 80, 20, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -130,22 +130,22 @@ static void _init_SysCtlDialog(WM_MESSAGE *pMsg)
 
 WM_HWIN SSD_GetEEPROM(void)
 {
-    return WM_GetDialogItem(g_hWin_SysState, ID_EDIT_0);
+    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_0);
 }
 
 WM_HWIN SSD_GetRelaySwitch(void)
 {
-    return WM_GetDialogItem(g_hWin_SysState, ID_EDIT_1);
+    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_1);
 }
 
 WM_HWIN SSD_GetCtrState(void)
 {
-    return WM_GetDialogItem(g_hWin_SysState, ID_EDIT_2);
+    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_2);
 }
 
 WM_HWIN SSD_GetPrtNum(void)
 {
-    return WM_GetDialogItem(g_hWin_SysState, ID_EDIT_3);
+    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
 }
 
 
@@ -159,14 +159,14 @@ void SSD_SelectUp(void)
     WM_HWIN hItem;
     if(SSD_KeyCnt == 0)
     {
-        hItem=WM_GetDialogItem(g_hWin_SysState, ID_EDIT_3);
+        hItem=WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
         WM_SetFocus(hItem);
         SSD_KeyCnt = (SYS_EDT_NUMBER - 1);
     }
     else
     {
         SSD_KeyCnt--;
-        hItem=WM_GetDialogItem(g_hWin_SysState,(ID_EDIT_0 + SSD_KeyCnt));
+        hItem=WM_GetDialogItem(g_hWin_TrmState,(ID_EDIT_0 + SSD_KeyCnt));
         WM_SetFocus(hItem);
     }
 }
@@ -176,14 +176,14 @@ void SSD_SelectDown(void)
     WM_HWIN hItem;
     if(SSD_KeyCnt == (SYS_EDT_NUMBER - 1))
     {
-        hItem=WM_GetDialogItem(g_hWin_SysState,ID_EDIT_0);
+        hItem=WM_GetDialogItem(g_hWin_TrmState,ID_EDIT_0);
         WM_SetFocus(hItem);
         SSD_KeyCnt = 0;
     }
     else
     {
         SSD_KeyCnt++;
-        hItem=WM_GetDialogItem(g_hWin_SysState,(ID_EDIT_0 + SSD_KeyCnt));
+        hItem=WM_GetDialogItem(g_hWin_TrmState,(ID_EDIT_0 + SSD_KeyCnt));
         WM_SetFocus(hItem);
     }
 }
@@ -194,7 +194,7 @@ void SSD_ColorChange(void)
     int i;
     for(i = 0;i < SYS_EDT_NUMBER;i++)
     {
-        hItem =  WM_GetDialogItem(g_hWin_SysState, (ID_EDIT_0 + i));
+        hItem =  WM_GetDialogItem(g_hWin_TrmState, (ID_EDIT_0 + i));
         if( 1 == WM_HasFocus(hItem))
         {
             EDIT_SetBkColor(hItem, 0, GUI_GREEN);
@@ -249,20 +249,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key)
             {
                 case GUI_KEY_YELLOW:
-                    WM_DeleteWindow(g_hWin_SysState);
-                    g_hWin_SysState=HBWIN_NULL;
+                    WM_DeleteWindow(g_hWin_TrmState);
+                    g_hWin_TrmState=HBWIN_NULL;
                     WM_SetFocus(g_hWin_menu);
                     WM_ShowWindow(g_hWin_TimeBar);
                     WM_ShowWindow(g_hWin_Date);
                     SSD_KeyCnt = 0;
                     break;
                 case GUI_KEY_GREEN:
-                    WM_DeleteWindow(g_hWin_SysState);
-                    g_hWin_SysState=HBWIN_NULL;
-                    WM_SetFocus(g_hWin_menu);
-                    WM_ShowWindow(g_hWin_TimeBar);
-                    WM_ShowWindow(g_hWin_Date);
-                    SSD_KeyCnt = 0; 
+                    g_gui_prm.state = FHD_GUI_TRM_STATE;
+                    g_gui_prm.cmd = FHD_CMD_READ_TRM_STATE;
+                    OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm); 
                     break;
                 case GUI_KEY_UP:
                     SSD_SelectUp();
@@ -272,13 +269,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     SSD_SelectDown();
                     SSD_ColorChange();
                     break;
-                    
+#if 0 
                 case GUI_KEY_F1:
-                    g_gui_prm.state = FHD_GUI_TRM_STATE;
-                    g_gui_prm.cmd = FHD_CMD_READ_TRM_STATE;
+                    g_gui_prm.state = FHD_GUI_SYS_STATE;
+                    g_gui_prm.cmd = FHD_CMD_READ_SYS_STATE;
                     OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                     
                     break;
-                    
+#endif     
                 case GUI_KEY_F2:
                     break;
                 case '*':
@@ -305,8 +302,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 *
 *       CreateSysState
 */
-WM_HWIN CreateSysState(void);
-WM_HWIN CreateSysState(void) {
+WM_HWIN CreateTrmState(void);
+WM_HWIN CreateTrmState(void) {
   WM_HWIN hWin;
 
   hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_menu, 0, 0);
@@ -342,7 +339,7 @@ void GUI_Sys_State_Proc(void)
             sprintf(buf, WorkRight);
         }
 
-        hItem = WM_GetDialogItem(g_hWin_SysState, ID_EDIT_0);
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_0);
         EDIT_SetText(hItem, buf);
 
         tmp2 = (tmp1 >> 3) & 0x00000001; //电容继电器
@@ -355,7 +352,7 @@ void GUI_Sys_State_Proc(void)
             sprintf(buf, NoneAction);
         }
 
-        hItem = WM_GetDialogItem(g_hWin_SysState, ID_EDIT_1);
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_1);
         EDIT_SetText(hItem, buf);
 
         tmp2 = (tmp1 >> 4) & 0x00000001; //接触器
@@ -368,7 +365,7 @@ void GUI_Sys_State_Proc(void)
             sprintf(buf, SwitchOff);
         }
 
-        hItem = WM_GetDialogItem(g_hWin_SysState, ID_EDIT_2);
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_2);
         EDIT_SetText(hItem, buf);
 
         sprintf(buf, "%0.2f", 1.0 * mb_swap_32((u8 *)pdata) / 100);
@@ -377,7 +374,7 @@ void GUI_Sys_State_Proc(void)
         sprintf(buf, "%d", mb_swap(*((u16 *)pdata))); //晃电保护次数
         pdata += 2;
         
-        hItem = WM_GetDialogItem(g_hWin_SysState, ID_EDIT_3);
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
         EDIT_SetText(hItem, buf);        
         break;
         

@@ -11,7 +11,8 @@ extern const char Worning[];
 extern const char WrnText[];
 extern const char ReadOutTime[];
 
-
+extern const char BeepOff[];
+extern const char BeepOn[];
 
 //主界面
 extern const char UploadIcon[];
@@ -57,29 +58,18 @@ extern const char TypeDirection[];
 extern const char TimeCrt[];
 
 //系统设置
-extern const char ParaChk[];
+extern const char TrmChk[];
 extern const char DevAddr[]; 
-extern const char Overtime[]; 
-extern const char DevConnect[]; 
-extern const char DevDisconnect[]; 
-extern const char DevStop[];
 extern const char MsgClear[];
-extern const char OperateLog[];
-extern const char MsgContent[];
 
-extern const char ComPort[];
-extern const char BaudRate[];
-extern const char CkeckBit[];
-extern const char OverTime[];
 extern const char VoltageChk[];
 extern const char VoltageRead[];
 
-extern const char SysConnect[];
-extern const char SysBreak[];
+extern const char TrmTime[];
 
 extern const char EEPROM[];
 
-extern const char ParaRdWt[];
+extern const char TrmRdWt[];
 extern const char SysTime[];
 extern const char SysCofigure[];
 extern const char UseSysTick[];
@@ -89,30 +79,19 @@ extern const char SwitchOff[];
 extern const char F1SwitchOn[];
 extern const char F2SwitchOff[];
 
-extern const char On2Off[];
-extern const char Off2On[];
-extern const char RestartPrt[];
-extern const char RestartWork[];
 extern const char ReferVtg[];
 extern const char VtgValue[];
 
 
-extern const char TimeMode[];
-extern const char VoltageMode[];
 extern const char ProtectTime[];
-extern const char RestartTime[];
-extern const char MaxDelay[]; 
-extern const char VoltageLimit[];
 extern const char ReadPara[]; 
 extern const char WritePara[]; 
 extern const char SysState[];
-extern const char WorkState[]; 
 extern const char WorkRight[]; 
 extern const char WorkWrong[]; 
 extern const char RelaySwitch[];
 extern const char NoneAction[]; 
 extern const char HaveAction[]; 
-extern const char RestartChk[]; 
 extern const char ContactorState[];
 extern const char RelayState[];
 extern const char Voltage[]; 
@@ -121,21 +100,13 @@ extern const char RestartNum[];
 extern const char ReadState[];
 extern const char SysLog[]; 
 extern const char AntiLog[]; 
-extern const char RestartLog[]; 
 extern const char OccurTime[]; 
 extern const char Period[]; 
 extern const char ReadLog[]; 
-extern const char SysControl[]; 
-extern const char SysReset[]; 
-extern const char ContactorOp[]; 
 extern const char ReadData[]; 
 extern const char ChkData[]; 
-extern const char DevTest[]; 
 extern const char MsgData[]; 
-extern const char MakeFrame[]; 
-extern const char MakingFrame[];
-extern const char FrameSend[]; 
-
+extern const char F1ReadData[];
 extern const char RdSysTime[];
 extern const char MemSize[];
 extern const char MemUsage[];
@@ -144,12 +115,16 @@ extern const char FactorySet[];
 extern const char MemFormat[];
 extern const char MemReturn[];
 extern const char VersionNum[];
-extern const char MemInfo[];
+extern const char SysSet[];
 extern const char TimeSet[];
 extern const char SetPara[];
 extern const char ReadSysState[];
+extern const char PdaInfo[];
+
 extern const char *EditFrameTitle[];
 extern const char *ListViewFrameTitle[];
+
+
 
 extern const char *TextSwitch[];
 

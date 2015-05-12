@@ -56,11 +56,11 @@
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "SysLog",     ID_WINDOW_0,   0,   0,   240, 295, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   AntiLog,  ID_TEXT_0, 8, 238, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Clear,    ID_BUTTON_0, 8, 265, 70, 25, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   AntiLog,  ID_TEXT_0, 8, 9, 80, 20, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, ReadData,    ID_BUTTON_0, 8, 265, 70, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,     ID_BUTTON_1, 160, 265, 70, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, ReadData, ID_BUTTON_2, 160, 233, 70, 25, 0, 0x0, 0 },
-  { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 8, 9, 225, 214, 0, 0x0, 0 },
+  //{ BUTTON_CreateIndirect, ReadData, ID_BUTTON_2, 160, 233, 70, 25, 0, 0x0, 0 },
+  { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 8, 35, 225, 214, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -118,21 +118,19 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key) 
         {
             case GUI_KEY_YELLOW:
-                WM_DeleteWindow(g_hWin_SysLog);
-                g_hWin_SysLog=HBWIN_NULL;
+                WM_DeleteWindow(g_hWin_TrmLog);
+                g_hWin_TrmLog = HBWIN_NULL;
                 WM_SetFocus(g_hWin_menu);
                 WM_ShowWindow(g_hWin_TimeBar);
                 WM_ShowWindow(g_hWin_Date);
                 break;
-            case GUI_KEY_GREEN:
-                break;
-                
-            case GUI_KEY_F1:    
+                         
+            case GUI_KEY_GREEN:    
                 g_gui_prm.state = FHD_GUI_TRM_LOG;
                 g_gui_prm.cmd = FHD_CMD_READ_TRM_LOG;
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                 
                 break;
-
+#if 0
             case GUI_KEY_F2:
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
                 RowNum = LISTVIEW_GetNumRows(hItem);
@@ -142,6 +140,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     LISTVIEW_DeleteRow(hItem, i);
                 }
                 break;
+#endif
         }
     }
     break;
@@ -168,8 +167,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 *
 *       CreateSysLog
 */
-WM_HWIN CreateSysLog(void);
-WM_HWIN CreateSysLog(void) {
+WM_HWIN CreateTrmLog(void);
+WM_HWIN CreateTrmLog(void) {
   WM_HWIN hWin;
 
   hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_menu, 0, 0);
@@ -209,13 +208,13 @@ void GUI_Sys_Log_Proc(void)
             
             pdata += 7;
             
-            hItem = WM_GetDialogItem(g_hWin_SysLog, ID_LISTVIEW_0);
+            hItem = WM_GetDialogItem(g_hWin_TrmLog, ID_LISTVIEW_0);
             LISTVIEW_SetItemText(hItem, POWER_DROP_TIMESTAMP_COL, i, buf);
             
             sprintf(buf, "%d", mb_swap(*((u16 *)pdata)));
             pdata += 2;
             
-            hItem = WM_GetDialogItem(g_hWin_SysLog, ID_LISTVIEW_0);
+            hItem = WM_GetDialogItem(g_hWin_TrmLog, ID_LISTVIEW_0);
             LISTVIEW_SetItemText(hItem, POWER_DROP_KEEP_TIME_COL, i, buf);
 
             LISTVIEW_AddRow(hItem, NULL);

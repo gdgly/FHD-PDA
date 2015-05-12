@@ -149,9 +149,6 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 #define TEXT_LEN  10     //???????????????????10???
 #define EWARM_OPTIMIZATION_EN          1u
 
-//extern GUI_CONST_STORAGE GUI_FONT GUI_FontPDAFontSong;
-
-
 extern WM_HWIN g_hWin_menu;
 
 extern WM_HWIN g_hWin_task;
@@ -163,9 +160,7 @@ extern WM_HWIN g_hWin_TimeBar;
 extern WM_HWIN g_hWin_Date;
 
 extern WM_HWIN g_hWin_Input;
-extern WM_HWIN g_hWin_SDInfo;   //存储卡信息
-//extern int test_multiedit;
-
+extern WM_HWIN g_hWin_SysSet;   //系统设置
 
 
 
@@ -175,17 +170,12 @@ extern WM_HWIN g_hWin_SDInfo;   //存储卡信息
 
 ***********/
 
-extern WM_HWIN g_hWin_CalPara;
-extern WM_HWIN g_hWin_ParaRdWt;
-extern WM_HWIN g_hWin_SysLog;
-extern WM_HWIN g_hWin_RestartLog;
-extern WM_HWIN g_hWin_FHDLog;
-extern WM_HWIN g_hWin_SysState;
-extern WM_HWIN g_hWin_SysCtl;
+extern WM_HWIN g_hWin_TrmCal;
+extern WM_HWIN g_hWin_TrmConf;
+extern WM_HWIN g_hWin_TrmLog;
+extern WM_HWIN g_hWin_TrmState;
 extern WM_HWIN g_hWin_SysTime;
 
-
-extern char DataSign_Text[TEXT_LEN];//??????????,???????
 
 
 //extern GUI_CONST_STORAGE GUI_BITMAP bm_Upload;

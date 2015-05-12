@@ -49,6 +49,9 @@ Sector 7 0x0806 0000 - 0x0807 FFFF 128 Kbyte
 #define SYS_POWER_ON        0
 #define SYS_POWER_OFF       1
 
+#define SYS_BEEP_ON         0
+#define SYS_BEEP_OFF        1
+
 
 typedef struct  __rom_prm
 {
@@ -76,8 +79,10 @@ unsigned int freqSel; //速率选择,下面减过了
 
 unsigned int bpsSpeed;             //传输数据等待时间,需要保存，以便下次启动有默认设置
 
+unsigned int beep_switch;
 
-unsigned int para_data[SRM_PARA_NUMBER - 23];
+
+unsigned int para_data[SRM_PARA_NUMBER - 24];
 }ROM_PRM, *P_ROM_PRM;
 
 typedef struct __sys_control__
@@ -99,7 +104,7 @@ typedef struct __sys_control__
     OS_EVENT *up_mbox; //邮箱发送的消息
     u32 sd_total_capacity; //SD卡总容量
     u32 sd_free_capacity; //SD卡剩余容量
-    u8 dev_addr; //终端设备地址
+    u8    dev_addr;    //设备地址
 }SYS_CTRL, *P_SYS_CTRL;
 
 #define SYS_ADD_TASK(tn)        g_sys_ctrl.procTask|=tn

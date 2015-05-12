@@ -84,7 +84,10 @@ void  App_TaskKey (void *p_arg)
 			{
               LED_KEY_ON();
 
+              if(SYS_BEEP_ON == g_rom_prm.beep_switch)
+              {
               Beep(); //ЛЊаж
+              }
 
               g_sys_ctrl.led_count = LED_KEY_DISP_TIME;
 

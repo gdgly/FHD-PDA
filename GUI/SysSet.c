@@ -34,7 +34,7 @@
 #define ID_TEXT_0    (GUI_ID_USER + 0x01)
 #define ID_TEXT_1    (GUI_ID_USER + 0x02)
 #define ID_TEXT_2    (GUI_ID_USER + 0x03)
-//#define ID_TEXT_3    (GUI_ID_USER + 0x04)
+#define ID_TEXT_3    (GUI_ID_USER + 0x04)
 //#define ID_TEXT_4    (GUI_ID_USER + 0x05)
 //#define ID_TEXT_5    (GUI_ID_USER + 0x06)
 //#define ID_TEXT_6    (GUI_ID_USER + 0x07)
@@ -42,17 +42,17 @@
 
 #define ID_EDIT_0    (GUI_ID_USER + 0x08)
 #define ID_EDIT_1    (GUI_ID_USER + 0x09)
-//#define ID_EDIT_2    (GUI_ID_USER + 0x0A)
-//#define ID_EDIT_3    (GUI_ID_USER + 0x0B)
+#define ID_EDIT_2    (GUI_ID_USER + 0x0A)
+#define ID_EDIT_3    (GUI_ID_USER + 0x0B)
 
 //#define ID_BUTTON_0  (GUI_ID_USER + 0x0C)
 #define ID_BUTTON_1  (GUI_ID_USER + 0x0D)
 #define ID_BUTTON_2  (GUI_ID_USER + 0x0E)
 #define ID_BUTTON_3  (GUI_ID_USER + 0x0F)
+#define ID_BUTTON_4  (GUI_ID_USER + 0x10)
 
-
-#define ID_PROGBAR_0 (GUI_ID_USER + 0x10)
-#define ID_PROGBAR_1 (GUI_ID_USER + 0x11)
+#define ID_PROGBAR_0 (GUI_ID_USER + 0x11)
+#define ID_PROGBAR_1 (GUI_ID_USER + 0x12)
 
 
 
@@ -79,18 +79,13 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect,     MemSize,      ID_TEXT_0,    12,  16,  80,  20, 0, 0x0,  0 },
   { TEXT_CreateIndirect,     MemUsage,     ID_TEXT_1,    12,  79,  80,  20, 0, 0x0,  0 },
   { TEXT_CreateIndirect,     FileNum,      ID_TEXT_2,    12,  47,  80,  20, 0, 0x0,  0 },
-  //{ TEXT_CreateIndirect,     FactorySet,   ID_TEXT_3,    12,  148, 108, 20, 0, 0x0,  0 },
-  //{ TEXT_CreateIndirect,     VersionNum,   ID_TEXT_4,    12,  187, 200, 20, 0, 0x0,  0 },
-  //{ TEXT_CreateIndirect,     MM_batteryVtg,    ID_TEXT_5,    12,  113, 180, 20, 0, 0x0,  0 },
-  //{ TEXT_CreateIndirect,     "new",        ID_TEXT_5,    12,  187, 200, 20, 0, 0x0,  0 },
-    
+  { TEXT_CreateIndirect,     "beep",      ID_TEXT_3,    12,  107,  80,  20, 0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   "*",         ID_BUTTON_3,  120, 107, 65,  25, 0, 0x0,  0 },
   { EDIT_CreateIndirect,     "Edit",       ID_EDIT_0,    120, 12,  115, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { EDIT_CreateIndirect,     "Edit",       ID_EDIT_1,    120, 43,  115, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  //{ EDIT_CreateIndirect,     "Edit",       ID_EDIT_2,    120, 111, 115, 20, 0, 0x64, 0},
     
   { PROGBAR_CreateIndirect,  "Progbar",    ID_PROGBAR_0, 120, 77, 115, 20, 0, 0x0,  0 },
-  //{ BUTTON_CreateIndirect,   "F1",         ID_BUTTON_0,  120, 143, 115, 25, 0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   "OK",    ID_BUTTON_1,  10,  260, 65,  25, 0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   "OK",         ID_BUTTON_1,  10,  260, 65,  25, 0, 0x0,  0 },
   { BUTTON_CreateIndirect,   Quit,         ID_BUTTON_2,  165, 260, 65,  25, 0, 0x0,  0 },
   { PROGBAR_CreateIndirect,  "Progbar",    ID_PROGBAR_1, 9,   228, 222, 20, 0, 0x0,  0 },
     
@@ -107,13 +102,13 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 */
 WM_HWIN MMD_Get_PROGBAR()
 {    
-     return WM_GetDialogItem(g_hWin_SDInfo, ID_PROGBAR_0);            
+     return WM_GetDialogItem(g_hWin_SysSet, ID_PROGBAR_0);            
 }
 
 void MMD_Set_FD_PROGBAR(u32 newVal)
 {
     WM_HWIN hItem;
-    hItem = WM_GetDialogItem(g_hWin_SDInfo, ID_PROGBAR_1);  
+    hItem = WM_GetDialogItem(g_hWin_SysSet, ID_PROGBAR_1);  
     if(hItem != WM_HWIN_NULL)
     {
         //g_sys_control.testProgBarVal = 100;
@@ -180,14 +175,6 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             //WIDGET_AndState(hItem,WIDGET_STATE_FOCUSSABLE);
             WM_DisableWindow(hItem);
 
-#if 0
-            hItem = WM_GetDialogItem(pMsg->hWin,ID_EDIT_2);
-            WM_DisableWindow(hItem);
-            EDIT_SetFloatMode(hItem,((g_sys_control.pwrValue*3.3)/4096),0,99999,2,
-                                     GUI_EDIT_SUPPRESS_LEADING_ZEROES);
-            EDIT_SetFloatValue(hItem,(g_sys_control.pwrValue*3.3)/4096);
-            //WM_CF_SHOW
-#endif
 #if 1
             hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
             PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
@@ -204,11 +191,6 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_2);
             BUTTON_SetBkColor(hItem,0,GUI_YELLOW);
             WIDGET_AndState(hItem,WIDGET_STATE_FOCUSSABLE);
-#if 0
-            hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_0);
-            BUTTON_SetBkColor(hItem,0,GUI_CYAN);
-            WIDGET_AndState(hItem,WIDGET_STATE_FOCUSSABLE);
-#endif
             //hItem = WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_0);
 
             hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1); 
@@ -222,8 +204,8 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                 switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key)
                 {
                     case GUI_KEY_GREEN:
-                        WM_DeleteWindow(g_hWin_SDInfo);
-                        g_hWin_SDInfo = HBWIN_NULL;
+                        WM_DeleteWindow(g_hWin_SysSet);
+                        g_hWin_SysSet = HBWIN_NULL;
                         WM_ShowWindow(g_hWin_TimeBar);
                         WM_ShowWindow(g_hWin_Date);
                         WM_SetFocus(g_hWin_menu);
@@ -231,13 +213,25 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                         //ERR_NOTE(g_hWin_SDInfo, GUI_MSBOX_FORMAT_ERROR);//»∑»œ∏Ò ΩªØÂ
                         break;
                     case GUI_KEY_YELLOW:
-                        WM_DeleteWindow(g_hWin_SDInfo);
-                        g_hWin_SDInfo = HBWIN_NULL;
+                        WM_DeleteWindow(g_hWin_SysSet);
+                        g_hWin_SysSet = HBWIN_NULL;
                         WM_ShowWindow(g_hWin_TimeBar);
                         WM_ShowWindow(g_hWin_Date);
                         WM_SetFocus(g_hWin_menu);
                         break;
                     case GUI_KEY_F1:
+                        break;
+
+                    case '*':
+                        if(SYS_BEEP_ON == g_rom_prm.beep_switch)
+                        {
+                             g_rom_prm.beep_switch = SYS_BEEP_OFF;
+                        }
+                        else 
+                        {
+                             g_rom_prm.beep_switch = SYS_BEEP_ON;
+                        }
+                        SetBeepState();
                         break;
                 }
             }   
@@ -259,8 +253,8 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 *
 *       CreateMemManage
 */
-WM_HWIN CreateSDInfo(void);
-WM_HWIN CreateSDInfo(void) {
+WM_HWIN CreateSysSet(void);
+WM_HWIN CreateSysSet(void) {
   WM_HWIN hWin;
   //WM_HWIN hTimer;
 
