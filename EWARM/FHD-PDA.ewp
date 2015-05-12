@@ -2134,16 +2134,10 @@
       </file>
     </group>
     <file>
-      <name>$PROJ_DIR$\..\GUI\CalPara.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\GUI\ErrNoteDLG.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\GUI_public_fun.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\GUI\ParaRdWtDLG.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\PDA_Bitmap.c</name>
@@ -2155,16 +2149,22 @@
       <name>$PROJ_DIR$\..\GUI\phrase.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\GUI\SDInfo.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\GUI\SysLogDLG.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\GUI\SysStateDLG.c</name>
+      <name>$PROJ_DIR$\..\GUI\SysSet.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\TimeSet.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\GUI\TrmCalDLG.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\GUI\TrmConfDLG.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\GUI\TrmLogDLG.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\GUI\TrmStateDLG.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\WidgetEdit.c</name>

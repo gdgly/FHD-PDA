@@ -98,7 +98,7 @@ typedef enum
 {
     RECV_RES_IDLE = 0,
     RECV_RES_SUCC,
-    RECV_RES_FAIL,
+    RECV_RES_INVALID,
     RECV_RES_TIMEOUT
 } RECV_RES_TYPE; //ЛЊаж
 
@@ -121,7 +121,7 @@ typedef struct _plc_prm
 
 typedef struct _fhd_prm {
 	u8 msg_state; //MSG_STATE_SENDING, MSG_STATE_RECEIVED
-	u8 recv_result; //RECV_RES_SUCC, RECV_RES_FAIL, RECV_RES_TIMEOUT
+	u8 recv_result; //RECV_RES_SUCC, RECV_RES_INVALID, RECV_RES_TIMEOUT
 	u8 send_buf[256];
 	u8 send_len;
 	u8 recv_buf[256];

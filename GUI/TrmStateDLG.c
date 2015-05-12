@@ -274,8 +274,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     break;
                     
                 case GUI_KEY_F1:
-                    g_gui_prm.state = FHD_GUI_SYS_STATE;
-                    g_gui_prm.cmd = FHD_CMD_READ_SYS_STATE;
+                    g_gui_prm.state = FHD_GUI_TRM_STATE;
+                    g_gui_prm.cmd = FHD_CMD_READ_TRM_STATE;
                     OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                     
                     break;
                     
@@ -323,7 +323,7 @@ void GUI_Sys_State_Proc(void)
 
     switch(g_gui_prm.cmd)
     {
-    case FHD_CMD_READ_SYS_STATE:
+    case FHD_CMD_READ_TRM_STATE:
         u8 *pdata;
         u32 tmp1, tmp2;
 

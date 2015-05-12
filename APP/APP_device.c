@@ -242,5 +242,7 @@ void DEV_Init(void)
     g_sys_ctrl.sleepTimeout = 0;
 
     g_sys_ctrl.sysPowerState = SYS_POWER_WAKEUP;
+
+    g_sys_ctrl.dev_addr = 1;
 }
 

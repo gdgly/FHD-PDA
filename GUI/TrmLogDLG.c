@@ -128,8 +128,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
                 
             case GUI_KEY_F1:    
-                g_gui_prm.state = FHD_GUI_SYS_LOG;
-                g_gui_prm.cmd = FHD_CMD_READ_SYS_LOG;
+                g_gui_prm.state = FHD_GUI_TRM_LOG;
+                g_gui_prm.cmd = FHD_CMD_READ_TRM_LOG;
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                 
                 break;
 
@@ -186,7 +186,7 @@ void GUI_Sys_Log_Proc(void)
 
     switch(g_gui_prm.cmd)
     {
-    case FHD_CMD_READ_SYS_LOG:
+    case FHD_CMD_READ_TRM_LOG:
         u8 *pdata;
 
 #define POWER_DROP_TIMESTAMP_COL       0

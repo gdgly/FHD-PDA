@@ -253,12 +253,13 @@ uint8 iec_checksum(const uint8 ucFrame[], int32 iLen)
 
 uint8 FHD_MakeFrame(uint8 ctrl, uint16 reg_addr, uint8 *pdata, uint16 len, uint8 *buf)
 {
-    uint8 index = 0;
+    uint8 dev_addr, index = 0;
     uint16 crc = 0;
 
 
-
-    buf[index] = 0x01;
+    dev_addr = FHD_GetDevAddr();
+    
+    buf[index] = dev_addr;
     index++;
 
     buf[index] = ctrl;
@@ -299,8 +300,18 @@ uint8 FHD_CheckFrame(uint8 *buf, uint16 len)
     }
 }
 
+uint8 FHD_GetDevAddr(void)
+{
+    return (g_sys_ctrl.dev_addr);
+}
+
 uint8 *FHD_GetUserData(uint8 *buf)
 {
-    return (&buf[2]);
+    return (&buf[3]);
+}
+
+uint8 FHD_GetUserDataLen(uint8 *buf)
+{
+    return (buf[2]);
 }
 

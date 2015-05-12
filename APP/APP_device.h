@@ -99,6 +99,7 @@ typedef struct __sys_control__
     OS_EVENT *up_mbox; //邮箱发送的消息
     u32 sd_total_capacity; //SD卡总容量
     u32 sd_free_capacity; //SD卡剩余容量
+    u8 dev_addr; //终端设备地址
 }SYS_CTRL, *P_SYS_CTRL;
 
 #define SYS_ADD_TASK(tn)        g_sys_ctrl.procTask|=tn

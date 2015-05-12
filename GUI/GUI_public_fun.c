@@ -268,19 +268,19 @@ void GUI_Recv_Msg_Proc(void)
     {
         switch(g_gui_prm.state)
         {
-        case FHD_GUI_CALIBRATE:
+        case FHD_GUI_TRM_CAL:
             GUI_Calibrate_Proc();
             break;
 
-        case FHD_GUI_CONF:
+        case FHD_GUI_TRM_CONF:
             GUI_Conf_Proc();
             break;
 
-        case FHD_GUI_SYS_STATE:
+        case FHD_GUI_TRM_STATE:
             GUI_Sys_State_Proc();
             break;
 
-        case FHD_GUI_SYS_LOG:
+        case FHD_GUI_TRM_LOG:
             GUI_Sys_Log_Proc();
             break;
 
@@ -409,7 +409,7 @@ void GUI_Msg_Proc(void)
 {
     if(MSG_STATE_SENDING == g_fhd_prm.msg_state)    
     {        
-        GUI_Msg_Download(ON);
+        GUI_Msg_Upload(ON);
 
         GUI_Send_Msg_Proc();
         
@@ -419,7 +419,7 @@ void GUI_Msg_Proc(void)
     {
         if(RECV_RES_SUCC == g_fhd_prm.recv_result)
         {
-            GUI_Msg_Upload(ON);
+            GUI_Msg_Download(ON);
 
             GUI_Recv_Msg_Proc();
         }

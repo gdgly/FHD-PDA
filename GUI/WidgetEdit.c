@@ -90,6 +90,7 @@ static void SelectInputEdit(int  EditNum)
         case EDT_DEV_ADDR:
             EDIT_GetText(hItem, tmpTextBuf,5);
             hItem = PRW_GetDevAddr();
+            g_sys_ctrl.dev_addr = atoi(tmpTextBuf);
             break;
         case EDT_YEAR:
             EDIT_GetText(hItem, tmpTextBuf, 3);

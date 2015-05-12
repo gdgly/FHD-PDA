@@ -1362,7 +1362,7 @@ void  App_TaskFHD (void *p_arg)
         {
             switch(g_gui_prm.cmd)
             {
-            case FHD_CMD_READ_VOLTAGE:
+            case FHD_CMD_READ_TRM_VOLTAGE:
                 index = 0;
                 
                 temp = mb_swap(0x0002);
@@ -1389,19 +1389,18 @@ void  App_TaskFHD (void *p_arg)
                     if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_prm.recv_buf, g_fhd_prm.recv_len))
                     {
                         pdata = FHD_GetUserData(g_fhd_prm.recv_buf);
-
-                        pdata++;
+                                                            
+                        g_fhd_prm.data_len = FHD_GetUserDataLen(g_fhd_prm.recv_buf);
 
                         temp = mb_swap_32(pdata);
 
-                        g_fhd_prm.data_len = sizeof(temp);
                         memcpy(g_fhd_prm.data_buf, &temp, g_fhd_prm.data_len);
 
                         g_fhd_prm.recv_result = RECV_RES_SUCC;                     
                     }
                     else
                     {
-                        g_fhd_prm.recv_result = RECV_RES_FAIL;
+                        g_fhd_prm.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
@@ -1414,7 +1413,7 @@ void  App_TaskFHD (void *p_arg)
                 OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);
                 break;
 
-            case FHD_CMD_CALIBRATE_VOLTAGE:
+            case FHD_CMD_CALIBRATE_TRM_VOLTAGE:
                 index = 0;
                 
                 temp = mb_swap(0x0002);
@@ -1451,7 +1450,7 @@ void  App_TaskFHD (void *p_arg)
                     }
                     else
                     {
-                        g_fhd_prm.recv_result = RECV_RES_FAIL;
+                        g_fhd_prm.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
@@ -1464,7 +1463,7 @@ void  App_TaskFHD (void *p_arg)
                 OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);                 
                 break;
 
-            case FHD_CMD_READ_TIME:
+            case FHD_CMD_READ_TRM_TIME:
                 index = 0;
                 
                 temp = mb_swap(0x0005);
@@ -1491,17 +1490,16 @@ void  App_TaskFHD (void *p_arg)
                     if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_prm.recv_buf, g_fhd_prm.recv_len))
                     {
                         pdata = FHD_GetUserData(g_fhd_prm.recv_buf);
+                                                            
+                        g_fhd_prm.data_len = FHD_GetUserDataLen(g_fhd_prm.recv_buf);
 
-                        pdata++;
-
-                        g_fhd_prm.data_len = g_fhd_prm.recv_len - 3;
                         memcpy(g_fhd_prm.data_buf, pdata, g_fhd_prm.data_len);
 
                         g_fhd_prm.recv_result = RECV_RES_SUCC;                   
                     }
                     else
                     {
-                        g_fhd_prm.recv_result = RECV_RES_FAIL;
+                        g_fhd_prm.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
@@ -1514,7 +1512,7 @@ void  App_TaskFHD (void *p_arg)
                 OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);               
                 break;
 
-            case FHD_CMD_CALIBRATE_TIME:
+            case FHD_CMD_CALIBRATE_TRM_TIME:
                 index = 0;
                 
                 temp = mb_swap(0x0005);
@@ -1531,10 +1529,10 @@ void  App_TaskFHD (void *p_arg)
                 data_buf[index] = g_gui_prm.data_buf[2]; //Month
                 index++;
 
-                data_buf[index] = g_gui_prm.data_buf[3]; //Day
+                data_buf[index] = g_gui_prm.data_buf[3]; //Date
                 index++; 
 
-                data_buf[index] = g_gui_prm.data_buf[4]; //Date
+                data_buf[index] = g_gui_prm.data_buf[4]; //Day
                 index++; 
 
                 data_buf[index] = g_gui_prm.data_buf[5]; //Hour
@@ -1573,7 +1571,7 @@ void  App_TaskFHD (void *p_arg)
                     }
                     else
                     {
-                        g_fhd_prm.recv_result = RECV_RES_FAIL;
+                        g_fhd_prm.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
@@ -1586,7 +1584,7 @@ void  App_TaskFHD (void *p_arg)
                 OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);                  
                 break;
 
-            case FHD_CMD_READ_CONF:
+            case FHD_CMD_READ_TRM_CONF:
                 index = 0;
                 
                 temp = mb_swap(0x0007);
@@ -1613,17 +1611,16 @@ void  App_TaskFHD (void *p_arg)
                     if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_prm.recv_buf, g_fhd_prm.recv_len))
                     {
                         pdata = FHD_GetUserData(g_fhd_prm.recv_buf);
+                                                            
+                        g_fhd_prm.data_len = FHD_GetUserDataLen(g_fhd_prm.recv_buf);
 
-                        pdata++;
-                            
-                        g_fhd_prm.data_len = g_fhd_prm.recv_len - 3;
                         memcpy(g_fhd_prm.data_buf, pdata, g_fhd_prm.data_len);
 
                         g_fhd_prm.recv_result = RECV_RES_SUCC;                    
                     }
                     else
                     {
-                        g_fhd_prm.recv_result = RECV_RES_FAIL;
+                        g_fhd_prm.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
@@ -1636,7 +1633,7 @@ void  App_TaskFHD (void *p_arg)
                 OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);    
                 break;
 
-            case FHD_CMD_WRITE_CONF:
+            case FHD_CMD_WRITE_TRM_CONF:
                 index = 0;
                 
                 temp = mb_swap(0x0007);
@@ -1694,7 +1691,7 @@ void  App_TaskFHD (void *p_arg)
                     }
                     else
                     {
-                        g_fhd_prm.recv_result = RECV_RES_FAIL;
+                        g_fhd_prm.recv_result = RECV_RES_INVALID;
                     }
                 }
                 else
@@ -1707,7 +1704,7 @@ void  App_TaskFHD (void *p_arg)
                 OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);                
                 break;
 
-            case FHD_CMD_READ_SYS_STATE:
+            case FHD_CMD_READ_TRM_STATE:
                 index = 0;
                 
                 temp = mb_swap(0x0006);
@@ -1734,17 +1731,16 @@ void  App_TaskFHD (void *p_arg)
                     if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_prm.recv_buf, g_fhd_prm.recv_len))
                     {
                         pdata = FHD_GetUserData(g_fhd_prm.recv_buf);
-                        
-                        pdata++;
-                                    
-                        g_fhd_prm.data_len = g_fhd_prm.recv_len - 3;
+                                                            
+                        g_fhd_prm.data_len = FHD_GetUserDataLen(g_fhd_prm.recv_buf);
+
                         memcpy(g_fhd_prm.data_buf, pdata, g_fhd_prm.data_len);
                         
                         g_fhd_prm.recv_result = RECV_RES_SUCC;
                     }
                     else
                     {
-                        g_fhd_prm.recv_result = RECV_RES_FAIL;
+                        g_fhd_prm.recv_result = RECV_RES_INVALID;
                     }
                 }
                 else
@@ -1757,7 +1753,7 @@ void  App_TaskFHD (void *p_arg)
                 OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);   
                 break;
 
-            case FHD_CMD_READ_SYS_LOG:
+            case FHD_CMD_READ_TRM_LOG:
                 index = 0;
                 
                 temp = mb_swap(0x002E);
@@ -1784,17 +1780,16 @@ void  App_TaskFHD (void *p_arg)
                     if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_prm.recv_buf, g_fhd_prm.recv_len))
                     {
                         pdata = FHD_GetUserData(g_fhd_prm.recv_buf);
+                                                            
+                        g_fhd_prm.data_len = FHD_GetUserDataLen(g_fhd_prm.recv_buf);
                         
-                        pdata++;
-                                    
-                        g_fhd_prm.data_len = g_fhd_prm.recv_len - 3;
                         memcpy(g_fhd_prm.data_buf, pdata, g_fhd_prm.data_len);
                         
                         g_fhd_prm.recv_result = RECV_RES_SUCC;
                     }
                     else
                     {
-                        g_fhd_prm.recv_result = RECV_RES_FAIL;
+                        g_fhd_prm.recv_result = RECV_RES_INVALID;
                     }
                 }
                 else

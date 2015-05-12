@@ -160,6 +160,9 @@ void PRW_FocusSel(void)
 static void _init_ParaDialog(WM_MESSAGE * pMsg)
 {
     WM_HWIN hItem;
+    u8 buf[16];
+
+    
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
     EDIT_SetText(hItem, SwitchOn);
     WM_DisableWindow(hItem);
@@ -168,8 +171,9 @@ static void _init_ParaDialog(WM_MESSAGE * pMsg)
     EDIT_SetText(hItem, "2000");
     WM_DisableWindow(hItem);
 
+    sprintf(buf, "%d", g_sys_ctrl.dev_addr);
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_2);
-    EDIT_SetText(hItem, "1");
+    EDIT_SetText(hItem, buf);
     WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
@@ -271,8 +275,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
                 
             case GUI_KEY_F1:
-                g_gui_prm.state = FHD_GUI_CONF;
-                g_gui_prm.cmd = FHD_CMD_READ_CONF;
+                g_gui_prm.state = FHD_GUI_TRM_CONF;
+                g_gui_prm.cmd = FHD_CMD_READ_TRM_CONF;
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                              
                 break;
                 
@@ -310,8 +314,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 memcpy(&g_gui_prm.data_buf[index], (u8 *)&temp, 2);
                 index += 2;
                 
-                g_gui_prm.state = FHD_GUI_CONF;
-                g_gui_prm.cmd = FHD_CMD_WRITE_CONF;
+                g_gui_prm.state = FHD_GUI_TRM_CONF;
+                g_gui_prm.cmd = FHD_CMD_WRITE_TRM_CONF;
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);    
                 break;
                 
@@ -377,7 +381,7 @@ void GUI_Conf_Proc(void)
 
     switch(g_gui_prm.cmd)
     {
-    case FHD_CMD_READ_CONF:
+    case FHD_CMD_READ_TRM_CONF:
         u8 *pdata;
         u32 tmp1, tmp2;
         
@@ -430,7 +434,7 @@ void GUI_Conf_Proc(void)
         EDIT_SetText(hItem, buf);
         break;
         
-    case FHD_CMD_WRITE_CONF:
+    case FHD_CMD_WRITE_TRM_CONF:
         break;
         
     default:

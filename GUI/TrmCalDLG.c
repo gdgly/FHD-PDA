@@ -210,8 +210,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
                 
             case GUI_KEY_F1:
-                g_gui_prm.state = FHD_GUI_CALIBRATE;
-                g_gui_prm.cmd = FHD_CMD_READ_VOLTAGE;
+                g_gui_prm.state = FHD_GUI_TRM_CAL;
+                g_gui_prm.cmd = FHD_CMD_READ_TRM_VOLTAGE;
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                
                 break;
                 
@@ -223,14 +223,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 temp = EDIT_GetFloatValue(hItem) * 100;
                 memcpy(g_gui_prm.data_buf, &temp, sizeof(temp));
                 g_gui_prm.data_len = sizeof(temp);
-                g_gui_prm.state = FHD_GUI_CALIBRATE;
-                g_gui_prm.cmd = FHD_CMD_CALIBRATE_VOLTAGE;
+                g_gui_prm.state = FHD_GUI_TRM_CAL;
+                g_gui_prm.cmd = FHD_CMD_CALIBRATE_TRM_VOLTAGE;
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                  
                 break;
                 
             case '*':
-                g_gui_prm.state = FHD_GUI_CALIBRATE;
-                g_gui_prm.cmd = FHD_CMD_READ_TIME;
+                g_gui_prm.state = FHD_GUI_TRM_CAL;
+                g_gui_prm.cmd = FHD_CMD_READ_TRM_TIME;
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                 
                 break;
                 
@@ -242,8 +242,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 sys_time.year += 2000;
                 memcpy(g_gui_prm.data_buf, &sys_time, sizeof(sys_time));
                 g_gui_prm.data_len = sizeof(sys_time);
-                g_gui_prm.state = FHD_GUI_CALIBRATE;
-                g_gui_prm.cmd = FHD_CMD_CALIBRATE_TIME;
+                g_gui_prm.state = FHD_GUI_TRM_CAL;
+                g_gui_prm.cmd = FHD_CMD_CALIBRATE_TRM_TIME;
                 OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                 
                 break;
                 
@@ -295,7 +295,7 @@ void GUI_Calibrate_Proc(void)
 
     switch(g_gui_prm.cmd)
     {
-    case FHD_CMD_READ_VOLTAGE:
+    case FHD_CMD_READ_TRM_VOLTAGE:
         u32 *pdata;
         
         
@@ -307,10 +307,10 @@ void GUI_Calibrate_Proc(void)
             EDIT_SetFloatValue(hItem, 1.0 * (*pdata) / 100); 
         break;
         
-    case FHD_CMD_CALIBRATE_VOLTAGE:
+    case FHD_CMD_CALIBRATE_TRM_VOLTAGE:
         break;
 
-    case FHD_CMD_READ_TIME:
+    case FHD_CMD_READ_TRM_TIME:
         u8 *ptr;
         
         
