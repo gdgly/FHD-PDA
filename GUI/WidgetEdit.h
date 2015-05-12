@@ -1,0 +1,90 @@
+#ifndef _WIDGETEDIT_
+#define _WIDGETEDIT_
+
+typedef WM_HWIN (*pGetHandler)(void);
+
+//#define GET_WIDGET_HANDLE(a,b)     return WM_GetDialogItem(a,b)
+
+#define LST_ANIP_SWITCH          0  /*晃电保护开关*/
+
+#define EDT_VOLTAGE_REFER        0  /*参考电压*/
+#define EDT_ANIP_TIME            1  /*晃电保护时长*/
+#define EDT_DEV_ADDR             2  /*设备地址*/
+
+
+#define EDT_YEAR                 3
+#define EDT_MONTH                4
+#define EDT_DAY                  5
+#define EDT_HOUR                 6
+#define EDT_MINITE               7
+#define EDT_SECOND               8
+
+//#define CPS_EDT_NUMBER           4   //通信参数设置页的edit数量
+#define PRW_EDT_NUMBER           3   //参数抄设页
+#define SYS_EDT_NUMBER           4   //系统状态页
+
+
+WM_HWIN CPS_GetCheck(void);
+
+WM_HWIN CPS_GetVtgChk(void);
+
+WM_HWIN CPS_GetVtgRead(void);
+
+void PRW_FocusSel(void);
+void SSD_FocusSel(void);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif /*_WIDGETEDIT_*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

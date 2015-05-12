@@ -1,2 +1,2 @@
 # FHD-PDA
-防晃电掌抄
+PDA based on STM32F207 for FHD, EWARM v6.70
