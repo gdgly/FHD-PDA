@@ -31,13 +31,8 @@ static const GUI_WIDGET_CREATE_INFO _aEditCreate[] = {
 };
 
 
-
 void Select_Focus(void)
 {
-    if(g_hWin_TimeSet>0)
-    {
-        WM_SetFocus(g_hWin_TimeSet);
-    }
  
     if(g_hWin_TrmCal > 0)
     {
@@ -55,6 +50,17 @@ void Select_Focus(void)
     {
         WM_SetFocus(g_hWin_TrmState);
         SSD_FocusSel();
+    }
+    
+    if((g_hWin_TimeSet > 0)&&(g_hWin_SysSet > 0))
+    {
+        WM_SetFocus(g_hWin_TimeSet);
+    }
+
+    if((g_hWin_TimeSet <= 0)&&(g_hWin_SysSet > 0))
+    {
+        WM_SetFocus(g_hWin_SysSet);
+        SST_FocusSel();
     }
 }
 
@@ -116,6 +122,18 @@ static void SelectInputEdit(int  EditNum)
             EDIT_GetText(hItem, tmpTextBuf, 3);
             hItem = TMS_GetSec();
             break;
+        case EDT_SRC_TIME:
+            EDIT_GetText(hItem, tmpTextBuf,4);
+            g_rom_prm.auto_sleep_time = atoi(tmpTextBuf);
+            DEV_Parameters_Write();
+            hItem = SST_GetSrcTime();
+            break;
+        case EDT_SHUTDOWN:
+            EDIT_GetText(hItem, tmpTextBuf,4);
+            g_rom_prm.auto_shutdown_time = atoi(tmpTextBuf);
+            DEV_Parameters_Write();
+            hItem = SST_GetShutDown();
+            break;
         default:
             break;
     }
@@ -171,6 +189,14 @@ static void _init_edit(WM_MESSAGE *pMsg,int EditNum)
         case EDT_SECOND:
             hItem = TMS_GetSec();
             EDIT_GetText(hItem, tmpTextBuf, 3);
+            break;
+        case EDT_SRC_TIME:
+            hItem = SST_GetSrcTime();
+            EDIT_GetText(hItem, tmpTextBuf,4);
+            break;
+        case EDT_SHUTDOWN:
+            hItem = SST_GetShutDown();
+            EDIT_GetText(hItem, tmpTextBuf,4);
             break;
         default:
             break;

@@ -8,7 +8,7 @@ ROM_PRM g_rom_prm =
     TAG_WORD_TABLE_MAP,
     0xffffbb00,         //unsigned int bootFlag;      //启动标志，不能改动
     0,              //0:  checksum
-    0x20141101,      //version
+    0x20150513,      //version
 
     
     0xffffffff,         //unsigned int meterPassword;//密码

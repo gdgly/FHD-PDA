@@ -121,6 +121,20 @@ extern const char SetPara[];
 extern const char ReadSysState[];
 extern const char PdaInfo[];
 
+extern const char Promotion[];
+extern const char SoftVersion[];
+extern const char HardVersion[];
+
+
+extern const char BeepSound[];
+extern const char SrcTime[];
+extern const char ShutTime[];
+extern const char MemState[];
+
+extern const char TextHelp[];
+extern const char FHD_PDA[];
+
+
 extern const char *EditFrameTitle[];
 extern const char *ListViewFrameTitle[];
 
@@ -131,7 +145,7 @@ extern const char *TextSwitch[];
 
 extern const char *TextEEPROM[];
 
-
+extern const char *gc_messageBoxText[];
 //extern 
 
 #endif /*__PHRASE_H__*/

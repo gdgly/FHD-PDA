@@ -155,12 +155,14 @@ extern WM_HWIN g_hWin_task;
 extern WM_HWIN g_hWin_TimeSet; //时间设置
 
 extern WM_HWIN g_hWin_Err;
+extern WM_HWIN g_hWin_about;
 
 extern WM_HWIN g_hWin_TimeBar;
 extern WM_HWIN g_hWin_Date;
 
 extern WM_HWIN g_hWin_Input;
 extern WM_HWIN g_hWin_SysSet;   //系统设置
+extern WM_HWIN g_hWin_SDInfo;
 
 
 
@@ -174,7 +176,6 @@ extern WM_HWIN g_hWin_TrmCal;
 extern WM_HWIN g_hWin_TrmConf;
 extern WM_HWIN g_hWin_TrmLog;
 extern WM_HWIN g_hWin_TrmState;
-extern WM_HWIN g_hWin_SysTime;
 
 
 

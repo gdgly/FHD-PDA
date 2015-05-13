@@ -95,7 +95,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
     LISTVIEW_AddColumn(hItem, 150, OccurTime, GUI_TA_HCENTER | GUI_TA_VCENTER);
-    LISTVIEW_AddColumn(hItem, 70, Period, GUI_TA_HCENTER | GUI_TA_VCENTER);
+    LISTVIEW_AddColumn(hItem, 72, Period, GUI_TA_HCENTER | GUI_TA_VCENTER);
     LISTVIEW_AddRow(hItem, NULL);
     LISTVIEW_SetGridVis(hItem, 0);
 
@@ -128,7 +128,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case GUI_KEY_GREEN:    
                 g_gui_prm.state = FHD_GUI_TRM_LOG;
                 g_gui_prm.cmd = FHD_CMD_READ_TRM_LOG;
-                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                 
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);                 
                 break;
 #if 0
             case GUI_KEY_F2:
@@ -177,7 +177,7 @@ WM_HWIN CreateTrmLog(void) {
 
 // USER START (Optionally insert additional public code)
 
-void GUI_Sys_Log_Proc(void)
+void GUI_Trm_Log_Proc(void)
 {
     WM_HWIN hItem;
     u8 i, row, buf[128];

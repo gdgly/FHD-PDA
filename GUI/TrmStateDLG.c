@@ -259,7 +259,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 case GUI_KEY_GREEN:
                     g_gui_prm.state = FHD_GUI_TRM_STATE;
                     g_gui_prm.cmd = FHD_CMD_READ_TRM_STATE;
-                    OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm); 
+                    OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm); 
                     break;
                 case GUI_KEY_UP:
                     SSD_SelectUp();
@@ -273,7 +273,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 case GUI_KEY_F1:
                     g_gui_prm.state = FHD_GUI_SYS_STATE;
                     g_gui_prm.cmd = FHD_CMD_READ_SYS_STATE;
-                    OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                     
+                    OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);                     
                     break;
 #endif     
                 case GUI_KEY_F2:
@@ -312,7 +312,7 @@ WM_HWIN CreateTrmState(void) {
 
 // USER START (Optionally insert additional public code)
 
-void GUI_Sys_State_Proc(void)
+void GUI_Trm_State_Proc(void)
 {
     WM_HWIN hItem;
     u8 buf[128];

@@ -53,7 +53,7 @@ Sector 7 0x0806 0000 - 0x0807 FFFF 128 Kbyte
 #define SYS_BEEP_OFF        1
 
 
-typedef struct  __rom_prm
+typedef struct _rom_prm
 {
 unsigned int magic_word;
 unsigned int bootFlag;      //启动标志，不能改动
@@ -79,13 +79,17 @@ unsigned int freqSel; //速率选择,下面减过了
 
 unsigned int bpsSpeed;             //传输数据等待时间,需要保存，以便下次启动有默认设置
 
+// ------------------------------
+
 unsigned int beep_switch;
+unsigned int auto_sleep_time;
+unsigned int auto_shutdown_time;
 
+// ------------------------------
+unsigned int para_data[SRM_PARA_NUMBER - 26];
+} ROM_PRM, *P_ROM_PRM;
 
-unsigned int para_data[SRM_PARA_NUMBER - 24];
-}ROM_PRM, *P_ROM_PRM;
-
-typedef struct __sys_control__
+typedef struct _sys_ctrl
 {
     unsigned int paraAddr;
     u32   guiState;
@@ -100,12 +104,12 @@ typedef struct __sys_control__
     u32   led_count;          //按键按一次LED亮一次
     u8    DevCheckCode[9];      //自检密码
     u32   sysFileNum;           //文件数量
-    OS_EVENT *down_mbox; //邮箱发送的消息
     OS_EVENT *up_mbox; //邮箱发送的消息
+    OS_EVENT *down_mbox; //邮箱发送的消息
     u32 sd_total_capacity; //SD卡总容量
     u32 sd_free_capacity; //SD卡剩余容量
     u8    dev_addr;    //设备地址
-}SYS_CTRL, *P_SYS_CTRL;
+} SYS_CTRL, *P_SYS_CTRL;
 
 #define SYS_ADD_TASK(tn)        g_sys_ctrl.procTask|=tn
 #define SYS_DEL_TASK(tn)        g_sys_ctrl.procTask&=(~tn)

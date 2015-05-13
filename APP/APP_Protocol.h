@@ -123,11 +123,11 @@ typedef struct _fhd_prm {
 	u8 msg_state; //MSG_STATE_SENDING, MSG_STATE_RECEIVED
 	u8 recv_result; //RECV_RES_SUCC, RECV_RES_INVALID, RECV_RES_TIMEOUT
 	u8 send_buf[256];
-	u8 send_len;
+	u16 send_len;
 	u8 recv_buf[256];
-	u8 recv_len;
+	u16 recv_len;
 	u8 data_buf[256];
-	u8 data_len;
+	u16 data_len;
 } FHD_PRM, P_FHD_PRM;
 
 extern OS_EVENT *g_sem_plc;

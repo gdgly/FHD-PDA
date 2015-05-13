@@ -565,7 +565,7 @@ void  App_TaskPLC (void *p_arg)
     (void)p_arg; 
 
     while (DEF_TRUE) {   
-        OSMboxPend(g_sys_ctrl.down_mbox, 5, &err);
+        OSMboxPend(g_sys_ctrl.up_mbox, 5, &err);
         
 #if 0
         if(OS_ERR_NONE == err)
@@ -596,7 +596,7 @@ void  App_TaskPLC (void *p_arg)
 
                     memcpy(g_plc_prm.send_buf, plc_read_addr, g_plc_prm.send_len);                    
 
-                    OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                     OSTimeDly(200);
 
@@ -617,7 +617,7 @@ void  App_TaskPLC (void *p_arg)
 
                     g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
 
-                    OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
                 }
                 else if(CHANNEL_WIRELESS == g_rom_prm.channel) //无线
                 {
@@ -633,7 +633,7 @@ void  App_TaskPLC (void *p_arg)
 
                     memcpy(g_plc_prm.send_buf, lBroadcast_Read_Meter, g_plc_prm.send_len);
 
-                    OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                     OSTimeDly(200);                    
 
@@ -655,7 +655,7 @@ void  App_TaskPLC (void *p_arg)
                     
                     g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
                     
-                    OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
                 }
                 break;
                 
@@ -683,7 +683,7 @@ void  App_TaskPLC (void *p_arg)
 
                 g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
                 break;
 
             case PLC_CMD_TYPE_L2R:     //抄控态
@@ -708,7 +708,7 @@ void  App_TaskPLC (void *p_arg)
 
                 g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
                 break;
 
             case PLC_CMD_TYPE_NODE:  //读载波节点
@@ -733,7 +733,7 @@ void  App_TaskPLC (void *p_arg)
 
                 g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
                 break;
 
             case PLC_CMD_FREQ_SET:   //速率设置
@@ -784,7 +784,7 @@ void  App_TaskPLC (void *p_arg)
 
                 g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);                
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);                
                 break;
 
             case PLC_CMD_TYPE_COMMON:
@@ -830,7 +830,7 @@ void  App_TaskPLC (void *p_arg)
 
                     memcpy(g_plc_prm.send_buf, (u8 *)&dl645_frame_send, g_plc_prm.send_len);                    
 
-                    OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                     OSTimeDly(200);                    
 
@@ -852,7 +852,7 @@ void  App_TaskPLC (void *p_arg)
                     
                     g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
                     
-                    OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
                 }
                 else if(CHANNEL_PLC == g_rom_prm.channel)
                 {
@@ -869,7 +869,7 @@ void  App_TaskPLC (void *p_arg)
                     
                     g_plc_prm.sendStatus = PLC_MSG_SENDING;
                     
-                    OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                     OSTimeDly(200);
                     
@@ -888,7 +888,7 @@ void  App_TaskPLC (void *p_arg)
                     
                     g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
                     
-                    OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
                 }
                 break;
 
@@ -928,7 +928,7 @@ void  App_TaskPLC (void *p_arg)
                 
                 g_plc_prm.sendStatus = PLC_MSG_SENDING;
                 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                 OSTimeDly(200);
                 
@@ -947,7 +947,7 @@ void  App_TaskPLC (void *p_arg)
                 
                 g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
                 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);   
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);   
 #endif
 
                 memcpy(g_send_para_pkg.relayAddr[g_sys_ctrl.sysAddrLevel], g_send_para_pkg.dstAddr, DL645_ADDR_LEN);
@@ -968,7 +968,7 @@ void  App_TaskPLC (void *p_arg)
                 
                 g_plc_prm.sendStatus = PLC_MSG_SENDING;
                 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                 OSTimeDly(200);
                 
@@ -987,7 +987,7 @@ void  App_TaskPLC (void *p_arg)
                 
                 g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
                 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
             
                 break;
 
@@ -1012,7 +1012,7 @@ void  App_TaskPLC (void *p_arg)
 
                     g_plc_prm.sendStatus = PLC_MSG_RECEIVED;
                     
-                    OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);                
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);                
                 }
             }
         }
@@ -1356,7 +1356,7 @@ void  App_TaskFHD (void *p_arg)
     (void)p_arg;
     
     while (DEF_TRUE) {
-        OSMboxPend(g_sys_ctrl.down_mbox, 0, &err);
+        OSMboxPend(g_sys_ctrl.up_mbox, 0, &err);
 
         if(OS_ERR_NONE == err)
         {
@@ -1378,7 +1378,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
@@ -1410,7 +1410,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_prm);
                 break;
 
             case FHD_CMD_CALIBRATE_TRM_VOLTAGE:
@@ -1436,7 +1436,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
@@ -1460,7 +1460,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);                 
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_prm);                 
                 break;
 
             case FHD_CMD_READ_TRM_TIME:
@@ -1479,7 +1479,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
@@ -1509,7 +1509,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);               
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_prm);               
                 break;
 
             case FHD_CMD_CALIBRATE_TRM_TIME:
@@ -1557,7 +1557,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
@@ -1581,7 +1581,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);                  
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_prm);                  
                 break;
 
             case FHD_CMD_READ_TRM_CONF:
@@ -1600,7 +1600,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
@@ -1630,7 +1630,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);    
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_prm);    
                 break;
 
             case FHD_CMD_WRITE_TRM_CONF:
@@ -1677,7 +1677,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
@@ -1701,7 +1701,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);                
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_prm);                
                 break;
 
             case FHD_CMD_READ_TRM_STATE:
@@ -1720,7 +1720,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
@@ -1750,7 +1750,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);   
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_prm);   
                 break;
 
             case FHD_CMD_READ_TRM_LOG:
@@ -1769,7 +1769,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_plc_prm);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_prm);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
@@ -1799,7 +1799,7 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_prm.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.up_mbox, (void *)&g_fhd_prm);                
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_prm);                
                 break;
                 
             default:

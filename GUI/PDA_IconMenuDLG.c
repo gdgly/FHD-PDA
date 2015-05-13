@@ -57,7 +57,7 @@
 //extern GUI_CONST_STORAGE GUI_BITMAP bmmeter;
 //extern GUI_CONST_STORAGE GUI_BITMAP bmwave;
 extern GUI_CONST_STORAGE GUI_BITMAP bmprotocal;
-//extern GUI_CONST_STORAGE GUI_BITMAP bmabout;
+extern GUI_CONST_STORAGE GUI_BITMAP bmabout;
 extern GUI_CONST_STORAGE GUI_BITMAP bmTFcard; 
 extern GUI_CONST_STORAGE GUI_BITMAP bmtime;
 extern GUI_CONST_STORAGE GUI_BITMAP bmRdWt;
@@ -78,9 +78,9 @@ typedef struct {
 //任务栏资源列表
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect,  NULL,           ID_WINDOW_0,  0,   0, 240, 25, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,    "00:00",     ID_TEXT_0,    3,   3, 120,  15, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,    "00:00",     ID_TEXT_0,    3,   3, 70,  15, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect,    "PLC-R" ,       ID_TEXT_1,    60,  3, 40,  15, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,    "\0",           ID_TEXT_10,   100, 5, 40,  15, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,    "\0",           ID_TEXT_10,   75, 5, 40,  15, 0, 0x0, 0 },
   { TEXT_CreateIndirect,    DownloadIcon,   ID_TEXT_5,    149, 3, 17,  17, 0, 0x0, 0 }, 
   { TEXT_CreateIndirect,    UploadIcon,     ID_TEXT_6,    166, 3, 17,  17, 0, 0x0, 0 },
   { TEXT_CreateIndirect,    "\0",           ID_TEXT_7,    196, 3, 42,  25, 0, 0x0, 0 },
@@ -94,9 +94,9 @@ static const BITMAP_ITEM _aBitmapItem[] =
   {&bmCalPara,    TrmChk     },  
   {&bmRdWt,      TrmRdWt    },  
   {&bmSysState,   SysState    }, 
-  {&bmprotocal,   SysLog      },  //通信规约调试
-  {&bmtime,       TimeSet     },  
+  {&bmprotocal,   SysLog      }, 
   {&bmSysSet,     SysSet     },
+  {&bmabout,       TextHelp     },  
  
 };
 
@@ -164,9 +164,6 @@ void TSK_Battery_Charge(int count)
 
 
 
-/************************************************
-数据上行
-************************************************/
 void GUI_Msg_Download(u16 sw)
 {
     WM_HWIN hItem;
@@ -199,10 +196,6 @@ void GUI_Msg_Download(u16 sw)
         
  }
 
-
-/************************************************
-数据下行
-************************************************/
 
 void GUI_Msg_Upload(u16 sw)
 {
@@ -280,7 +273,6 @@ void SetBeepState(void)
 {
     WM_HWIN hItem;
     hItem = WM_GetDialogItem(g_hWin_task,ID_TEXT_10);
-    TEXT_SetTextColor(hItem,GUI_WHITE);
     TEXT_SetFont(hItem,&GUI_Font_Battery_40);
     if(SYS_BEEP_ON == g_rom_prm.beep_switch)
     {
@@ -411,13 +403,16 @@ static void _cbIconWin(WM_MESSAGE * pMsg)
                             SSD_ColorChange();
 							break;
 
-                        case 5:
+                        case 4:
                             //g_hWin_TrmState
 							g_hWin_SysSet = CreateSysSet();
                             //WM_BringToBottom(g_hWin_msg);
                             WM_HideWindow(g_hWin_TimeBar);
                             WM_HideWindow(g_hWin_Date);
-                            WM_SetFocus(g_hWin_SysSet);
+                            //WM_SetFocus(g_hWin_SysSet);
+                            hItem = SST_GetSrcTime();
+                            WM_SetFocus(hItem);
+                            SST_ColorChange();
 							break;
 						case 3:
                             g_hWin_TrmLog = CreateTrmLog();
@@ -430,14 +425,14 @@ static void _cbIconWin(WM_MESSAGE * pMsg)
                             //CPT_Color_Change();
 							break;
                             
-                        case 4:
-                            g_hWin_TimeSet = CreateTimeSet();
+                        case 5:
+                            g_hWin_about = Createabout();
                             //WM_BringToBottom(g_hWin_msg);
                             WM_HideWindow(g_hWin_TimeBar);
                             WM_HideWindow(g_hWin_Date);
-                            WM_SetFocus(g_hWin_TimeSet);
-                            TMS_SetFocus();
-                            TMS_Color_Change();
+                            WM_SetFocus(g_hWin_about);
+                            //TMS_SetFocus();
+                            //TMS_Color_Change();
                             break;
 						
 						default:

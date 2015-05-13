@@ -251,14 +251,13 @@ uint8 iec_checksum(const uint8 ucFrame[], int32 iLen)
 	return checksum;
 }
 
-uint8 FHD_MakeFrame(uint8 ctrl, uint16 reg_addr, uint8 *pdata, uint16 len, uint8 *buf)
+uint16 FHD_MakeFrame(uint8 ctrl, uint16 reg_addr, uint8 *pdata, uint16 len, uint8 *buf)
 {
-    uint8 dev_addr, index = 0;
-    uint16 crc = 0;
+    uint8 dev_addr;
+    uint16 index = 0, crc;
 
 
     dev_addr = FHD_GetDevAddr();
-    
     buf[index] = dev_addr;
     index++;
 

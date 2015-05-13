@@ -3948,8 +3948,365 @@ GUI_CONST_STORAGE unsigned char acGUI_Fontns16_673A[ 32] = { /* code 673A */
   ___X__X_,____XXX_,
   ___X_X__,________};
 
+  
+  
+/* Start of unicode area <CJK Unified Ideographs> */
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_58F0[ 32] = { /* code 58F0 */
+   _______X,________,
+   _______X,________,
+   XXXXXXXX,XXXXXXX_,
+   _______X,________,
+   _XXXXXXX,XXXXXX__,
+   ________,________,
+   __XXXXXX,XXXXX___,
+   __X____X,____X___,
+   __X____X,____X___,
+   __XXXXXX,XXXXX___,
+   __X_____,________,
+   __X_____,________,
+   __X_____,________,
+   _X______,________,
+   _X______,________,
+   X_______,________};
 
-GUI_CONST_STORAGE GUI_CHARINFO GUI_Fontns16_CharInfo[215] = {
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_6309[ 32] = { /* code 6309 */
+    ___X____,_X______,
+    ___X____,__X_____,
+    ___X____,__X_____,
+    ___X__XX,XXXXXXX_,
+    XXXXX_X_,______X_,
+    ___X_X__,_X___X__,
+    ___X____,_X______,
+    ___XX_XX,XXXXXXX_,
+    __XX____,X___X___,
+    XX_X____,X___X___,
+    ___X___X,____X___,
+    ___X____,XX_X____,
+    ___X____,__X_____,
+    ___X____,_X_X____,
+    _X_X____,X___X___,
+    __X___XX,_____X__};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_952E[ 32] = { /* code 952E */
+  __X_____,___X____,
+  __X_____,___X____,
+  __XXX_XX,_XXXXX__,
+  __X____X,___X_X__,
+  _X_____X,XXXXXXX_,
+  _XXXX_X_,___X_X__,
+  X_X___X_,_XXXXX__,
+  __X__XXX,___X____,
+  XXXXX__X,_XXXXX__,
+  __X__X_X,___X____,
+  __X__X_X,XXXXXXX_,
+  __X___X_,___X____,
+  __X_X_X_,___X____,
+  __XX_X_X,________,
+  __X_X___,XXXXXXX_,
+  ________,________};
+  
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_97F3[ 32] = { /* code 97F3 */
+  ______X_,________,
+  _______X,________,
+  __XXXXXX,XXXXX___,
+  ________,________,
+  ____X___,__X_____,
+  _____X__,_X______,
+  XXXXXXXX,XXXXXXX_,
+  ________,________,
+  ___XXXXX,XXXX____,
+  ___X____,___X____,
+  ___X____,___X____,
+  ___XXXXX,XXXX____,
+  ___X____,___X____,
+  ___X____,___X____,
+  ___XXXXX,XXXX____,
+  ___X____,___X____};
+
+
+
+/* Start of unicode area <CJK Unified Ideographs> */
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_76EE[ 32] = { /* code 76EE */
+  ________,________,
+  __XXXXXX,XXXXX___,
+  __X_____,____X___,
+  __X_____,____X___,
+  __X_____,____X___,
+  __XXXXXX,XXXXX___,
+  __X_____,____X___,
+  __X_____,____X___,
+  __X_____,____X___,
+  __XXXXXX,XXXXX___,
+  __X_____,____X___,
+  __X_____,____X___,
+  __X_____,____X___,
+  __X_____,____X___,
+  __XXXXXX,XXXXX___,
+  __X_____,____X___};
+
+
+
+/* Start of unicode area <CJK Unified Ideographs> */
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_5347[ 32] = { /* code 5347 */
+  _______X,__X_____,
+  _____XXX,X_X_____,
+  __XXXX__,__X_____,
+  _____X__,__X_____,
+  _____X__,__X_____,
+  _____X__,__X_____,
+  _____X__,__X_____,
+  XXXXXXXX,XXXXXXX_,
+  _____X__,__X_____,
+  _____X__,__X_____,
+  _____X__,__X_____,
+  ____X___,__X_____,
+  ____X___,__X_____,
+  ___X____,__X_____,
+  __X_____,__X_____,
+  _X______,__X_____};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_5C4F[ 32] = { /* code 5C4F */
+  ________,________,
+  __XXXXXX,XXXXX___,
+  __X_____,____X___,
+  __X_____,____X___,
+  __XXXXXX,XXXXX___,
+  __X__X__,___X____,
+  __X___X_,__X_____,
+  __X_XXXX,XXXXX___,
+  __X___X_,__X_____,
+  __X___X_,__X_____,
+  __XXXXXX,XXXXXX__,
+  __X___X_,__X_____,
+  _X____X_,__X_____,
+  _X___X__,__X_____,
+  X____X__,__X_____,
+  ____X___,__X_____};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_672C[ 32] = { /* code 672C */
+  _______X,________,
+  _______X,________,
+  _______X,________,
+  _______X,________,
+  _XXXXXXX,XXXXXX__,
+  ______XX,X_______,
+  _____X_X,_X______,
+  _____X_X,_X______,
+  ____X__X,__X_____,
+  ___X___X,___X____,
+  __X____X,____X___,
+  _X__XXXX,XXX__X__,
+  X______X,______X_,
+  _______X,________,
+  _______X,________,
+  _______X,________};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_7248[ 32] = { /* code 7248 */
+  ____X___,____X___,
+  _X__X___,___XXX__,
+  _X__X__X,XXX_____,
+  _X__X__X,________,
+  _X__X__X,________,
+  _XXXXX_X,XXXXXX__,
+  _X_____X,_X___X__,
+  _X_____X,_X___X__,
+  _XXXX__X,_X___X__,
+  _X__X__X,__X_X___,
+  _X__X__X,__X_X___,
+  _X__X__X,___X____,
+  _X__X__X,___X____,
+  _X__X_X_,__X_X___,
+  _X__X_X_,_X___X__,
+  X___XX__,X_____X_};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_786C[ 32] = { /* code 786C */
+  ________,________,
+  _______X,XXXXXXX_,
+  XXXXXX__,__X_____,
+  ___X____,__X_____,
+  ___X___X,XXXXXX__,
+  __X____X,__X__X__,
+  __XXXX_X,__X__X__,
+  _XX__X_X,XXXXXX__,
+  _XX__X_X,__X__X__,
+  X_X__X_X,__X__X__,
+  __X__X_X,XXXXXX__,
+  __X__X_X,__X_____,
+  __XXXX__,X_X_____,
+  __X__X__,_X______,
+  __X_____,X_XX____,
+  ______XX,____XXX_};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_7EA7[ 32] = { /* code 7EA7 */
+  ___X____,________,
+  ___X__XX,XXXXXX__,
+  __X_____,X____X__,
+  __X_____,X___X___,
+  _X__X___,X___X___,
+  XXXXX___,X__X____,
+  ___X____,X__XXX__,
+  __X_____,X____X__,
+  _X_____X,_X___X__,
+  XXXXX__X,_X___X__,
+  _X_____X,__X_X___,
+  _______X,__X_X___,
+  ___XX_X_,___X____,
+  XXX___X_,__X_X___,
+  _X___X__,_X___X__,
+  _______X,X_____X_};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_81EA[ 32] = { /* code 81EA */
+  _______X,________,
+  ______X_,________,
+  _____X__,________,
+  ___XXXXX,XXXX____,
+  ___X____,___X____,
+  ___X____,___X____,
+  ___X____,___X____,
+  ___XXXXX,XXXX____,
+  ___X____,___X____,
+  ___X____,___X____,
+  ___XXXXX,XXXX____,
+  ___X____,___X____,
+  ___X____,___X____,
+  ___X____,___X____,
+  ___XXXXX,XXXX____,
+  ___X____,___X____};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_8F6F[ 32] = { /* code 8F6F */
+  ___X____,_X______,
+  ___X____,_X______,
+  ___X____,_X______,
+  XXXXXXX_,_XXXXX__,
+  __X_____,X____X__,
+  __X_X___,X___X___,
+  _X__X__X,__X_____,
+  _XXXXXX_,__X_____,
+  ____X___,__X_____,
+  ____X___,_X_X____,
+  ____XXX_,_X_X____,
+  XXXXX___,_X_X____,
+  _X__X___,X___X___,
+  ____X___,X___X___,
+  ____X__X,_____X__,
+  ____X_X_,______X_};
+
+
+
+/* Start of unicode area <CJK Unified Ideographs> */
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_786E[ 32] = { /* code 786E */
+  ________,_X______,
+  ________,_X______,
+  XXXXXX__,_XXXXX__,
+  ___X____,X____X__,
+  ___X___X,____X___,
+  __X___X_,XXXXXXX_,
+  __XXXX__,X__X__X_,
+  _XX__X__,X__X__X_,
+  _XX__X__,XXXXXXX_,
+  X_X__X__,X__X__X_,
+  __X__X__,X__X__X_,
+  __X__X__,XXXXXXX_,
+  __XXXX__,X__X__X_,
+  __X__X_X,___X__X_,
+  __X____X,____X_X_,
+  ______X_,_____X__};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_8BA4[ 32] = { /* code 8BA4 */
+  ________,_X______,
+  __X_____,_X______,
+  ___X____,_X______,
+  ___X____,_X______,
+  ________,_X______,
+  ________,_X______,
+  XXXX____,_X______,
+  ___X____,_X______,
+  ___X____,X_X_____,
+  ___X____,X_X_____,
+  ___X____,X_X_____,
+  ___X_X_X,___X____,
+  ___XX__X,___X____,
+  ___X__X_,____X___,
+  _____X__,_____X__,
+  ____X___,______X_};
+
+
+/* Start of unicode area <CJK Unified Ideographs> */
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_52A9[ 32] = { /* code 52A9 */
+  ________,__X_____,
+  _XXXXX__,__X_____,
+  _X___X__,__X_____,
+  _X___X__,__X_____,
+  _X___X__,XXXXXX__,
+  _XXXXX__,__X__X__,
+  _X___X__,__X__X__,
+  _X___X__,__X__X__,
+  _XXXXX__,__X__X__,
+  _X___X__,__X__X__,
+  _X___X__,__X__X__,
+  _X___X__,_X___X__,
+  _X__XXX_,_X___X__,
+  XXXX____,X____X__,
+  _______X,__X_X___,
+  ______X_,___X____};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_5E2E[ 32] = { /* code 5E2E */
+  ____X___,________,
+  ____X___,_XXXXX__,
+  XXXXXXXX,_X__X___,
+  ____X___,_X_X____,
+  _XXXXXX_,_X__X___,
+  ____X___,_X___X__,
+  XXXXXXXX,_X_X_X__,
+  ___X____,_X__X___,
+  __X_____,_X______,
+  _X_____X,________,
+  X_XXXXXX,XXXXX___,
+  __X____X,____X___,
+  __X____X,____X___,
+  __X____X,__X_X___,
+  __X____X,___X____,
+  _______X,________};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_660E[ 32] = { /* code 660E */
+  ________,________,
+  ________,XXXXXX__,
+  _XXXXX__,X____X__,
+  _X___X__,X____X__,
+  _X___X__,X____X__,
+  _X___X__,XXXXXX__,
+  _XXXXX__,X____X__,
+  _X___X__,X____X__,
+  _X___X__,X____X__,
+  _X___X__,XXXXXX__,
+  _XXXXX__,X____X__,
+  _X___X__,X____X__,
+  _______X,_____X__,
+  _______X,_____X__,
+  ______X_,___X_X__,
+  _____X__,____X___};
+
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_8BF4[ 32] = { /* code 8BF4 */
+  ______X_,____X___,
+  __X____X,____X___,
+  ___X___X,___X____,
+  ___X____,__X_____,
+  ______XX,XXXXX___,
+  ______X_,____X___,
+  XXXX__X_,____X___,
+  ___X__X_,____X___,
+  ___X__XX,XXXXX___,
+  ___X____,X_X_____,
+  ___X____,X_X_____,
+  ___X_X_X,__X_____,
+  ___XX__X,__X___X_,
+  ___X__X_,__X___X_,
+  _____X__,___XXXX_,
+  ____X___,________};
+
+
+
+GUI_CONST_STORAGE GUI_CHARINFO GUI_Fontns16_CharInfo[234] = {
    {   8,   8,  1, acGUI_Fontns16_0020 } /* code 0020 */
   ,{   8,   8,  1, acGUI_Fontns16_0021 } /* code 0021 */
   ,{   8,   8,  1, acGUI_Fontns16_0022 } /* code 0022 */
@@ -4169,7 +4526,166 @@ GUI_CONST_STORAGE GUI_CHARINFO GUI_Fontns16_CharInfo[215] = {
   ,{  16,  16,  2, acGUI_Fontns16_7EC8 } /* code 7EC8 */
   ,{  16,  16,  2, acGUI_Fontns16_638C } /* code 638C */
   ,{  16,  16,  2, acGUI_Fontns16_673A } /* code 673A */
+  ,{  16,  16,  2, acGUI_Fontns16_58F0 } /* code 58F0 */
+  ,{  16,  16,  2, acGUI_Fontns16_6309 } /* code 6309 */
+  ,{  16,  16,  2, acGUI_Fontns16_952E } /* code 952E */
+  ,{  16,  16,  2, acGUI_Fontns16_97F3 } /* code 97F3 */
+  ,{  16,  16,  2, acGUI_Fontns16_76EE } /* code 76EE */
+  ,{  16,  16,  2, acGUI_Fontns16_5347 } /* code 5347 */
+  ,{  16,  16,  2, acGUI_Fontns16_5C4F } /* code 5C4F */
+  ,{  16,  16,  2, acGUI_Fontns16_672C } /* code 672C */
+  ,{  16,  16,  2, acGUI_Fontns16_7248 } /* code 7248 */
+  ,{  16,  16,  2, acGUI_Fontns16_786C } /* code 786C */
+  ,{  16,  16,  2, acGUI_Fontns16_7EA7 } /* code 7EA7 */
+  ,{  16,  16,  2, acGUI_Fontns16_81EA } /* code 81EA */
+  ,{  16,  16,  2, acGUI_Fontns16_8F6F } /* code 8F6F */
+  ,{  16,  16,  2, acGUI_Fontns16_786E } /* code 786E */
+  ,{  16,  16,  2, acGUI_Fontns16_8BA4 } /* code 8BA4 */
+  ,{  16,  16,  2, acGUI_Fontns16_52A9 } /* code 52A9 */
+  ,{  16,  16,  2, acGUI_Fontns16_5E2E } /* code 5E2E */
+  ,{  16,  16,  2, acGUI_Fontns16_660E } /* code 660E */
+  ,{  16,  16,  2, acGUI_Fontns16_8BF4 } /* code 8BF4 */
 };
+
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop136 = {
+   0x8BF4 /* first character */
+  ,0x8BF4 /* last character  */
+  ,&GUI_Fontns16_CharInfo[233] /* address of first character */
+  ,(GUI_CONST_STORAGE GUI_FONT_PROP *)0 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop135 = {
+   0x660E /* first character */
+  ,0x660E /* last character  */
+  ,&GUI_Fontns16_CharInfo[232] /* address of first character */
+  ,&GUI_Fontns16_Prop136 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop134 = {
+   0x5E2E /* first character */
+  ,0x5E2E /* last character  */
+  ,&GUI_Fontns16_CharInfo[231] /* address of first character */
+  ,&GUI_Fontns16_Prop135 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop133 = {
+   0x52A9 /* first character */
+  ,0x52A9 /* last character  */
+  ,&GUI_Fontns16_CharInfo[230] /* address of first character */
+  ,&GUI_Fontns16_Prop134 /* pointer to next GUI_FONT_PROP */
+};
+
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop132 = {
+   0x8BA4 /* first character */
+  ,0x8BA4 /* last character  */
+  ,&GUI_Fontns16_CharInfo[229] /* address of first character */
+  ,&GUI_Fontns16_Prop133 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop131 = {
+   0x786E /* first character */
+  ,0x786E /* last character  */
+  ,&GUI_Fontns16_CharInfo[228] /* address of first character */
+  ,&GUI_Fontns16_Prop132 /* pointer to next GUI_FONT_PROP */
+};
+
+
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop130 = {
+   0x8F6F /* first character */
+  ,0x8F6F /* last character  */
+  ,&GUI_Fontns16_CharInfo[227] /* address of first character */
+  ,&GUI_Fontns16_Prop131/* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop129 = {
+   0x81EA /* first character */
+  ,0x81EA /* last character  */
+  ,&GUI_Fontns16_CharInfo[226] /* address of first character */
+  ,&GUI_Fontns16_Prop130 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop128 = {
+   0x7EA7 /* first character */
+  ,0x7EA7 /* last character  */
+  ,&GUI_Fontns16_CharInfo[225] /* address of first character */
+  ,&GUI_Fontns16_Prop129 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop127 = {
+   0x786C /* first character */
+  ,0x786C /* last character  */
+  ,&GUI_Fontns16_CharInfo[224] /* address of first character */
+  ,&GUI_Fontns16_Prop128 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop126 = {
+   0x7248 /* first character */
+  ,0x7248 /* last character  */
+  ,&GUI_Fontns16_CharInfo[223] /* address of first character */
+  ,&GUI_Fontns16_Prop127 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop125 = {
+   0x672C /* first character */
+  ,0x672C /* last character  */
+  ,&GUI_Fontns16_CharInfo[222] /* address of first character */
+  ,&GUI_Fontns16_Prop126 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop124 = {
+   0x5C4F /* first character */
+  ,0x5C4F /* last character  */
+  ,&GUI_Fontns16_CharInfo[221] /* address of first character */
+  ,&GUI_Fontns16_Prop125 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop123 = {
+   0x5347 /* first character */
+  ,0x5347 /* last character  */
+  ,&GUI_Fontns16_CharInfo[220] /* address of first character */
+  ,&GUI_Fontns16_Prop124 /* pointer to next GUI_FONT_PROP */
+};
+
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop122 = {
+   0x76EE /* first character */
+  ,0x76EE /* last character  */
+  ,&GUI_Fontns16_CharInfo[219] /* address of first character */
+  ,&GUI_Fontns16_Prop123/* pointer to next GUI_FONT_PROP */
+};
+
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop121 = {
+   0x97F3 /* first character */
+  ,0x97F3 /* last character  */
+  ,&GUI_Fontns16_CharInfo[218] /* address of first character */
+  ,&GUI_Fontns16_Prop122 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop120 = {
+   0x952E /* first character */
+  ,0x952E /* last character  */
+  ,&GUI_Fontns16_CharInfo[217] /* address of first character */
+  ,&GUI_Fontns16_Prop121 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop119 = {
+   0x6309 /* first character */
+  ,0x6309 /* last character  */
+  ,&GUI_Fontns16_CharInfo[216] /* address of first character */
+  ,&GUI_Fontns16_Prop120 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop118 = {
+   0x58F0 /* first character */
+  ,0x58F0 /* last character  */
+  ,&GUI_Fontns16_CharInfo[215] /* address of first character */
+  ,&GUI_Fontns16_Prop119 /* pointer to next GUI_FONT_PROP */
+};
+
 
 
 
@@ -4177,7 +4693,7 @@ GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop117 = {
    0x673A /* first character */
   ,0x673A /* last character  */
   ,&GUI_Fontns16_CharInfo[214] /* address of first character */
-  ,(GUI_CONST_STORAGE GUI_FONT_PROP *)0 /* pointer to next GUI_FONT_PROP */
+  ,&GUI_Fontns16_Prop118 /* pointer to next GUI_FONT_PROP */
 };
 
 GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop116 = {

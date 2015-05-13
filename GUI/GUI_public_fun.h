@@ -113,14 +113,13 @@ typedef struct _gui_prm {
     u8 state;
 	u8 cmd;
 	u8 data_buf[256];
-	u8 data_len;
+	u16 data_len;
 } GUI_PRM, P_GUI_PRM; //华兄
 
 extern GUI_PRM g_gui_prm;
 
 extern SEND_PARA_PKG g_send_para_pkg;      //参数包
 
-extern const char *gc_messageBoxText[];
 //extern const u8 c_645ctrlDef[2][PLC_CTRL_MAX_NUM] ;
 
 extern const u32 c_645DidoDef[2][PLC_CTRL_MAX_NUM] ;
@@ -129,10 +128,10 @@ extern const u32 c_645DidoDef[2][PLC_CTRL_MAX_NUM] ;
 
 
 /* 华兄 */
-void GUI_Calibrate_Proc(void);
-void GUI_Conf_Proc(void);
-void GUI_Sys_State_Proc(void);
-void GUI_Sys_Log_Proc(void);
+void GUI_Trm_Cal_Proc(void);
+void GUI_Trm_Conf_Proc(void);
+void GUI_Trm_State_Proc(void);
+void GUI_Trm_Log_Proc(void);
 
 
 /*button对按键的反应，闪烁一下*/

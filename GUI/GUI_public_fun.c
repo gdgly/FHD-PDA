@@ -269,19 +269,19 @@ void GUI_Recv_Msg_Proc(void)
         switch(g_gui_prm.state)
         {
         case FHD_GUI_TRM_CAL:
-            GUI_Calibrate_Proc();
+            GUI_Trm_Cal_Proc();
             break;
 
         case FHD_GUI_TRM_CONF:
-            GUI_Conf_Proc();
+            GUI_Trm_Conf_Proc();
             break;
 
         case FHD_GUI_TRM_STATE:
-            GUI_Sys_State_Proc();
+            GUI_Trm_State_Proc();
             break;
 
         case FHD_GUI_TRM_LOG:
-            GUI_Sys_Log_Proc();
+            GUI_Trm_Log_Proc();
             break;
 
         default:
@@ -402,9 +402,6 @@ void GUI_Msg_Proc()
     
 }
 #else //ЛЊаж
-#if (EWARM_OPTIMIZATION_EN > 0u)
-#pragma optimize = low
-#endif
 void GUI_Msg_Proc(void)
 {
     if(MSG_STATE_SENDING == g_fhd_prm.msg_state)    
@@ -412,8 +409,6 @@ void GUI_Msg_Proc(void)
         GUI_Msg_Upload(ON);
 
         GUI_Send_Msg_Proc();
-        
-        return;
     }    
     else if(MSG_STATE_RECEIVED == g_fhd_prm.msg_state)
     {

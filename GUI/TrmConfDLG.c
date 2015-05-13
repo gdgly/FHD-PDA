@@ -279,7 +279,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case GUI_KEY_F1:
                 g_gui_prm.state = FHD_GUI_TRM_CONF;
                 g_gui_prm.cmd = FHD_CMD_READ_TRM_CONF;
-                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                              
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);                              
                 break;
                 
             case GUI_KEY_GREEN:
@@ -318,7 +318,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 
                 g_gui_prm.state = FHD_GUI_TRM_CONF;
                 g_gui_prm.cmd = FHD_CMD_WRITE_TRM_CONF;
-                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);    
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);    
                 break;
                 
             case '*':
@@ -375,7 +375,7 @@ WM_HWIN CreateParaConf(void) {
 
 // USER START (Optionally insert additional public code)
 
-void GUI_Conf_Proc(void)
+void GUI_Trm_Conf_Proc(void)
 {
     WM_HWIN hItem;
     u8 buf[128];

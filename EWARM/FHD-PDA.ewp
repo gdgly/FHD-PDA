@@ -2134,6 +2134,9 @@
       </file>
     </group>
     <file>
+      <name>$PROJ_DIR$\..\GUI\AboutDLG.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\GUI\ErrNoteDLG.c</name>
     </file>
     <file>
@@ -2149,7 +2152,10 @@
       <name>$PROJ_DIR$\..\GUI\phrase.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\GUI\SysSet.c</name>
+      <name>$PROJ_DIR$\..\GUI\SDInfo.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\GUI\SysSetDLG.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\TimeSet.c</name>

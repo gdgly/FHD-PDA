@@ -19,9 +19,13 @@ typedef WM_HWIN (*pGetHandler)(void);
 #define EDT_MINITE               7
 #define EDT_SECOND               8
 
+#define EDT_SRC_TIME             9
+#define EDT_SHUTDOWN             10
+
 //#define CPS_EDT_NUMBER           4   //通信参数设置页的edit数量
 #define PRW_EDT_NUMBER           3   //参数抄设页
 #define SYS_EDT_NUMBER           4   //系统状态页
+#define SST_EDT_NUMBER           2
 
 
 WM_HWIN CPS_GetCheck(void);
@@ -32,7 +36,8 @@ WM_HWIN CPS_GetVtgRead(void);
 
 void PRW_FocusSel(void);
 void SSD_FocusSel(void);
-
+void SST_FocusSel(void);
+void SST_ColorChange(void);
 
 
 

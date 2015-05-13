@@ -46,6 +46,8 @@
 **********************************************************************
 */
 
+
+
 // USER START (Optionally insert additional static data)
 // USER END
 
@@ -69,14 +71,6 @@ WM_HWIN ERR_Get_Text(void)
 }
 
 
-
-
-
-
-/*********************************************************************
-*
-*       _cbDialog
-*/
 static void _cbDialog(WM_MESSAGE * pMsg) {
   WM_HWIN hItem;
   int     NCode;
@@ -105,11 +99,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //WIDGET_AndState(hItem,WIDGET_STATE_FOCUSSABLE);
     BUTTON_SetBkColor(hItem,0,GUI_YELLOW);
     break;
-  case WM_NOTIFY_PARENT:
-    Id    = WM_GetId(pMsg->hWinSrc);
-    NCode = pMsg->Data.v;
-    switch(Id) {;}
-    break;
   case WM_KEY:
     if((((WM_KEY_INFO *)(pMsg->Data.p))->PressedCnt)==1)
     {
@@ -122,27 +111,21 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
             case GUI_KEY_GREEN:
                 WM_DeleteWindow(g_hWin_Err);
-#if 0
-                if(g_hWin_mem>0)
-                {
-                    SYS_ADD_TASK(SYS_TASK_FORMAT_DISK);
-                }
-                if(g_hWin_about>0)
+                if(g_hWin_SysSet>0)
                 {
                   
-                  if(g_sys_register_para.bootFlag != BOOT_REQUEST_ACT)
+                  if(g_rom_prm.bootFlag != BOOT_REQUEST_ACT)
                   {
-                      g_sys_register_para.bootFlag = BOOT_REQUEST_ACT;
+                      g_rom_prm.bootFlag = BOOT_REQUEST_ACT;
                       DEV_Parameters_Write();
                   }
                   DEV_SoftReset();
                 }
-#endif
                 Select_Focus();
                 break;
         }
-        break;
     }
+    break;
   default:
     WM_DefaultProc(pMsg);
     break;

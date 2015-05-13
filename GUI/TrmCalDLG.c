@@ -209,7 +209,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 g_gui_prm.data_len = sizeof(sys_time);
                 g_gui_prm.state = FHD_GUI_TRM_CAL;
                 g_gui_prm.cmd = FHD_CMD_CALIBRATE_TRM_TIME;
-                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);   
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);   
 #if 0
                 WM_DeleteWindow(g_hWin_TrmCal);
                 g_hWin_TrmCal=HBWIN_NULL;
@@ -222,7 +222,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case GUI_KEY_GREEN:
                 g_gui_prm.state = FHD_GUI_TRM_CAL;
                 g_gui_prm.cmd = FHD_CMD_READ_TRM_VOLTAGE;
-                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);                
                 break;
                 
             case '*':
@@ -237,13 +237,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 g_gui_prm.data_len = sizeof(temp);
                 g_gui_prm.state = FHD_GUI_TRM_CAL;
                 g_gui_prm.cmd = FHD_CMD_CALIBRATE_TRM_VOLTAGE;
-                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                  
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);                  
                 break;
                 
             case GUI_KEY_F1:
                 g_gui_prm.state = FHD_GUI_TRM_CAL;
                 g_gui_prm.cmd = FHD_CMD_READ_TRM_TIME;
-                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm);                 
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);                 
                 break;
                 
             case '#':   
@@ -257,7 +257,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 g_gui_prm.data_len = sizeof(sys_time);
                 g_gui_prm.state = FHD_GUI_CALIBRATE;
                 g_gui_prm.cmd = FHD_CMD_CALIBRATE_TIME;
-                OSMboxPost(g_sys_ctrl.down_mbox, &g_gui_prm); 
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm); 
 #endif
                 break;
                 
@@ -298,10 +298,8 @@ WM_HWIN CreateCal(void) {
 }
 
 // USER START (Optionally insert additional public code)
-#if (EWARM_OPTIMIZATION_EN > 0u)
-#pragma optimize = low
-#endif
-void GUI_Calibrate_Proc(void)
+
+void GUI_Trm_Cal_Proc(void)
 {
     WM_HWIN hItem;
     u8 buf[128];
@@ -347,7 +345,6 @@ void GUI_Calibrate_Proc(void)
         break;
     }
 }
-
 
 // USER END
 

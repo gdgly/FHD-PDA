@@ -359,21 +359,21 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                     if(DEV_OK == Time_From_Widget(g_rtc_time))
                     {
                         RTC_WriteTime(g_rtc_time);
-                    WM_DeleteWindow(g_hWin_TimeSet);
-                    g_hWin_TimeSet=HBWIN_NULL;
-                    WM_SetFocus(g_hWin_menu);
-                    WM_ShowWindow(g_hWin_TimeBar);
-                    WM_ShowWindow(g_hWin_Date);
-                    tms_key_cnt=0;
+                        WM_DeleteWindow(g_hWin_TimeSet);
+                        g_hWin_TimeSet=HBWIN_NULL;
+                        WM_SetFocus(g_hWin_SysSet);
+                        //WM_ShowWindow(g_hWin_TimeBar);
+                        //WM_ShowWindow(g_hWin_Date);
+                        tms_key_cnt=0;
                     }
                     break;
                 //因为没有在edit中拦截消息，所以在edit中也可以直接删除窗口
                 case GUI_KEY_YELLOW:
                     WM_DeleteWindow(g_hWin_TimeSet);
                     g_hWin_TimeSet=HBWIN_NULL;
-                    WM_SetFocus(g_hWin_menu);
-                    WM_ShowWindow(g_hWin_TimeBar);
-                    WM_ShowWindow(g_hWin_Date);
+                    WM_SetFocus(g_hWin_SysSet);
+                    //WM_ShowWindow(g_hWin_TimeBar);
+                    //WM_ShowWindow(g_hWin_Date);
                     tms_key_cnt=0;
                     break;   
                 case GUI_KEY_TAB:
@@ -439,7 +439,7 @@ WM_HWIN CreateTimeSet(void)
 {
   WM_HWIN hWin;
 
-  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_menu, 0, 0);
+  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_SysSet, 0, 0);
   return hWin;
 }
 

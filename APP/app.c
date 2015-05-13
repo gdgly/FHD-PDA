@@ -185,14 +185,14 @@ WM_HWIN g_hWin_menu;
 
 WM_HWIN g_hWin_task;//任务栏
 WM_HWIN g_hWin_TimeSet; //时间设置
-
+WM_HWIN g_hWin_about;
 WM_HWIN g_hWin_Err;
 
 WM_HWIN g_hWin_TimeBar;  //主页时间
 WM_HWIN g_hWin_Date;     //显示日期
 WM_HWIN g_hWin_Input;    //各种输入小框体
-WM_HWIN g_hWin_SysTime;
 WM_HWIN g_hWin_SysSet;
+WM_HWIN g_hWin_SDInfo;
 
 /**********
 
@@ -273,7 +273,6 @@ void APP_StartButtonTest()
             if(keyCnt > 80)
             {
                 SYS_PWR_ON();
-                //g_sys_ctrl.power_stat = SYS_POWER_ON;
                 OSTimeDly(20);
                 return;                
             }
@@ -281,7 +280,6 @@ void APP_StartButtonTest()
         else
         {
             APP_Shutdown();
-            //g_sys_ctrl.power_stat = SYS_POWER_OFF;
             keyCnt = 0;
 
             if(GET_USB_VOL() == 0)
@@ -335,7 +333,7 @@ static  void  App_TaskStart (void *p_arg)
     OSStatInit();                                               /* Determine CPU capacity                                   */
 #endif
 
-#if 0
+#if 1
     APP_StartButtonTest();
 #endif
 
@@ -455,13 +453,12 @@ static  void  App_TaskGUI (void *p_arg)
                 //ERR_NOTE(g_hWin_menu,11);
                 APP_Shutdown();
             }
-            
         }
         //memcpy(timebuf,RTC2Text(),10);
         RTC2Text(timebuf);
         TEXT_SetText(g_hWin_TimeBar,timebuf);
 
-        RTC2Text_NoSec(timebuf);
+        RTC2Text(timebuf);
         TEXT_SetText(TSK_Get_Time(),timebuf);
         //memcpy(timebuf_date,RTC2Text_Date(),11);
         RTC2Text_Date(timebuf);
@@ -518,23 +515,15 @@ static  void  App_TaskPower (void *p_arg)
         }        
 
         g_sys_ctrl.shutdownTimeout++;
-        if(g_sys_ctrl.shutdownTimeout > ((g_rom_prm.scrTimeout + 120) * 100))
+        if(g_sys_ctrl.shutdownTimeout > ((g_rom_prm.auto_shutdown_time + 180) * 100))
         {
-            if((PLC_CMD_TYPE_NODE == g_send_para_pkg.cmdType) ||
-               (PLC_CMD_TYPE_R2L == g_send_para_pkg.cmdType))
-            {
-                LCD_BL_OFF();
-            }
-            else
-            {
-                APP_Shutdown();
-            }
+            APP_Shutdown();
             
             g_sys_ctrl.shutdownTimeout = 0;
         }
         
         g_sys_ctrl.sleepTimeout++;
-        if(g_sys_ctrl.sleepTimeout > ((g_rom_prm.scrTimeout + 30) * 100))
+        if(g_sys_ctrl.sleepTimeout > ((g_rom_prm.auto_sleep_time + 60) * 100))
         {
             APP_Sleep();
             
@@ -588,7 +577,7 @@ static  void  App_TaskGMP (void *p_arg)
             ||(g_sys_ctrl.guiState == GUI_PLC_MSG_LISTING)
             ||(g_sys_ctrl.guiState == GUI_PLC_MSG_FREQ))
         {
-            OSMboxPend(g_sys_ctrl.up_mbox, 10, &err);        
+            OSMboxPend(g_sys_ctrl.down_mbox, 10, &err);        
             if(OS_ERR_NONE == err)
             {
                 //g_sys_ctrl.numMultiedit++;
@@ -639,7 +628,7 @@ static  void  App_TaskGMP (void *p_arg)
     (void)p_arg;
     
     while (DEF_TRUE) {
-        OSMboxPend(g_sys_ctrl.up_mbox, 0, &err);
+        OSMboxPend(g_sys_ctrl.down_mbox, 0, &err);
 
         if(OS_ERR_NONE == err)
         {
@@ -951,8 +940,8 @@ static  void  App_EventCreate (void)
     g_sem_chk_rf = OSSemCreate(0);
 	g_key_control.key_sem = OSSemCreate(0);    
     
-    g_sys_ctrl.down_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/
-    g_sys_ctrl.up_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/        
+    g_sys_ctrl.up_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/
+    g_sys_ctrl.down_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/        
 }
 
 
