@@ -123,7 +123,7 @@ extern SEND_PARA_PKG g_send_para_pkg;      //²ÎÊý°ü
 //extern const u8 c_645ctrlDef[2][PLC_CTRL_MAX_NUM] ;
 
 extern const u32 c_645DidoDef[2][PLC_CTRL_MAX_NUM] ;
-
+extern u8 g_gui_time[MAX_RTC_ITEM];
 
 
 

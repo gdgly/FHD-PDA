@@ -30,6 +30,7 @@
 *
 **********************************************************************
 */
+#if 0
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_TEXT_0   (GUI_ID_USER + 0x09)
 #define ID_TEXT_1   (GUI_ID_USER + 0x0A)
@@ -37,18 +38,19 @@
 #define ID_TEXT_3   (GUI_ID_USER + 0x0C)
 #define ID_TEXT_4   (GUI_ID_USER + 0x0D)
 #define ID_TEXT_5   (GUI_ID_USER + 0x0E)
+#define ID_TEXT_6   (GUI_ID_USER + 0x0F)
 
-#define ID_EDIT_0   (GUI_ID_USER + 0x0F)
-#define ID_EDIT_1   (GUI_ID_USER + 0x10)
-#define ID_EDIT_2   (GUI_ID_USER + 0x11)
-#define ID_EDIT_3   (GUI_ID_USER + 0x12)
-#define ID_EDIT_4   (GUI_ID_USER + 0x13)
-#define ID_EDIT_5   (GUI_ID_USER + 0x14)
+#define ID_EDIT_0   (GUI_ID_USER + 0x10)
+#define ID_EDIT_1   (GUI_ID_USER + 0x11)
+#define ID_EDIT_2   (GUI_ID_USER + 0x12)
+#define ID_EDIT_3   (GUI_ID_USER + 0x13)
+#define ID_EDIT_4   (GUI_ID_USER + 0x14)
+#define ID_EDIT_5   (GUI_ID_USER + 0x15)
 
-#define ID_BUTTON_0 (GUI_ID_USER + 0x15)
-#define ID_BUTTON_1 (GUI_ID_USER + 0x16)
-#define ID_TEXT_6   (GUI_ID_USER + 0x17)
-#define ID_TEXT_7   (GUI_ID_USER + 0x18)
+#define ID_EDIT_6   (GUI_ID_USER + 0x16)
+#define ID_BUTTON_0 (GUI_ID_USER + 0x17)
+#define ID_BUTTON_1 (GUI_ID_USER + 0x18)
+#define ID_TEXT_7   (GUI_ID_USER + 0x1A)
 
 
 
@@ -72,8 +74,47 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { EDIT_CreateIndirect,   "sec",     ID_EDIT_5,   110, 220, 80,  20, 0, 2, 0 },
   { BUTTON_CreateIndirect, Save,   ID_BUTTON_0, 10,  259, 80,  25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,    ID_BUTTON_1, 150, 261, 80,  25, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   TimeSet_24,ID_TEXT_6,   60,  12,  150, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   TimeSet_24,ID_TEXT_7,   60,  12,  150, 20, 0, 0x0, 0 },
  
+};
+#endif
+#define ID_WINDOW_0 (GUI_ID_USER + 0x00)
+#define ID_TEXT_0 (GUI_ID_USER + 0x01)
+#define ID_TEXT_1 (GUI_ID_USER + 0x02)
+#define ID_TEXT_2 (GUI_ID_USER + 0x03)
+#define ID_TEXT_3 (GUI_ID_USER + 0x04)
+#define ID_TEXT_4 (GUI_ID_USER + 0x05)
+#define ID_TEXT_5 (GUI_ID_USER + 0x06)
+#define ID_TEXT_6 (GUI_ID_USER + 0x07)
+#define ID_TEXT_7 (GUI_ID_USER + 0x08)
+#define ID_EDIT_0 (GUI_ID_USER + 0x09)
+#define ID_EDIT_1 (GUI_ID_USER + 0x0A)
+#define ID_EDIT_2 (GUI_ID_USER + 0x0B)
+#define ID_EDIT_3 (GUI_ID_USER + 0x0C)
+#define ID_EDIT_4 (GUI_ID_USER + 0x0D)
+#define ID_EDIT_5 (GUI_ID_USER + 0x0E)
+#define ID_EDIT_6 (GUI_ID_USER + 0x0F)
+#define ID_BUTTON_0 (GUI_ID_USER + 0x10)
+#define ID_BUTTON_1 (GUI_ID_USER + 0x11)
+static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
+  { WINDOW_CreateIndirect, "TimeSet", ID_WINDOW_0, 0,   0, 240, 295, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, TimeSet_24,  ID_TEXT_7,   63,  6, 130, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   Year,      ID_TEXT_0,   51,  34, 40, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   Month,     ID_TEXT_1,   51,  64, 40, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   Day,       ID_TEXT_2,   51,  94, 40, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   Hour,      ID_TEXT_3,   51,  124, 40, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   Minite,    ID_TEXT_4,   51,  154, 40, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   Second,    ID_TEXT_5,   51,  184, 40, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   Week,      ID_TEXT_6,   51,  214, 40, 20, 0, 0x0, 0 },
+  { EDIT_CreateIndirect,   "year",    ID_EDIT_0,   110, 30, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect,   "month",   ID_EDIT_1,   110, 60, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect,   "day",     ID_EDIT_2,   110, 90, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect,   "hour",    ID_EDIT_3,   110, 120, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect,   "min",     ID_EDIT_4,   110, 150, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect,   "sec",     ID_EDIT_5,   110, 180, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect,   "week",    ID_EDIT_6,   110, 210, 80, 20, 0, 0x64, 0 },
+  { BUTTON_CreateIndirect, Save,  ID_BUTTON_0, 13,  259, 80, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, Quit,  ID_BUTTON_1, 153, 259, 80, 25, 0, 0x0, 0 },
 };
 
 /*********************************************************************
@@ -198,6 +239,8 @@ static void Time_Init(WM_MESSAGE *pMsg)
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_5);
     EDIT_SetText(hItem, sec);
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_6);
+    EDIT_SetText(hItem, TextWeek[(g_rtc_time[DAY_POS])]);
 }
 
 
@@ -251,6 +294,10 @@ WM_HWIN TMS_GetSec(void)
     return WM_GetDialogItem(g_hWin_TimeSet,ID_EDIT_5);
 }
 
+WM_HWIN TMS_GetWeek(void)
+{
+    return WM_GetDialogItem(g_hWin_TimeSet,ID_EDIT_6);
+}
 
 static int tms_key_cnt=0;
     
@@ -260,10 +307,10 @@ void TMS_SelEdt_Up(WM_MESSAGE * pMsg)
     WM_HWIN hItem;
     if(tms_key_cnt == 0)
     {
-        hItem=WM_GetDialogItem(pMsg->hWin,ID_EDIT_5);
+        hItem=WM_GetDialogItem(pMsg->hWin,ID_EDIT_6);
         WM_SetFocus(hItem);
 
-        tms_key_cnt=5;
+        tms_key_cnt=6;
     }
     else
     {
@@ -276,7 +323,7 @@ void TMS_SelEdt_Up(WM_MESSAGE * pMsg)
 void TMS_SelEdt_Down(WM_MESSAGE *pMsg)
 {
     WM_HWIN hItem;
-    if(tms_key_cnt == 5)
+    if(tms_key_cnt == 6)
     {
         hItem=WM_GetDialogItem(pMsg->hWin,ID_EDIT_0);
         WM_SetFocus(hItem);
@@ -295,7 +342,7 @@ void TMS_Color_Change(void)
 {
     WM_HWIN hItem;
     int i;
-    for(i=0;i<6;i++)
+    for(i=0;i<7;i++)
     {
         hItem=WM_GetDialogItem(g_hWin_TimeSet,ID_EDIT_0+i);
         if(WM_HasFocus(hItem)==1)
@@ -333,7 +380,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         
       case WM_NOTIFY_PARENT:
         //Disable_Enable_Widget(pMsg);
-        for(i=0;i<6;i++)
+        for(i=0;i<7;i++)
         {
             hItem=WM_GetDialogItem(pMsg->hWin,ID_EDIT_0+i);
             WM_DisableWindow(hItem);
@@ -356,9 +403,9 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                     TMS_Color_Change();
                     break;
                 case GUI_KEY_GREEN: /*保存重新设置的时间*/
-                    if(DEV_OK == Time_From_Widget(g_rtc_time))
+                    if(DEV_OK == Time_From_Widget(g_gui_time))
                     {
-                        RTC_WriteTime(g_rtc_time);
+                        RTC_WriteTime(g_gui_time);
                         WM_DeleteWindow(g_hWin_TimeSet);
                         g_hWin_TimeSet=HBWIN_NULL;
                         WM_SetFocus(g_hWin_SysSet);
@@ -412,6 +459,10 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                             g_sys_ctrl.selectWidget=EDT_SECOND;
                             g_hWin_Input=Create_Edit_Set(g_hWin_TimeSet);                   
                             WM_SetFocus(g_hWin_Input);
+                            break;
+                        case ID_EDIT_6:
+                            g_sys_ctrl.selectWidget = LST_WEEK;
+                            g_hWin_Input = Create_ListBox_Set(g_hWin_TimeSet);
                             break;
                    }
                     break;

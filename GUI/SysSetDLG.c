@@ -58,7 +58,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "SysSet",    ID_WINDOW_0, 0, 0, 240, 295, 0, 0x0, 0 },
   { TEXT_CreateIndirect, SrcTime,     ID_TEXT_0, 15, 14, 110, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ShutTime,    ID_TEXT_1, 15, 44, 120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, TimeSet,     ID_TEXT_2, 15, 74, 110, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, MemState,     ID_TEXT_2, 15, 74, 110, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, BeepSound,   ID_TEXT_3, 15, 104, 110, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, Promotion,    ID_TEXT_4, 15, 134, 110, 20, 0, 0x0, 0 },
   { EDIT_CreateIndirect, "Edit",      ID_EDIT_0, 140, 10, 80, 20, 0, 0x64, 0 },
@@ -74,7 +74,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { EDIT_CreateIndirect, "Edit",      ID_EDIT_3, 140, 191, 80, 20, 0, 0x64, 0 },
 
   
-  { BUTTON_CreateIndirect, MemState, ID_BUTTON_3, 15, 261, 80, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, TimeSet, ID_BUTTON_3, 15, 261, 80, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,      ID_BUTTON_4, 140, 261, 80, 25, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
@@ -233,12 +233,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     WM_ShowWindow(g_hWin_Date);
                     WM_SetFocus(g_hWin_menu);
                     break;
+                    
                 case GUI_KEY_F1:
-                    g_hWin_TimeSet = CreateTimeSet();
-                    WM_SetFocus(g_hWin_TimeSet);
-                    TMS_SetFocus();
-                    TMS_Color_Change();
+                    g_hWin_SDInfo = CreateSDInfo();
+                    WM_SetFocus(g_hWin_SDInfo);  
                     break;
+                    
                 case GUI_KEY_F2:
                     if(SYS_BEEP_ON == g_rom_prm.beep_switch)
                     {
@@ -253,10 +253,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                         
                     SetBeepState();
                     break;
+                    
                 case GUI_KEY_GREEN:
-                    g_hWin_SDInfo = CreateSDInfo();
-                    WM_SetFocus(g_hWin_SDInfo);
+                    g_hWin_TimeSet = CreateTimeSet();
+                    WM_SetFocus(g_hWin_TimeSet);
+                    TMS_SetFocus();
+                    TMS_Color_Change();
                     break;
+ 
                 case GUI_KEY_UP:
                     SST_SelectUp();
                     SST_ColorChange();

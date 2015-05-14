@@ -30,14 +30,11 @@ static const GUI_WIDGET_CREATE_INFO _aEditCreate[] = {
   { EDIT_CreateIndirect,     "Edit",  ID_EDIT_0,     14,  38, 165, 25,  0, 0x64, 0 },
 };
 
-
 void Select_Focus(void)
 {
- 
     if(g_hWin_TrmCal > 0)
     {
         WM_SetFocus(g_hWin_TrmCal);
-       //CPS_FocusSel();
     }
 
     if(g_hWin_TrmConf > 0)
@@ -52,21 +49,23 @@ void Select_Focus(void)
         SSD_FocusSel();
     }
     
-    if((g_hWin_TimeSet > 0)&&(g_hWin_SysSet > 0))
+    if((g_hWin_SysSet > 0)&&(g_hWin_SDInfo > 0)&&(g_hWin_TimeSet <= 0))
+    {
+        WM_SetFocus(g_hWin_SDInfo);
+    }
+    
+    if((g_hWin_SysSet > 0)&&(g_hWin_SDInfo <= 0)&&(g_hWin_TimeSet > 0))
     {
         WM_SetFocus(g_hWin_TimeSet);
+        TMS_SetFocus();
     }
 
-    if((g_hWin_TimeSet <= 0)&&(g_hWin_SysSet > 0))
+    if((g_hWin_SysSet > 0)&&(g_hWin_SDInfo <= 0)&&(g_hWin_TimeSet <= 0))
     {
         WM_SetFocus(g_hWin_SysSet);
         SST_FocusSel();
     }
 }
-
-
-
-
 
 #if 1
 /***********************************************
@@ -100,26 +99,32 @@ static void SelectInputEdit(int  EditNum)
             break;
         case EDT_YEAR:
             EDIT_GetText(hItem, tmpTextBuf, 3);
+            g_gui_time[YEAR_POS] = atoi(tmpTextBuf);
             hItem = TMS_GetYear();
             break;
         case EDT_MONTH:
             EDIT_GetText(hItem, tmpTextBuf, 3);
+            g_gui_time[MONTH_POS] = atoi(tmpTextBuf);
             hItem = TMS_GetMonth();
             break;
         case EDT_DAY:
             EDIT_GetText(hItem, tmpTextBuf, 3);
+            g_gui_time[DATE_POS] = atoi(tmpTextBuf);
             hItem = TMS_GetDay();
             break;
         case EDT_HOUR:
             EDIT_GetText(hItem, tmpTextBuf, 3);
+            g_gui_time[HOUR_POS] = atoi(tmpTextBuf);
             hItem = TMS_GetHour();
             break;
         case EDT_MINITE:
             EDIT_GetText(hItem, tmpTextBuf, 3);
+            g_gui_time[MIN_POS] = atoi(tmpTextBuf);
             hItem = TMS_GetMin();
             break;
         case EDT_SECOND:
             EDIT_GetText(hItem, tmpTextBuf, 3);
+            g_gui_time[SEC_POS] = atoi(tmpTextBuf);
             hItem = TMS_GetSec();
             break;
         case EDT_SRC_TIME:
@@ -303,6 +308,12 @@ static void _Init_ListBox(WM_MESSAGE *pMsg, int ListBoxNum)
             LISTBOX_AddString(hItem, SwitchOn);
             LISTBOX_AddString(hItem, SwitchOff);
             break;
+        case LST_WEEK:
+            for(i = 0;i<7;i++)
+            {
+                LISTBOX_AddString(hItem, TextWeek[i]);
+            }
+            break;
         default:
            break;
     }
@@ -325,6 +336,11 @@ static void SelectLSTRow(int  WidgetNum)
         case LST_ANIP_SWITCH: 
             hItem = PRW_GetElecPrtSwth();
             EDIT_SetText(hItem,TextSwitch[SelNum]);
+            break;
+        case LST_WEEK:
+            g_gui_time[DAY_POS] = SelNum;
+            hItem = TMS_GetWeek();
+            EDIT_SetText(hItem,TextWeek[SelNum]);
             break;
         default:
             break;

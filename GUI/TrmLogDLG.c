@@ -95,7 +95,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
     LISTVIEW_AddColumn(hItem, 150, OccurTime, GUI_TA_HCENTER | GUI_TA_VCENTER);
-    LISTVIEW_AddColumn(hItem, 72, Period, GUI_TA_HCENTER | GUI_TA_VCENTER);
+    LISTVIEW_AddColumn(hItem, 75, Period, GUI_TA_HCENTER | GUI_TA_VCENTER);
     LISTVIEW_AddRow(hItem, NULL);
     LISTVIEW_SetGridVis(hItem, 0);
 

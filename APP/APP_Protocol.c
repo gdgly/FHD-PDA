@@ -1339,7 +1339,7 @@ void  App_TaskFHD (void *p_arg)
                 data_buf[index] = g_gui_prm.data_buf[3]; //Date
                 index++; 
 
-                data_buf[index] = g_gui_prm.data_buf[4]; //Day
+                data_buf[index] = g_gui_prm.data_buf[4] % 7; //Day
                 index++; 
 
                 data_buf[index] = g_gui_prm.data_buf[5]; //Hour

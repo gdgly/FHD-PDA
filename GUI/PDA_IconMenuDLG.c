@@ -81,7 +81,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect,    "00:00",     ID_TEXT_0,    3,   3, 70,  15, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect,    "PLC-R" ,       ID_TEXT_1,    60,  3, 40,  15, 0, 0x0, 0 },
   { TEXT_CreateIndirect,    "\0",           ID_TEXT_10,   75, 5, 40,  15, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,    DownloadIcon,   ID_TEXT_5,    149, 3, 17,  17, 0, 0x0, 0 }, 
+  { TEXT_CreateIndirect,    DownloadIcon,   ID_TEXT_5,    156, 3, 17,  17, 0, 0x0, 0 }, 
   { TEXT_CreateIndirect,    UploadIcon,     ID_TEXT_6,    166, 3, 17,  17, 0, 0x0, 0 },
   { TEXT_CreateIndirect,    "\0",           ID_TEXT_7,    196, 3, 42,  25, 0, 0x0, 0 },
 };
@@ -305,7 +305,7 @@ static void _cbTaskDialog(WM_MESSAGE * pMsg)
         TEXT_SetTextColor(hItem,GUI_WHITE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_10);
-        TEXT_SetTextColor(hItem,GUI_BLACK);
+        TEXT_SetTextColor(hItem,GUI_DARKGRAY);
         TEXT_SetFont(hItem, &GUI_Font_Battery_40);
 
         if(SYS_BEEP_ON == g_rom_prm.beep_switch)
@@ -460,9 +460,9 @@ static void _cbIconWin(WM_MESSAGE * pMsg)
 WM_HWIN TimeBarDisp(void)
 {
     WM_HWIN hText;
-    hText=TEXT_CreateEx(20,30,200,31,g_hWin_menu,WM_CF_SHOW,TEXT_CF_HCENTER,ID_TEXT_8,"00:00");
-    TEXT_SetFont(hText,&GUI_Fontcn27);
-    TEXT_SetTextColor(hText,GUI_DARKGRAY);
+    hText=TEXT_CreateEx(20,40,200,31,g_hWin_menu,WM_CF_SHOW,TEXT_CF_HCENTER,ID_TEXT_8,"00:00");
+    TEXT_SetFont(hText,&GUI_Fontns20);
+    TEXT_SetTextColor(hText,GUI_BLACK);
     return hText;
 }
 

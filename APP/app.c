@@ -452,15 +452,15 @@ static  void  App_TaskGUI (void *p_arg)
         if(!(count % 10))
         {
             RTC_ReadTime(g_rtc_time); 
+            
+            RTC2Text(timebuf);
+            TEXT_SetText(TSK_Get_Time(), timebuf);
 
             RTC2Text(timebuf);
-            TEXT_SetText(g_hWin_TimeBar,timebuf);
-
-            RTC2Text(timebuf);
-            TEXT_SetText(TSK_Get_Time(),timebuf);
+            TEXT_SetText(g_hWin_TimeBar, TextDay[g_rtc_time[DAY_POS] % 7]);
             
             RTC2Text_Date(timebuf);
-            TEXT_SetText(g_hWin_Date,timebuf);            
+            TEXT_SetText(g_hWin_Date, timebuf);            
         }
         
         count++;

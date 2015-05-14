@@ -55,6 +55,15 @@ extern const char TimeSet_24[];
 extern const char TypeDirection[];
 //extern const char Confirm[];
 
+extern const char Monday[];
+extern const char Tuesday[];
+extern const char Wednesday[];
+extern const char Thursday[];
+extern const char Friday[];
+extern const char Saturday[];
+extern const char Sunday[];
+extern const char *TextDay[];
+extern const char Week[];
 extern const char TimeCrt[];
 
 //œµÕ≥…Ë÷√
@@ -146,6 +155,9 @@ extern const char *TextSwitch[];
 extern const char *TextEEPROM[];
 
 extern const char *gc_messageBoxText[];
+extern const char *aboutText[];
+extern const char *TextWeek[];
+extern const char *FHD_WEEK[];
 //extern 
 
 #endif /*__PHRASE_H__*/

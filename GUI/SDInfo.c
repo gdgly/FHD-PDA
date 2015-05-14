@@ -84,7 +84,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { EDIT_CreateIndirect,     "Edit",       ID_EDIT_1,    140, 43,  95, 20, EDIT_CF_HCENTER, 0x64, 0 },
     
   { PROGBAR_CreateIndirect,  "Progbar",    ID_PROGBAR_0, 140, 77, 95, 20, 0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   "OK",         ID_BUTTON_1,  10,  260, 65,  25, 0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   MemFormat,         ID_BUTTON_1,  10,  260, 65,  25, 0, 0x0,  0 },
   { BUTTON_CreateIndirect,   Quit,         ID_BUTTON_2,  165, 260, 65,  25, 0, 0x0,  0 },
   { PROGBAR_CreateIndirect,  "Progbar",    ID_PROGBAR_1, 9,   228, 222, 20, 0, 0x0,  0 },
     
@@ -101,7 +101,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 */
 WM_HWIN MMD_Get_PROGBAR()
 {    
-     return WM_GetDialogItem(g_hWin_SysSet, ID_PROGBAR_0);            
+     return WM_GetDialogItem(g_hWin_SDInfo, ID_PROGBAR_0);            
 }
 
 void GUI_Set_FD_PROGBAR(u32 val)
@@ -109,7 +109,7 @@ void GUI_Set_FD_PROGBAR(u32 val)
     WM_HWIN hItem;
 
     
-    hItem = WM_GetDialogItem(g_hWin_SysSet, ID_PROGBAR_1);  
+    hItem = WM_GetDialogItem(g_hWin_SDInfo, ID_PROGBAR_1);  
     
     if(WM_HWIN_NULL != hItem)
     {
@@ -183,11 +183,12 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                 switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key)
                 {
                     case GUI_KEY_GREEN:
-                        WM_DeleteWindow(g_hWin_SDInfo);
-                        g_hWin_SDInfo = HBWIN_NULL;
+                        //WM_DeleteWindow(g_hWin_SDInfo);
+                        //g_hWin_SDInfo = HBWIN_NULL;
                         //WM_ShowWindow(g_hWin_TimeBar);
                         //WM_ShowWindow(g_hWin_Date);
-                        WM_SetFocus(g_hWin_SysSet);
+                        //WM_SetFocus(g_hWin_SysSet);
+                        ERR_NOTE(g_hWin_SDInfo,1);
                         break;
                     case GUI_KEY_YELLOW:
                         WM_DeleteWindow(g_hWin_SDInfo);

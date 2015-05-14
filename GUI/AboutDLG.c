@@ -47,8 +47,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     MULTIEDIT_SetFont(hItem,&GUI_Font_Song_16);
     MULTIEDIT_SetWrapWord(hItem);//启用自动换行
     MULTIEDIT_SetReadOnly(hItem,1);//只读模式
-    MULTIEDIT_SetText(hItem, FHD_PDA);
-        
+    //MULTIEDIT_SetText(hItem, FHD_PDA);
+    for(i = 0;i < 14;i++)
+    {
+        MULTIEDIT_AddText(hItem, aboutText[i]);
+    }
     hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_0);
     BUTTON_SetBkColor(hItem,0,GUI_YELLOW);
     WIDGET_AndState(hItem,WIDGET_STATE_FOCUSSABLE);

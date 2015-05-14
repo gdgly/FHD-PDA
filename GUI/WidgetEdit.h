@@ -6,6 +6,7 @@ typedef WM_HWIN (*pGetHandler)(void);
 //#define GET_WIDGET_HANDLE(a,b)     return WM_GetDialogItem(a,b)
 
 #define LST_ANIP_SWITCH          0  /*晃电保护开关*/
+#define LST_WEEK                 1
 
 #define EDT_VOLTAGE_REFER        0  /*参考电压*/
 #define EDT_ANIP_TIME            1  /*晃电保护时长*/

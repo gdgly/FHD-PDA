@@ -2,6 +2,8 @@
 #include "WIDGET.h"
 #include "DIALOG.h"
 
+
+u8 g_gui_time[MAX_RTC_ITEM];
 u8 s_prbf[512];
 
 

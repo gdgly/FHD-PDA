@@ -111,16 +111,23 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
             case GUI_KEY_GREEN:
                 WM_DeleteWindow(g_hWin_Err);
-                if(g_hWin_SysSet>0)
+                
+                if((g_hWin_SysSet > 0) && (g_hWin_SDInfo <= 0))
                 {
-                  
-                  if(g_rom_prm.bootFlag != BOOT_REQUEST_ACT)
+                  if(BOOT_REQUEST_ACT != g_rom_prm.bootFlag)
                   {
                       g_rom_prm.bootFlag = BOOT_REQUEST_ACT;
+                      
                       DEV_Parameters_Write();
                   }
+                  
                   DEV_SoftReset();
                 }
+                else if(g_hWin_SDInfo > 0)
+                {
+                    SYS_ADD_TASK(SYS_TASK_FORMAT_DISK);
+                }
+                
                 Select_Focus();
                 break;
         }

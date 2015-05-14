@@ -73,10 +73,10 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, InterElecPrt,          ID_TEXT_0, 7, 10, 122, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_1,   5,   40,  128, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, DevAddr,          ID_TEXT_2, 5, 71, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, SetPara,         ID_BUTTON_0, 8,   262, 70, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, ReadPara,         ID_BUTTON_0, 8,   262, 70, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 160, 262, 70, 25, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, ReadData,     ID_BUTTON_2, 81,  262, 81, 25, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, ReadPara,        ID_TEXT_3,   5,   101,  80, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, SetPara,        ID_TEXT_3,   5,   101,  80, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "F1",         ID_BUTTON_3, 155,   101, 80, 20, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect, SetPara,        ID_TEXT_4,   5,   131,  80, 20, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "F2",         ID_BUTTON_4, 155,   131, 80, 20, 0, 0x0, 0 },
@@ -276,13 +276,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 PRW_ColorChange();
                 break;
                 
-            case GUI_KEY_F1:
+            case GUI_KEY_GREEN:
                 g_gui_prm.state = FHD_GUI_TRM_CONF;
                 g_gui_prm.cmd = FHD_CMD_READ_TRM_CONF;
                 OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);                              
                 break;
                 
-            case GUI_KEY_GREEN:
+            case GUI_KEY_F1:
                 u8 buf[16], index;
                 u16 temp;
                 
