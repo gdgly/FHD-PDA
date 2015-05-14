@@ -96,6 +96,14 @@ typedef enum
 
 typedef enum
 {
+    FHD_MSG_NONE = 0,
+    FHD_MSG_SEND,
+    FHD_MSG_RECV,
+    MAX_FHD_MSG_TYPE
+} FHD_MSG_TYPE; //ЛЊаж
+
+typedef enum
+{
     RECV_RES_IDLE = 0,
     RECV_RES_SUCC,
     RECV_RES_INVALID,
@@ -128,6 +136,7 @@ typedef struct _fhd_prm {
 	u16 recv_len;
 	u8 data_buf[256];
 	u16 data_len;
+    u8 fm_buf[512];
 } FHD_PRM, P_FHD_PRM;
 
 extern OS_EVENT *g_sem_plc;

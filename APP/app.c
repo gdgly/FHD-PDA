@@ -263,7 +263,9 @@ void APP_Wakeup()
 #endif
 void APP_StartButtonTest()
 {
-    u32 keyCnt = 0;;
+    u32 keyCnt = 0;
+
+    
     while(1)
     {
         OSTimeDly(20);
@@ -316,7 +318,7 @@ void APP_StartButtonTest()
 */
 static  void  App_TaskStart (void *p_arg)
 {
-    u8 i = 0, n;
+    INT8U n;
 
 
     (void)p_arg; 
@@ -354,30 +356,20 @@ static  void  App_TaskStart (void *p_arg)
 
     RF_Init();
     
+    RTC_ReadTime(g_rtc_time); 
+    RTC_CheckTime(g_rtc_time);   
+    
     DEBUG_PRINT(("OS Tasks Run!\n"));
 
-    //FatFs_Test();
-
-    RTC_ReadTime(g_rtc_time); 
-    RTC_CheckTime(g_rtc_time);
-
     while (DEF_TRUE) { 
-        /* Task body, always written as an infinite loop.           */
-
-        if(i++ >= 10)
-        {
-            i = 0;
-            RTC_ReadTime(g_rtc_time); 
-        }
-
         for(n = 0; n < 32; n++)
         {
-            if((0x01<<n) & g_sys_ctrl.procTask)
+            if((1 << n) & g_sys_ctrl.procTask)
             {
                 switch(n)
                 {
-                case 0:
-                    //MMD_Format_Disk();
+                case 0:                                   
+                    FM_Format_Disk();
                     SYS_DEL_TASK(SYS_TASK_FORMAT_DISK);
                     break;
                 }
@@ -404,18 +396,19 @@ static  void  App_TaskStart (void *p_arg)
 *********************************************************************************************************
 */
 static  void  App_TaskGUI (void *p_arg)
-{
-    (void)p_arg;
+{ 
     WM_HWIN hItem;
     unsigned char timebuf[16];
-    //unsigned char timebuf_nosec[6];
-    //unsigned char timebuf_date[11];
     int i = 0;
-    int j = 0;//读取电压值计数
     u32 val = 0; //电压
+    INT32U count = 0;
+    
 #if OS_CRITICAL_METHOD == 3u
-        OS_CPU_SR  cpu_sr = 0u;
+    OS_CPU_SR  cpu_sr = 0u;
 #endif  
+
+
+    (void)p_arg;
 
     g_hWin_menu = CreatePDA_IconMenu();
     WM_ShowWindow(g_hWin_menu);
@@ -423,24 +416,25 @@ static  void  App_TaskGUI (void *p_arg)
 
     while (DEF_TRUE) {                                          /* Task body, always written as an infinite loop.           */
         GUI_Exec();
-        if(j < 10)
+        
+        if(i < 10)
         {
             val += BSP_ADC_ReadPwr();
             //检测到USB并且电没有充满的时候，充电标志闪烁,
             if((GPIO_PIN_RESET == GET_USB_VOL())&&(GPIO_PIN_SET == GET_CHARG_CHK()))
             {
-                TSK_Battery_Charge(j);
+                TSK_Battery_Charge(i);
             }
-            j++;
+            i++;
         }
-        else if(j >= 10)
+        else if(i >= 10)
         {
             g_sys_ctrl.pwrValue = val/10;
             if((GPIO_PIN_SET == GET_USB_VOL())||(GPIO_PIN_RESET == GET_CHARG_CHK()))
             {
                 Battery_State(g_sys_ctrl.pwrValue);
             }
-            j = 0;
+            i = 0;
             val = 0;
             
            // if(g_hWin_SysInfo >0)
@@ -454,16 +448,22 @@ static  void  App_TaskGUI (void *p_arg)
                 APP_Shutdown();
             }
         }
-        //memcpy(timebuf,RTC2Text(),10);
-        RTC2Text(timebuf);
-        TEXT_SetText(g_hWin_TimeBar,timebuf);
 
-        RTC2Text(timebuf);
-        TEXT_SetText(TSK_Get_Time(),timebuf);
-        //memcpy(timebuf_date,RTC2Text_Date(),11);
-        RTC2Text_Date(timebuf);
-        TEXT_SetText(g_hWin_Date,timebuf);
+        if(!(count % 10))
+        {
+            RTC_ReadTime(g_rtc_time); 
+
+            RTC2Text(timebuf);
+            TEXT_SetText(g_hWin_TimeBar,timebuf);
+
+            RTC2Text(timebuf);
+            TEXT_SetText(TSK_Get_Time(),timebuf);
+            
+            RTC2Text_Date(timebuf);
+            TEXT_SetText(g_hWin_Date,timebuf);            
+        }
         
+        count++;
         
         OSTimeDlyHMSM(0, 0, 0, 100);     
     }
@@ -487,6 +487,11 @@ static  void  App_TaskGUI (void *p_arg)
 static  void  App_TaskPower (void *p_arg)
 {
     (void)p_arg;
+
+    while(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
+    {
+        OSTimeDlyHMSM(0, 0, 0, 10);
+    }
         
     while (DEF_TRUE) {
         if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
@@ -515,7 +520,7 @@ static  void  App_TaskPower (void *p_arg)
         }        
 
         g_sys_ctrl.shutdownTimeout++;
-        if(g_sys_ctrl.shutdownTimeout > ((g_rom_prm.auto_shutdown_time + 180) * 100))
+        if(g_sys_ctrl.shutdownTimeout > (g_rom_prm.auto_shutdown_time * 100))
         {
             APP_Shutdown();
             
@@ -523,7 +528,7 @@ static  void  App_TaskPower (void *p_arg)
         }
         
         g_sys_ctrl.sleepTimeout++;
-        if(g_sys_ctrl.sleepTimeout > ((g_rom_prm.auto_sleep_time + 60) * 100))
+        if(g_sys_ctrl.sleepTimeout > (g_rom_prm.auto_sleep_time * 100))
         {
             APP_Sleep();
             

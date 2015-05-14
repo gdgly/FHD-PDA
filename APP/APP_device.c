@@ -1,34 +1,18 @@
 #include "includes.h"
 
 
+ROM_PRM g_rom_prm = {
+    TAG_WORD_TABLE_MAP, //标签
+    0xffffbb00, //启动标志，不能更改
+    0, //CRC              
+    0x20150515, //版本日期    
 
-
-ROM_PRM g_rom_prm = 
-{
-    TAG_WORD_TABLE_MAP,
-    0xffffbb00,         //unsigned int bootFlag;      //启动标志，不能改动
-    0,              //0:  checksum
-    0x20150513,      //version
-
-    
-    0xffffffff,         //unsigned int meterPassword;//密码
-    4000,               //unsigned int recvDelayTime;//接受数据延时
-    1000,               //unsigned int execInterval;//执行时间
-    DL_T_07,            //unsigned int plcProtocol; //规约
-    0,                  //unsigned int channel; //通道
-    9600,               //unsigned int baudrate; //波特率
-    0xFA,               //unsigned int preamble; //前导符
-    1,                  //unsigned int stopbit;
-    0,                  //unsigned int number;
-    
-    //PARAMETER SECTOR
-    {
-        0,               //reserved
-    }
+    SYS_BEEP_ON, //蜂鸣器开关
+    60, //自动睡眠时间
+    180, //自动关机时间
 };
 
 SYS_CTRL g_sys_ctrl;
-
 
 /**
   * @brief  STM32 soft reset.

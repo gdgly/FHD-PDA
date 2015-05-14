@@ -1906,6 +1906,9 @@
       <name>$PROJ_DIR$\..\APP\FHD.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\APP\FM.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\APP\GDW376_2.c</name>
     </file>
     <file>

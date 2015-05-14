@@ -52,14 +52,19 @@ Sector 7 0x0806 0000 - 0x0807 FFFF 128 Kbyte
 #define SYS_BEEP_ON         0
 #define SYS_BEEP_OFF        1
 
-
-typedef struct _rom_prm
-{
+typedef struct _rom_prm {
 unsigned int magic_word;
-unsigned int bootFlag;      //启动标志，不能改动
+unsigned int bootFlag;
 unsigned int crc;
 unsigned int versionDate;
 
+// ------------------------------
+
+unsigned int beep_switch;
+unsigned int auto_sleep_time;
+unsigned int auto_shutdown_time;
+
+// ------------------------------
 
 unsigned int meterPassword[8];//密码
 unsigned int recvDelayTime;//接受数据延时
@@ -69,7 +74,6 @@ unsigned int scrTimeout;           //屏幕超时
 unsigned int plcProtocol; //规约
 unsigned int channel; //通道
 unsigned int baudrate; //波特率
-//before ************10******************
 
 unsigned int preamble; //前导符
 unsigned int stopbit;
@@ -81,16 +85,10 @@ unsigned int bpsSpeed;             //传输数据等待时间,需要保存，以便下次启动有默
 
 // ------------------------------
 
-unsigned int beep_switch;
-unsigned int auto_sleep_time;
-unsigned int auto_shutdown_time;
-
-// ------------------------------
 unsigned int para_data[SRM_PARA_NUMBER - 26];
 } ROM_PRM, *P_ROM_PRM;
 
-typedef struct _sys_ctrl
-{
+typedef struct _sys_ctrl {
     unsigned int paraAddr;
     u32   guiState;
     u32   testProgBarVal;

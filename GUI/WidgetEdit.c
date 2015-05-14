@@ -125,12 +125,24 @@ static void SelectInputEdit(int  EditNum)
         case EDT_SRC_TIME:
             EDIT_GetText(hItem, tmpTextBuf,4);
             g_rom_prm.auto_sleep_time = atoi(tmpTextBuf);
+            if(g_rom_prm.auto_sleep_time < 30)
+            {
+                g_rom_prm.auto_sleep_time = 30;
+
+                sprintf(tmpTextBuf, "%d", g_rom_prm.auto_sleep_time);
+            }
             DEV_Parameters_Write();
             hItem = SST_GetSrcTime();
             break;
         case EDT_SHUTDOWN:
             EDIT_GetText(hItem, tmpTextBuf,4);
             g_rom_prm.auto_shutdown_time = atoi(tmpTextBuf);
+            if(g_rom_prm.auto_shutdown_time < 120)
+            {
+                g_rom_prm.auto_shutdown_time = 120;
+
+                sprintf(tmpTextBuf, "%d", g_rom_prm.auto_shutdown_time);
+            }
             DEV_Parameters_Write();
             hItem = SST_GetShutDown();
             break;

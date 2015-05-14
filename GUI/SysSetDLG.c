@@ -177,23 +177,22 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   {
       case WM_INIT_DIALOG:
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
-          sprintf(tmpBuf, "%d", (g_rom_prm.auto_sleep_time + 60));
+          sprintf(tmpBuf, "%d", (g_rom_prm.auto_sleep_time));
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
           
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
-          sprintf(tmpBuf, "%d", (g_rom_prm .auto_shutdown_time + 180));
+          sprintf(tmpBuf, "%d", (g_rom_prm .auto_shutdown_time));
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
-
           
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_2);
-          sprintf(tmpBuf, "V%d.%d", HARDWARE_VERSION / 10, HARDWARE_VERSION % 10);
+          sprintf(tmpBuf, "v%d.%d", SOFTWARE_VERSION / 10, SOFTWARE_VERSION % 10);
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
 
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_3);
-          sprintf(tmpBuf, "V%d.%d", HARDWARE_VERSION / 10, HARDWARE_VERSION % 10);
+          sprintf(tmpBuf, "v%d.%d", HARDWARE_VERSION / 10, HARDWARE_VERSION % 10);
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
 

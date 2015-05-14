@@ -104,37 +104,17 @@ WM_HWIN MMD_Get_PROGBAR()
      return WM_GetDialogItem(g_hWin_SysSet, ID_PROGBAR_0);            
 }
 
-void MMD_Set_FD_PROGBAR(u32 newVal)
+void GUI_Set_FD_PROGBAR(u32 val)
 {
     WM_HWIN hItem;
-    hItem = WM_GetDialogItem(g_hWin_SysSet, ID_PROGBAR_1);  
-    if(hItem != WM_HWIN_NULL)
-    {
-        //g_sys_control.testProgBarVal = 100;
-        PROGBAR_SetValue(hItem, newVal);              
-    }
-}
 
-void MMD_Format_Disk(void)
-{
     
-    FRESULT res;
-    FATFS fs;
-
-    res = f_mount(SD_DRV, &fs);
-
-    if(FR_OK == res)
+    hItem = WM_GetDialogItem(g_hWin_SysSet, ID_PROGBAR_1);  
+    
+    if(WM_HWIN_NULL != hItem)
     {
-        res = f_mkfs(SD_DRV, SD_FORMAT, _MAX_SS);
-
-        if(FR_OK == res)
-        {
-            //DEBUG_PRINT(("SD format ok!\n"));
-            MMD_Set_FD_PROGBAR(100);
-            
-        }                        
+        PROGBAR_SetValue(hItem, val);              
     }
-    f_mount(SD_DRV, NULL);
 }
 
 // USER START (Optionally insert additional static code)
@@ -164,7 +144,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             WM_DisableWindow(hItem);
             
             hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
-            g_sys_ctrl.sysFileNum = Get_Files_Number();
+            g_sys_ctrl.sysFileNum = get_file_num();
             sprintf(sbuf, "%d", g_sys_ctrl.sysFileNum);
             EDIT_SetText(hItem, sbuf);
             //EDIT_SetText(hItem,"1");

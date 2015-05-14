@@ -135,6 +135,7 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 #include "uart_link.h"
 #include "sd.h"
 #include "ff.h"
+#include "FM.h"
 #include "rtc.h"
 #include "FHD.h" //ЛЊаж
 #include "GUI_public_fun.h"

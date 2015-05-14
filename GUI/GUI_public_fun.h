@@ -3,7 +3,7 @@
 
 
 
-#define HARDWARE_VERSION 10
+#define HARDWARE_VERSION 22
 #define SOFTWARE_VERSION 10
 
 
@@ -162,11 +162,7 @@ void Select_Focus(void);
 u32 GUI_GetStrDataFlag(u8 * dbuf, u32 pro_ver);
 u8* GUI_hex2MeterAddrStr(u8 * srcBuf, u32 len);
 void GUI_Fill_Zero(u8 *tempbuf); //×Ô¶¯²¹È«Áã
+void GUI_Set_FD_PROGBAR(u32 val);
 
-//void MMD_Format_Disk(void);
-//void MMD_Set_FD_PROGBAR(u32 newVal);
 
 #endif /*__GUI_PUBLIC_FUN__*/
-
-
-

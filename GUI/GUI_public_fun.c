@@ -318,7 +318,7 @@ void GUI_print_send_buf()
 #else //ЛЊаж
 void GUI_Send_Msg_Proc(void)
 {
-
+    
 }
 #endif
 
@@ -408,6 +408,8 @@ void GUI_Msg_Proc(void)
     {        
         GUI_Msg_Upload(ON);
 
+        fhd_msg_record(FHD_MSG_SEND);
+
         GUI_Send_Msg_Proc();
     }    
     else if(MSG_STATE_RECEIVED == g_fhd_prm.msg_state)
@@ -415,6 +417,8 @@ void GUI_Msg_Proc(void)
         if(RECV_RES_SUCC == g_fhd_prm.recv_result)
         {
             GUI_Msg_Download(ON);
+
+            fhd_msg_record(FHD_MSG_RECV);
 
             GUI_Recv_Msg_Proc();
         }
