@@ -60,10 +60,9 @@ const char Battery_40[] ="\xe6\x9f\x92";
 const char Battery_20[] ="\xe9\x99\x86";
 const char Battery_00[] ="\xe4\xbc\x8d";
 //const char Battery_Charge[] = "\xe8\x82\x86";
-const char TSK_Wireless[] = "\xe8\x82\x86";
+const char SD_Mount[] =   "\xe8\xb4\xb0";
+const char SD_Unmount[] = "\xe5\xa3\xb9";
 
-const char Protocol_07[]="DLT-07";
-const char Protocol_97[]="DLT-97";
 
 
 /***************************************************************
@@ -224,6 +223,9 @@ const char ChkData[] = "\xe6\xa0\xa1\xe5\x87\x86";
 const char DevTest[] = "\xe8\xb0\x83\xe8\xaf\x95";
 //数据
 const char MsgData[] = "\xe6\x95\xb0\xe6\x8d\xae";
+
+//电池电压
+const char BtrVoltage[] = "\xe7\x94\xb5\xe6\xb1\xa0\xe7\x94\xb5\xe5\x8e\x8b(V)";
 
 
 const char MemSize[]="\xe5\x86\x85\xe5\xad\x98\xe5\x8d\xa1\xe5\xae\xb9\xe9\x87\x8f";

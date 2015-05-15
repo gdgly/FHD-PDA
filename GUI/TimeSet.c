@@ -240,7 +240,7 @@ static void Time_Init(WM_MESSAGE *pMsg)
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_5);
     EDIT_SetText(hItem, sec);
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_6);
-    EDIT_SetText(hItem, TextWeek[(g_rtc_time[DAY_POS])]);
+    EDIT_SetText(hItem, TextWeek[(g_rtc_time[DAY_POS] % 7)]);
 }
 
 

@@ -221,7 +221,7 @@ extern u8 g_get_pro[4];
 void APP_Shutdown()
 {
 #if 1
-    if(g_sys_ctrl.sysUsbVol)
+    if(g_sys_ctrl.usb_state)
     {
         return;
     }
@@ -399,7 +399,7 @@ static  void  App_TaskGUI (void *p_arg)
 { 
     WM_HWIN hItem;
     unsigned char timebuf[16];
-    int i = 0;
+    int n = 0;
     u32 val = 0; //电压
     INT32U count = 0;
     
@@ -417,35 +417,35 @@ static  void  App_TaskGUI (void *p_arg)
     while (DEF_TRUE) {                                          /* Task body, always written as an infinite loop.           */
         GUI_Exec();
         
-        if(i < 10)
+        if(n < 10)
         {
             val += BSP_ADC_ReadPwr();
             //检测到USB并且电没有充满的时候，充电标志闪烁,
             if((GPIO_PIN_RESET == GET_USB_VOL())&&(GPIO_PIN_SET == GET_CHARG_CHK()))
             {
-                TSK_Battery_Charge(i);
+                TSK_Battery_Charge(n);
             }
-            i++;
+            n++;
         }
-        else if(i >= 10)
+        else if(n >= 10)
         {
-            g_sys_ctrl.pwrValue = val/10;
+            g_sys_ctrl.pwr_val = val/10;
             if((GPIO_PIN_SET == GET_USB_VOL())||(GPIO_PIN_RESET == GET_CHARG_CHK()))
             {
-                Battery_State(g_sys_ctrl.pwrValue);
+                Battery_State(g_sys_ctrl.pwr_val);
             }
-            i = 0;
+            n = 0;
             val = 0;
             
-           // if(g_hWin_SysInfo >0)
-            //{
-                //EDIT_SetFloatValue(SID_GetVoltage(),(g_sys_ctrl.pwrValue*3.3)/2048);
-            //}
+            if(g_hWin_SysSet >0)
+            {
+                EDIT_SetFloatValue(SST_GetVoltage(),(g_sys_ctrl.pwr_val*3.3)/2048);
+            }
            
-            if((g_sys_ctrl.pwrValue*3.3)/2048 <= 3.0)
+            if((g_sys_ctrl.pwr_val*3.3)/2048 <= 3.0)
             {
                 //ERR_NOTE(g_hWin_menu,11);
-                APP_Shutdown();
+                //APP_Shutdown();
             }
         }
 
@@ -461,6 +461,20 @@ static  void  App_TaskGUI (void *p_arg)
             
             RTC2Text_Date(timebuf);
             TEXT_SetText(g_hWin_Date, timebuf);            
+        }
+        
+        if(!(count % 50))
+        {
+            hItem = TSK_GetSD();
+            
+            if(TRUE == fdisk_detect())
+            {
+                TEXT_SetText(hItem, SD_Mount);
+            }
+            else
+            {
+                TEXT_SetText(hItem, "\0");
+            }
         }
         
         count++;
@@ -512,27 +526,27 @@ static  void  App_TaskPower (void *p_arg)
 
         if(GPIO_PIN_RESET == GET_USB_VOL())
         {
-            g_sys_ctrl.sysUsbVol = 1;
+            g_sys_ctrl.usb_state = 1;
         }
         else
         {
-            g_sys_ctrl.sysUsbVol = 0;
+            g_sys_ctrl.usb_state = 0;
         }        
 
-        g_sys_ctrl.shutdownTimeout++;
-        if(g_sys_ctrl.shutdownTimeout > (g_rom_prm.auto_shutdown_time * 100))
+        g_sys_ctrl.shutdown_timeout++;
+        if(g_sys_ctrl.shutdown_timeout > (g_rom_prm.auto_shutdown_time * 100))
         {
-            APP_Shutdown();
+            g_sys_ctrl.shutdown_timeout = 0;
             
-            g_sys_ctrl.shutdownTimeout = 0;
+            APP_Shutdown();
         }
         
-        g_sys_ctrl.sleepTimeout++;
-        if(g_sys_ctrl.sleepTimeout > (g_rom_prm.auto_sleep_time * 100))
+        g_sys_ctrl.sleep_timeout++;
+        if(g_sys_ctrl.sleep_timeout > (g_rom_prm.auto_sleep_time * 100))
         {
-            APP_Sleep();
+            g_sys_ctrl.sleep_timeout = 0;
             
-            g_sys_ctrl.sleepTimeout = 0;
+            APP_Sleep();
         }        
 
         if(g_sys_ctrl.led_count)

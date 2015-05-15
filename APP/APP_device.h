@@ -89,24 +89,27 @@ unsigned int para_data[SRM_PARA_NUMBER - 26];
 } ROM_PRM, *P_ROM_PRM;
 
 typedef struct _sys_ctrl {
+    OS_EVENT *up_mbox; //上行邮箱
+    OS_EVENT *down_mbox; //下行邮箱    
+    u32 shutdown_timeout; //自动关机超时时间
+    u32 sleep_timeout; //睡眠超时时间
+    u32 sd_total_capacity; //SD卡总容量
+    u32 sd_free_capacity; //SD卡剩余容量
+    u32 sd_file_num; //文件数目 
+    u32 usb_state; //USB在位状态
+    u32 pwr_val; //电池电量
+    u8 dev_addr; //设备地址 
+
+    // ---------------------------------
+    
     unsigned int paraAddr;
     u32   guiState;
     u32   testProgBarVal;
     u32   procTask;    //当前系统需要处理的任务
-    u32   pwrValue;//电池电量
-    u32   shutdownTimeout;
-    u32   sleepTimeout;
     u32   sysPowerState;
-    u32   sysUsbVol;
     u32   selectWidget;         //根据此值选择不同的回调函数
     u32   led_count;          //按键按一次LED亮一次
     u8    DevCheckCode[9];      //自检密码
-    u32   sysFileNum;           //文件数量
-    OS_EVENT *up_mbox; //邮箱发送的消息
-    OS_EVENT *down_mbox; //邮箱发送的消息
-    u32 sd_total_capacity; //SD卡总容量
-    u32 sd_free_capacity; //SD卡剩余容量
-    u8    dev_addr;    //设备地址
 } SYS_CTRL, *P_SYS_CTRL;
 
 #define SYS_ADD_TASK(tn)        g_sys_ctrl.procTask|=tn

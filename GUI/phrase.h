@@ -24,8 +24,8 @@ extern const char Battery_40[];
 extern const char Battery_20[];
 extern const char Battery_00[];
 //extern const char Battery_Charge[];
-extern const char Protocol_07[];
-extern const char Protocol_97[];
+extern const char SD_Mount[];
+extern const char SD_Unmount[];
 
 extern const char TSK_Wireless[];
 
@@ -133,7 +133,7 @@ extern const char PdaInfo[];
 extern const char Promotion[];
 extern const char SoftVersion[];
 extern const char HardVersion[];
-
+extern const char BtrVoltage[];
 
 extern const char BeepSound[];
 extern const char SrcTime[];

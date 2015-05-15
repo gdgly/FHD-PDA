@@ -79,7 +79,7 @@
 #define FILE_NAME_LEN           12
 #define FILE_NUM_LEN             4
 #define FILE_SIZE_LEN            4
-#define MAX_FILE_NUM            10
+#define MAX_FILE_NUM            11
 #define SEQ_LEN                  1
 
 #define SHAKE_HANDS_CMD  0xF0000000

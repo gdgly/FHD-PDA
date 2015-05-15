@@ -84,7 +84,7 @@ unsigned int Get_checksum(unsigned char *buf, unsigned short len)
 
 void DEV_Power_Off()
 {
-    if(g_sys_ctrl.sysUsbVol)
+    if(g_sys_ctrl.usb_state)
     {
         return;
     }
@@ -221,9 +221,9 @@ void DEV_Init(void)
 {  
     DEV_Parameters_Read();  
     
-    g_sys_ctrl.shutdownTimeout = 0;
+    g_sys_ctrl.shutdown_timeout = 0;
 
-    g_sys_ctrl.sleepTimeout = 0;
+    g_sys_ctrl.sleep_timeout = 0;
 
     g_sys_ctrl.sysPowerState = SYS_POWER_WAKEUP;
 

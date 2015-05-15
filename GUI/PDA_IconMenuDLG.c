@@ -79,8 +79,8 @@ typedef struct {
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect,  NULL,           ID_WINDOW_0,  0,   0, 240, 25, 0, 0x0, 0 },
   { TEXT_CreateIndirect,    "00:00",     ID_TEXT_0,    3,   3, 70,  15, 0, 0x0, 0 },
-  //{ TEXT_CreateIndirect,    "PLC-R" ,       ID_TEXT_1,    60,  3, 40,  15, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,    "\0",           ID_TEXT_10,   75, 5, 40,  15, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,    "\0" ,       ID_TEXT_1,    108,  6, 40,  15, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,    "\0",           ID_TEXT_10,   75, 5,  30,  15, 0, 0x0, 0 },
   { TEXT_CreateIndirect,    DownloadIcon,   ID_TEXT_5,    156, 3, 17,  17, 0, 0x0, 0 }, 
   { TEXT_CreateIndirect,    UploadIcon,     ID_TEXT_6,    166, 3, 17,  17, 0, 0x0, 0 },
   { TEXT_CreateIndirect,    "\0",           ID_TEXT_7,    196, 3, 42,  25, 0, 0x0, 0 },
@@ -116,9 +116,10 @@ WM_HWIN TSK_Get_Time()
     return WM_GetDialogItem(g_hWin_task,ID_TEXT_0);
 }
 
-
-
-
+WM_HWIN TSK_GetSD()
+{
+    return WM_GetDialogItem(g_hWin_task,ID_TEXT_1);
+}
 
 //无线时候变成绿色
 
@@ -317,19 +318,18 @@ static void _cbTaskDialog(WM_MESSAGE * pMsg)
             TEXT_SetText(hItem, BeepOff);
         }
         
-#if 1
-        //TSK_Set_Protocol_Text();
-        hItem=WM_GetDialogItem(pMsg->hWin,ID_TEXT_0);
 
-        if(g_rom_prm.plcProtocol==DL_T_07)
+        //TSK_Set_Protocol_Text();
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
+        TEXT_SetTextColor(hItem,GUI_DARKGRAY);
+        TEXT_SetFont(hItem, &GUI_Font_Battery_40);
+        if(TRUE == fdisk_detect())
         {
-            TEXT_SetText(hItem,Protocol_07);
+            TEXT_SetText(hItem, SD_Mount);
         }
-        else if(g_rom_prm.plcProtocol==DL_T_97)
-        {
-            TEXT_SetText(hItem,Protocol_97);
-        }
-#endif       
+        else
+            TEXT_SetText(hItem, SD_Unmount);
+        
         break;
 
       default:

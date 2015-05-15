@@ -130,8 +130,8 @@ void  App_TaskKey (void *p_arg)
                 break;
         }
 
-        g_sys_ctrl.shutdownTimeout = 0;
-        g_sys_ctrl.sleepTimeout = 0;
+        g_sys_ctrl.shutdown_timeout = 0;
+        g_sys_ctrl.sleep_timeout = 0;
         
         GUI_SendKeyMsg(key_msg , 0);//松开的时候发送
 

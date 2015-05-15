@@ -49,6 +49,8 @@
 #define ID_EDIT_2   (GUI_ID_USER + 0x11)
 #define ID_EDIT_3   (GUI_ID_USER + 0x12)
 
+#define ID_TEXT_7   (GUI_ID_USER + 0x13)
+#define ID_EDIT_4   (GUI_ID_USER + 0x14)
 
 /*********************************************************************
 *
@@ -61,17 +63,19 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, MemState,     ID_TEXT_2, 15, 74, 110, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, BeepSound,   ID_TEXT_3, 15, 104, 110, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, Promotion,    ID_TEXT_4, 15, 134, 110, 20, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "Edit",      ID_EDIT_0, 140, 10, 80, 20, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",      ID_EDIT_1, 140, 39, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",      ID_EDIT_0, 140, 10, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",      ID_EDIT_1, 140, 39, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { BUTTON_CreateIndirect, "F1",      ID_BUTTON_0, 140, 70, 80, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "F2",      ID_BUTTON_1, 140, 100, 80, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "*",       ID_BUTTON_2, 140, 131, 80, 20, 0, 0x0, 0 },
 
   { TEXT_CreateIndirect, SoftVersion, ID_TEXT_5, 15, 161, 110, 20, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "Edit",      ID_EDIT_2, 140, 161, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",      ID_EDIT_2, 140, 161, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
 
   { TEXT_CreateIndirect, HardVersion, ID_TEXT_6, 15, 191, 110, 20, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "Edit",      ID_EDIT_3, 140, 191, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",      ID_EDIT_3, 140, 191, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { TEXT_CreateIndirect, BtrVoltage, ID_TEXT_7, 15, 221, 110, 20, 0, 0x0, 0 },
+  { EDIT_CreateIndirect, "Edit",      ID_EDIT_4, 140, 221, 80, 20, 0, 0x64, 0 },
 
   
   { BUTTON_CreateIndirect, TimeSet, ID_BUTTON_3, 15, 261, 80, 25, 0, 0x0, 0 },
@@ -163,6 +167,10 @@ WM_HWIN SST_GetShutDown(void)
     return WM_GetDialogItem(g_hWin_SysSet,ID_EDIT_1);
 }
 
+WM_HWIN SST_GetVoltage(void)
+{
+    return WM_GetDialogItem(g_hWin_SysSet, ID_EDIT_4);
+}
 
 /*********************************************************************
 *
@@ -195,6 +203,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
           sprintf(tmpBuf, "v%d.%d", HARDWARE_VERSION / 10, HARDWARE_VERSION % 10);
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
+          hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_4);
+          EDIT_SetFloatMode(hItem, (g_sys_ctrl.pwr_val*3.3)/2048, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
+          WM_DisableWindow(hItem);
+          WIDGET_AndState(hItem,WIDGET_STATE_FOCUSSABLE);
 
           hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
           BUTTON_SetBkColor(hItem, 0, GUI_CYAN);

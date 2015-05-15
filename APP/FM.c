@@ -15,6 +15,54 @@
 #include "includes.h"
 
 
+u8 fdisk_detect(void)
+{
+    u8 ret;
+    FATFS fs;
+    FIL fp;
+    FRESULT res;
+
+
+    res = f_mount(SD_DRV, &fs);
+
+    if(FR_OK == res)
+    {  
+        res = f_open(&fp, "FDDETCT.TXT", FA_OPEN_EXISTING);
+
+        if(FR_OK == res)
+        {
+            ret = TRUE;
+        }
+        else
+        {
+            f_close(&fp);
+            
+            res = f_open(&fp, "FDDETCT.TXT", FA_READ | FA_WRITE | FA_OPEN_ALWAYS);
+            
+            if(FR_OK == res)
+            {
+                f_puts("HRK Technology Inc.", &fp);
+                
+                ret = TRUE;
+            }
+            else
+            {
+                ret = FALSE;
+            }
+        }        
+
+        f_close(&fp);
+    }
+    else
+    {
+        ret = FALSE;
+    }
+
+    f_mount(SD_DRV, NULL);
+
+    return (ret);
+}
+
 u8 get_sd_info(void)
 {
     FATFS fs, *p_fs;

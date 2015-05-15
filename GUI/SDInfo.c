@@ -144,8 +144,8 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             WM_DisableWindow(hItem);
             
             hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
-            g_sys_ctrl.sysFileNum = get_file_num();
-            sprintf(sbuf, "%d", g_sys_ctrl.sysFileNum);
+            g_sys_ctrl.sd_file_num = get_file_num();
+            sprintf(sbuf, "%d", g_sys_ctrl.sd_file_num);
             EDIT_SetText(hItem, sbuf);
             //EDIT_SetText(hItem,"1");
             //scan_files("/");
