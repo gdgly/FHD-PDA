@@ -54,10 +54,10 @@
 #define  APP_CFG_TASK_START_PRIO                         2u
 #define  APP_CFG_TASK_END_TICK_PRIO                      3u
 #define  APP_CFG_TASK_KEY_PRIO                           4u
-#define  APP_CFG_TASK_GUI_PRIO                           5u
-#define  APP_CFG_TASK_END_PROC_PRIO                      6u
-#define  APP_CFG_TASK_PLC_PRIO                           7u
-#define  APP_CFG_TASK_GMP_PRIO                           8u
+#define  APP_CFG_TASK_GMP_PRIO                           5u
+#define  APP_CFG_TASK_GUI_PRIO                           6u
+#define  APP_CFG_TASK_END_PROC_PRIO                      7u
+#define  APP_CFG_TASK_PLC_PRIO                           8u
 #define  APP_CFG_TASK_POWER_PRIO                         9u
 #define  APP_CFG_TASK_PC_PRIO                           10u
 #define  APP_CFG_TASK_RS485_PRIO                        11u

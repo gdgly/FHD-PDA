@@ -40,6 +40,7 @@ extern const char Cancel[];
 extern const char Quit[];
 //确认
 extern const char Confirm[];
+extern const char TextOK[];
 
 
 //时间设置

@@ -1,7 +1,7 @@
 /** 
  * @file     FM.c
  * @brief    文件管理
- * @details  文件管理，应用层接口
+ * @details  应用层文件管理接口
  * @author   华兄
  * @email    591881218@qq.com
  * @date     2015
@@ -27,7 +27,7 @@ u8 fdisk_detect(void)
 
     if(FR_OK == res)
     {  
-        res = f_open(&fp, "FDDETCT.TXT", FA_OPEN_EXISTING);
+        res = f_open(&fp, "FDDETECT.TXT", FA_OPEN_EXISTING);
 
         if(FR_OK == res)
         {
@@ -37,7 +37,7 @@ u8 fdisk_detect(void)
         {
             f_close(&fp);
             
-            res = f_open(&fp, "FDDETCT.TXT", FA_READ | FA_WRITE | FA_OPEN_ALWAYS);
+            res = f_open(&fp, "FDDETECT.TXT", FA_READ | FA_WRITE | FA_OPEN_ALWAYS);
             
             if(FR_OK == res)
             {
@@ -314,9 +314,9 @@ u16 sprintf_plc_listen_record(void)
 
     len = 0;
     
-    if(g_plc_prm.recv_len)
+    if(g_plc_para.recv_len)
     {
-        memset(g_plc_prm.sd_buf, ' ', sizeof(g_plc_prm.sd_buf));
+        memset(g_plc_para.sd_buf, ' ', sizeof(g_plc_para.sd_buf));
         
         sprintf(buf, "20%02x-%02x-%02x %02x:%02x:%02x  ", g_rtc_time[YEAR_POS], 
                                                            g_rtc_time[MONTH_POS],
@@ -325,7 +325,7 @@ u16 sprintf_plc_listen_record(void)
                                                            g_rtc_time[MIN_POS],
                                                            g_rtc_time[SEC_POS]);
         
-        ptr = g_plc_prm.sd_buf;
+        ptr = g_plc_para.sd_buf;
 
         memcpy(ptr, buf, 21);
         ptr += 21;
@@ -336,15 +336,15 @@ u16 sprintf_plc_listen_record(void)
         *ptr++ = ' ';
         len += 3;
         
-        for(i = 0; i < g_plc_prm.recv_len; i++)
+        for(i = 0; i < g_plc_para.recv_len; i++)
         {
-            *ptr++ = GUI_Hex2Char(g_plc_prm.recv_buf[i] >> 4);
-            *ptr++ = GUI_Hex2Char(g_plc_prm.recv_buf[i] & 0x0f);
+            *ptr++ = GUI_Hex2Char(g_plc_para.recv_buf[i] >> 4);
+            *ptr++ = GUI_Hex2Char(g_plc_para.recv_buf[i] & 0x0f);
             *ptr++ = ' ';
             len += 3;
         }
 
-        sprintf(buf, " LEN: %03u", g_plc_prm.recv_len);
+        sprintf(buf, " LEN: %03u", g_plc_para.recv_len);
         
         memcpy(ptr, buf, 9);
         ptr += 9;
@@ -479,7 +479,7 @@ u8 plc_listen_record(void)
 
     bytes = sprintf_plc_listen_record();
         
-    res = f_write(&fp, g_plc_prm.sd_buf, bytes, &br); //追加文件
+    res = f_write(&fp, g_plc_para.sd_buf, bytes, &br); //追加文件
 
     if((FR_OK != res) || (!br))
     {
@@ -509,7 +509,7 @@ u16 sprintf_fhd_msg_record(u8 msg_type)
     
     if(FHD_MSG_NONE != msg_type)
     {
-        memset(g_fhd_prm.fm_buf, ' ', sizeof(g_fhd_prm.fm_buf));
+        memset(g_fhd_para.fm_buf, ' ', sizeof(g_fhd_para.fm_buf));
         
         sprintf(buf, "20%02x-%02x-%02x %02x:%02x:%02x  ", g_rtc_time[YEAR_POS], 
                                                           g_rtc_time[MONTH_POS],
@@ -518,7 +518,7 @@ u16 sprintf_fhd_msg_record(u8 msg_type)
                                                           g_rtc_time[MIN_POS],
                                                           g_rtc_time[SEC_POS]);
         
-        ptr = g_fhd_prm.fm_buf;
+        ptr = g_fhd_para.fm_buf;
 
         memcpy(ptr, buf, 21);
         ptr += 21;
@@ -531,15 +531,15 @@ u16 sprintf_fhd_msg_record(u8 msg_type)
             *ptr++ = ' ';
             len += 3;
 
-            for(i = 0; i < g_fhd_prm.send_len; i++)
+            for(i = 0; i < g_fhd_para.send_len; i++)
             {
-                *ptr++ = GUI_Hex2Char(g_fhd_prm.send_buf[i] >> 4);
-                *ptr++ = GUI_Hex2Char(g_fhd_prm.send_buf[i] & 0x0f);
+                *ptr++ = GUI_Hex2Char(g_fhd_para.send_buf[i] >> 4);
+                *ptr++ = GUI_Hex2Char(g_fhd_para.send_buf[i] & 0x0f);
                 *ptr++ = ' ';
                 len += 3;
             }
             
-            sprintf(buf, " LEN: %03u", g_fhd_prm.send_len);
+            sprintf(buf, " LEN: %03u", g_fhd_para.send_len);
         }
         else if(FHD_MSG_RECV == msg_type)
         {
@@ -548,15 +548,15 @@ u16 sprintf_fhd_msg_record(u8 msg_type)
             *ptr++ = ' ';
             len += 3;
             
-            for(i = 0; i < g_fhd_prm.recv_len; i++)
+            for(i = 0; i < g_fhd_para.recv_len; i++)
             {
-                *ptr++ = GUI_Hex2Char(g_fhd_prm.recv_buf[i] >> 4);
-                *ptr++ = GUI_Hex2Char(g_fhd_prm.recv_buf[i] & 0x0f);
+                *ptr++ = GUI_Hex2Char(g_fhd_para.recv_buf[i] >> 4);
+                *ptr++ = GUI_Hex2Char(g_fhd_para.recv_buf[i] & 0x0f);
                 *ptr++ = ' ';
                 len += 3;
             }
             
-            sprintf(buf, " LEN: %03u", g_fhd_prm.recv_len);
+            sprintf(buf, " LEN: %03u", g_fhd_para.recv_len);
         }
         else
         {
@@ -698,7 +698,7 @@ u8 fhd_msg_record(u8 msg_type)
 
     bytes = sprintf_fhd_msg_record(msg_type);
         
-    res = f_write(&fp, g_fhd_prm.fm_buf, bytes, &br); //追加文件
+    res = f_write(&fp, g_fhd_para.fm_buf, bytes, &br); //追加文件
 
     if((FR_OK != res) || (!br))
     {

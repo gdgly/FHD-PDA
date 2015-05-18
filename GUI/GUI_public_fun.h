@@ -93,8 +93,7 @@ typedef enum
 //#define ERROR_BOX(error_no)     MESSAGEBOX_Create(&gc_messageBoxText[error_no][0],"Error",0)
 
 
-typedef struct _sys_parameter_pkg_
-{
+typedef struct _sys_parameter_pkg_ {
     //U16 g_protocal;      //规约
     U8  cmdType;      
     U8  ctlCode;   //控制字
@@ -109,14 +108,14 @@ typedef struct _sys_parameter_pkg_
     
 }SEND_PARA_PKG,*P_SEND_PARA_PKG;
 
-typedef struct _gui_prm {
+typedef struct _gui_para_ {
     u8 state;
 	u8 cmd;
 	u8 data_buf[256];
 	u16 data_len;
-} GUI_PRM, P_GUI_PRM; //华兄
+} GUI_PARA, P_GUI_PARA; //华兄
 
-extern GUI_PRM g_gui_prm;
+extern GUI_PARA g_gui_para;
 
 extern SEND_PARA_PKG g_send_para_pkg;      //参数包
 

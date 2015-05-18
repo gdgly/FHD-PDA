@@ -7373,8 +7373,8 @@ GUI_CONST_STORAGE GUI_CHARINFO GUI_Battery_CharInfo[10] = {
   ,{  40,  40,  5, acGUI_Battery_8086 } /* code 8086 */
   
   ,{  40,  40,  5, acGUI_Battery_53C1 } /* code 53C1 */
-  ,{  40,  40,  5, acGUI_Battery_8D30 } /* code 8D30 */
-  ,{  40,  40,  5, acGUI_Battery_58F9 } /* code 58F9 */
+  ,{  30,  30,  5, acGUI_Battery_8D30 } /* code 8D30 */
+  ,{  30,  30,  5, acGUI_Battery_58F9 } /* code 58F9 */
 };
 
 GUI_CONST_STORAGE GUI_FONT_PROP GUI_Battery_Prop10 = {

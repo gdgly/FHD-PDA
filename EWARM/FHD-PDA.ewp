@@ -1903,7 +1903,7 @@
       <name>$PROJ_DIR$\..\APP\DL645.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\APP\FHD.c</name>
+      <name>$PROJ_DIR$\..\APP\FHDP.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\APP\FM.c</name>

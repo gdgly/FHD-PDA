@@ -257,9 +257,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     SSD_KeyCnt = 0;
                     break;
                 case GUI_KEY_GREEN:
-                    g_gui_prm.state = FHD_GUI_TRM_STATE;
-                    g_gui_prm.cmd = FHD_CMD_READ_TRM_STATE;
-                    OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm); 
+                    g_gui_para.state = FHD_GUI_TRM_STATE;
+                    g_gui_para.cmd = FHD_CMD_READ_TRM_STATE;
+                    OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para); 
                     break;
                 case GUI_KEY_UP:
                     SSD_SelectUp();
@@ -271,9 +271,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     break;
 #if 0 
                 case GUI_KEY_F1:
-                    g_gui_prm.state = FHD_GUI_SYS_STATE;
-                    g_gui_prm.cmd = FHD_CMD_READ_SYS_STATE;
-                    OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);                     
+                    g_gui_para.state = FHD_GUI_SYS_STATE;
+                    g_gui_para.cmd = FHD_CMD_READ_SYS_STATE;
+                    OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                     
                     break;
 #endif     
                 case GUI_KEY_F2:
@@ -318,13 +318,13 @@ void GUI_Trm_State_Proc(void)
     u8 buf[128];
     
 
-    switch(g_gui_prm.cmd)
+    switch(g_gui_para.cmd)
     {
     case FHD_CMD_READ_TRM_STATE:
         u8 *pdata;
         u32 tmp1, tmp2;
 
-        pdata = (u8 *)g_fhd_prm.data_buf;
+        pdata = (u8 *)g_fhd_para.data_buf;
         
         tmp1 = mb_swap_32((u8 *)pdata);
         pdata += 4;

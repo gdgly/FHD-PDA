@@ -84,7 +84,7 @@ void  App_TaskKey (void *p_arg)
 			{
               LED_KEY_ON();
 
-              if(SYS_BEEP_ON == g_rom_prm.beep_switch)
+              if(SYS_BEEP_ON == g_rom_para.beep_switch)
               {
               Beep(); //ЛЊаж
               }

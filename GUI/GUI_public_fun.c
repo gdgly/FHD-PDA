@@ -217,15 +217,15 @@ void GUI_print_recv_buf()
     u16 i;
     u8 *send_ptr;
     //int n = 0;
-    if(g_plc_prm.recv_len && (g_plc_prm.recv_len < 80))
+    if(g_plc_para.recv_len && (g_plc_para.recv_len < 80))
     {
         send_ptr = s_prbf;
         *send_ptr++ = 'R';
         *send_ptr++ = ':';
-        for(i = 0; i < g_plc_prm.recv_len; i++)
+        for(i = 0; i < g_plc_para.recv_len; i++)
         {
-            *send_ptr++ = GUI_Hex2Char( g_plc_prm.recv_buf[i]>>4);
-            *send_ptr++ = GUI_Hex2Char( g_plc_prm.recv_buf[i]&0x0f);
+            *send_ptr++ = GUI_Hex2Char( g_plc_para.recv_buf[i]>>4);
+            *send_ptr++ = GUI_Hex2Char( g_plc_para.recv_buf[i]&0x0f);
             *send_ptr++ = ' ';
         }
         *send_ptr++ = '\n';
@@ -266,9 +266,9 @@ void GUI_print_recv_buf()
 #else //华兄
 void GUI_Recv_Msg_Proc(void)
 {
-    if(g_fhd_prm.recv_len)
+    if(g_fhd_para.recv_len)
     {
-        switch(g_gui_prm.state)
+        switch(g_gui_para.state)
         {
         case FHD_GUI_TRM_CAL:
             GUI_Trm_Cal_Proc();
@@ -300,15 +300,15 @@ void GUI_print_send_buf()
     u16 i;
     u8 *send_ptr;
     
-    if(g_plc_prm.send_len && (g_plc_prm.send_len < 80))
+    if(g_plc_para.send_len && (g_plc_para.send_len < 80))
     {        
         send_ptr = s_prbf;
         *send_ptr++ = 'S';
         *send_ptr++ = ':';
-        for(i = 0; i < g_plc_prm.send_len; i++)
+        for(i = 0; i < g_plc_para.send_len; i++)
         {
-            *send_ptr++ = GUI_Hex2Char( g_plc_prm.send_buf[i]>>4);
-            *send_ptr++ = GUI_Hex2Char( g_plc_prm.send_buf[i]&0x0f);
+            *send_ptr++ = GUI_Hex2Char( g_plc_para.send_buf[i]>>4);
+            *send_ptr++ = GUI_Hex2Char( g_plc_para.send_buf[i]&0x0f);
             *send_ptr++ = ' ';
         }
         *send_ptr++ = '\n';
@@ -341,9 +341,9 @@ void GUI_Msg_Proc()
 
     
 
-    if(g_plc_prm.sendStatus == PLC_MSG_SENDING)    
+    if(g_plc_para.sendStatus == PLC_MSG_SENDING)    
     {        
-        //g_plc_prm.send_buf
+        //g_plc_para.send_buf
         //GUI_Msg_Upload();//数据发送图标变色
         //hItem=TSK_Get_Upload_Text();
         //TEXT_SetTextColor(hItem,GUI_GREEN);
@@ -354,16 +354,16 @@ void GUI_Msg_Proc()
        
     }
 
-    if((g_plc_prm.result == PLC_RES_FAIL) || (g_plc_prm.result == PLC_RES_TIMEOUT))
+    if((g_plc_para.result == PLC_RES_FAIL) || (g_plc_para.result == PLC_RES_TIMEOUT))
     {
-        g_plc_prm.result = PLC_RES_NONE;
+        g_plc_para.result = PLC_RES_NONE;
         //ERR_NOTE(g_hWin_menu, 10);
         hItem = GUI_Get_PROGBAR();
         PROGBAR_SetBarColor(hItem, 0, GUI_RED);
         return;
     }
 
-    if(g_plc_prm.result == PLC_RES_ERROR_FRAME)
+    if(g_plc_para.result == PLC_RES_ERROR_FRAME)
     {
        
         GUI_Msg_Download(1);
@@ -378,14 +378,14 @@ void GUI_Msg_Proc()
         }
            
         //g_sys_ctrl.guiState = GUI_PLC_MSG_IDLE;
-        g_plc_prm.sendStatus = PLC_MSG_IDLE; 
-        g_plc_prm.result = PLC_RES_NONE;
+        g_plc_para.sendStatus = PLC_MSG_IDLE; 
+        g_plc_para.result = PLC_RES_NONE;
         return;
     }
 
-    if((g_plc_prm.sendStatus == PLC_MSG_RECEIVED) )
+    if((g_plc_para.sendStatus == PLC_MSG_RECEIVED) )
     {
-        if( g_plc_prm.result == PLC_RES_SUCC )
+        if( g_plc_para.result == PLC_RES_SUCC )
         {
             GUI_Msg_Download(1);
             GUI_print_recv_buf();
@@ -398,42 +398,49 @@ void GUI_Msg_Proc()
             }
         }        
         //g_sys_ctrl.guiState = GUI_PLC_MSG_IDLE;
-        g_plc_prm.sendStatus = PLC_MSG_IDLE;
-        g_plc_prm.result = PLC_RES_NONE;
+        g_plc_para.sendStatus = PLC_MSG_IDLE;
+        g_plc_para.result = PLC_RES_NONE;
     }
     
 }
 #else //华兄
 void GUI_Msg_Proc(void)
 {
-    if(MSG_STATE_SENDING == g_fhd_prm.msg_state)    
+    //CPU_SR_ALLOC();
+
+    
+    if(MSG_STATE_SENDING == g_fhd_para.msg_state)    
     {        
         GUI_Msg_Upload(ON);
 
+        //CPU_INT_DIS();
         fhd_msg_record(FHD_MSG_SEND);
+        //CPU_INT_EN();
 
         GUI_Send_Msg_Proc();
     }    
-    else if(MSG_STATE_RECEIVED == g_fhd_prm.msg_state)
+    else if(MSG_STATE_RECEIVED == g_fhd_para.msg_state)
     {
-        if(RECV_RES_SUCC == g_fhd_prm.recv_result)
+        if(RECV_RES_SUCC == g_fhd_para.recv_result)
         {
             GUI_Msg_Download(ON);
 
+            //CPU_INT_DIS();
             fhd_msg_record(FHD_MSG_RECV);
+            //CPU_INT_EN();
 
             GUI_Recv_Msg_Proc();
         }
 
-        g_fhd_prm.msg_state = MSG_STATE_NONE;
-        g_fhd_prm.recv_result = RECV_RES_IDLE;        
+        g_fhd_para.msg_state = MSG_STATE_NONE;
+        g_fhd_para.recv_result = RECV_RES_IDLE;        
     }
 }
 #endif
 
 SEND_PARA_PKG g_send_para_pkg;      //参数包
 
-GUI_PRM g_gui_prm;
+GUI_PARA g_gui_para;
 
 //MBOX_SEND_INFO g_mail_box_info; //邮箱发送的消息
 

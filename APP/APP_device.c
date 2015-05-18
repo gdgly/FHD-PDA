@@ -1,7 +1,7 @@
 #include "includes.h"
 
 
-ROM_PRM g_rom_prm = {
+ROM_PARA g_rom_para = {
     TAG_WORD_TABLE_MAP, //标签
     0xffffbb00, //启动标志，不能更改
     0, //CRC              
@@ -137,9 +137,9 @@ void DEV_Parameters_Read(void)
             if(crcr == pPara[2])
             {
                 //版本检查
-                if(pPara[3] >= g_rom_prm.versionDate)
+                if(pPara[3] >= g_rom_para.versionDate)
                 {
-                    APP_memcpy((unsigned char *)&g_rom_prm, (unsigned char *)pPara, ROM_ADDR_PARA_SIZE);
+                    APP_memcpy((unsigned char *)&g_rom_para, (unsigned char *)pPara, ROM_ADDR_PARA_SIZE);
                     g_sys_ctrl.paraAddr = (unsigned int)pPara;
      
                 }
@@ -169,7 +169,7 @@ unsigned int DEV_Parameters_Write(void)
 
     HAL_FLASH_Unlock();
 
-    g_rom_prm.crc = Get_checksum((unsigned char *)&g_rom_prm.versionDate, ROM_ADDR_PARA_SIZE - 12);
+    g_rom_para.crc = Get_checksum((unsigned char *)&g_rom_para.versionDate, ROM_ADDR_PARA_SIZE - 12);
     
     while(n < (ROM_PARA_WRITE_TIMES))
     {        
@@ -178,7 +178,7 @@ unsigned int DEV_Parameters_Write(void)
         {
             g_sys_ctrl.paraAddr= (unsigned int)pPara;  //added on 2014.12.30
             addr = (unsigned int)pPara;
-            s_addr = (unsigned int *)&g_rom_prm;
+            s_addr = (unsigned int *)&g_rom_para;
             for(i = 0; i < ROM_ADDR_PARA_SIZE/4; i++)
             {
                 //Flash002_WritePage(addr, s_addr);
@@ -198,7 +198,7 @@ unsigned int DEV_Parameters_Write(void)
     pPara = (unsigned int *)(ROM_ADDR_SYS_PARA);
     
     addr = (unsigned int)pPara;
-    s_addr = (unsigned int *)&g_rom_prm;
+    s_addr = (unsigned int *)&g_rom_para;
    
     for(i = 0; i < ROM_ADDR_PARA_SIZE/4; i++)
     {            
@@ -228,5 +228,7 @@ void DEV_Init(void)
     g_sys_ctrl.sysPowerState = SYS_POWER_WAKEUP;
 
     g_sys_ctrl.dev_addr = 1;
+
+    g_sys_ctrl.sd_format_flag = FALSE;
 }
 

@@ -114,9 +114,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 
                 if((g_hWin_SysSet > 0) && (g_hWin_SDInfo <= 0))
                 {
-                  if(BOOT_REQUEST_ACT != g_rom_prm.bootFlag)
+                  if(BOOT_REQUEST_ACT != g_rom_para.bootFlag)
                   {
-                      g_rom_prm.bootFlag = BOOT_REQUEST_ACT;
+                      g_rom_para.bootFlag = BOOT_REQUEST_ACT;
                       
                       DEV_Parameters_Write();
                   }

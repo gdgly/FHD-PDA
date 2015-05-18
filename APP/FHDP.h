@@ -1,5 +1,5 @@
-#ifndef __FHD_H__
-#define __FHD_H__
+#ifndef __FHDP_H__
+#define __FHDP_H__
 
 
 typedef unsigned char		uint8;              /* defined for unsigned 8-bits integer variable */

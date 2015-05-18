@@ -17,7 +17,7 @@ Sector 7 0x0806 0000 - 0x0807 FFFF 128 Kbyte
 */
 
 #define ROM_ADDR_SYS_PARA    (0x8004000uL)
-#define ROM_ADDR_PARA_SIZE   (sizeof(ROM_PRM))
+#define ROM_ADDR_PARA_SIZE   (sizeof(ROM_PARA))
 
 #define RAM_COPY_MAX_SIZE_K    64
 #define SRM_PARA_NUMBER      512
@@ -52,7 +52,7 @@ Sector 7 0x0806 0000 - 0x0807 FFFF 128 Kbyte
 #define SYS_BEEP_ON         0
 #define SYS_BEEP_OFF        1
 
-typedef struct _rom_prm {
+typedef struct _rom_para_ {
 unsigned int magic_word;
 unsigned int bootFlag;
 unsigned int crc;
@@ -86,15 +86,16 @@ unsigned int bpsSpeed;             //传输数据等待时间,需要保存，以便下次启动有默
 // ------------------------------
 
 unsigned int para_data[SRM_PARA_NUMBER - 26];
-} ROM_PRM, *P_ROM_PRM;
+} ROM_PARA, *P_ROM_PARA;
 
-typedef struct _sys_ctrl {
+typedef struct _sys_ctrl_ {
     OS_EVENT *up_mbox; //上行邮箱
     OS_EVENT *down_mbox; //下行邮箱    
     u32 shutdown_timeout; //自动关机超时时间
     u32 sleep_timeout; //睡眠超时时间
     u32 sd_total_capacity; //SD卡总容量
     u32 sd_free_capacity; //SD卡剩余容量
+    u8 sd_format_flag; //SD卡格式化标志
     u32 sd_file_num; //文件数目 
     u32 usb_state; //USB在位状态
     u32 pwr_val; //电池电量
@@ -116,7 +117,7 @@ typedef struct _sys_ctrl {
 #define SYS_DEL_TASK(tn)        g_sys_ctrl.procTask&=(~tn)
 #define SYS_IS_TASK(tn)         g_sys_ctrl.procTask&tn
  
-extern ROM_PRM g_rom_prm;
+extern ROM_PARA g_rom_para;
 extern SYS_CTRL g_sys_ctrl;
 
 void DEV_Init(void);

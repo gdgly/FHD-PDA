@@ -126,9 +126,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
                          
             case GUI_KEY_GREEN:    
-                g_gui_prm.state = FHD_GUI_TRM_LOG;
-                g_gui_prm.cmd = FHD_CMD_READ_TRM_LOG;
-                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);                 
+                g_gui_para.state = FHD_GUI_TRM_LOG;
+                g_gui_para.cmd = FHD_CMD_READ_TRM_LOG;
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                 
                 break;
 #if 0
             case GUI_KEY_F2:
@@ -183,7 +183,7 @@ void GUI_Trm_Log_Proc(void)
     u8 i, row, buf[128];
     
 
-    switch(g_gui_prm.cmd)
+    switch(g_gui_para.cmd)
     {
     case FHD_CMD_READ_TRM_LOG:
         u8 *pdata;
@@ -191,7 +191,7 @@ void GUI_Trm_Log_Proc(void)
 #define POWER_DROP_TIMESTAMP_COL       0
 #define POWER_DROP_KEEP_TIME_COL       1
 
-        pdata = (u8 *)g_fhd_prm.data_buf;
+        pdata = (u8 *)g_fhd_para.data_buf;
 
         row = *((u16 *)pdata);
         pdata += 2;

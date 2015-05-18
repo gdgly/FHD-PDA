@@ -185,12 +185,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   {
       case WM_INIT_DIALOG:
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
-          sprintf(tmpBuf, "%d", (g_rom_prm.auto_sleep_time));
+          sprintf(tmpBuf, "%d", (g_rom_para.auto_sleep_time));
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
           
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
-          sprintf(tmpBuf, "%d", (g_rom_prm .auto_shutdown_time));
+          sprintf(tmpBuf, "%d", (g_rom_para .auto_shutdown_time));
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
           
@@ -252,13 +252,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     break;
                     
                 case GUI_KEY_F2:
-                    if(SYS_BEEP_ON == g_rom_prm.beep_switch)
+                    if(SYS_BEEP_ON == g_rom_para.beep_switch)
                     {
-                         g_rom_prm.beep_switch = SYS_BEEP_OFF;
+                         g_rom_para.beep_switch = SYS_BEEP_OFF;
                     }
                     else 
                     {
-                         g_rom_prm.beep_switch = SYS_BEEP_ON;
+                         g_rom_para.beep_switch = SYS_BEEP_ON;
                     }
                     
                     DEV_Parameters_Write();

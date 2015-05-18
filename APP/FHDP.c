@@ -1,5 +1,5 @@
 /** 
- * @file     FHD.c
+ * @file     FHDP.c
  * @brief    FHD通讯协议
  * @details  
  * @author   华兄

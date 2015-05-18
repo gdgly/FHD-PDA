@@ -277,9 +277,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
                 
             case GUI_KEY_GREEN:
-                g_gui_prm.state = FHD_GUI_TRM_CONF;
-                g_gui_prm.cmd = FHD_CMD_READ_TRM_CONF;
-                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);                              
+                g_gui_para.state = FHD_GUI_TRM_CONF;
+                g_gui_para.cmd = FHD_CMD_READ_TRM_CONF;
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                              
                 break;
                 
             case GUI_KEY_F1:
@@ -295,11 +295,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 
                 if(!temp)
                 {
-                    g_gui_prm.data_buf[index] = 1;
+                    g_gui_para.data_buf[index] = 1;
                 }
                 else
                 {
-                    g_gui_prm.data_buf[index] = 0;
+                    g_gui_para.data_buf[index] = 0;
                 }
                 
                 index++;
@@ -307,18 +307,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_1);
                 EDIT_GetText(hItem, buf, 16);
                 temp = atoi(buf);
-                memcpy(&g_gui_prm.data_buf[index], (u8 *)&temp, 2);
+                memcpy(&g_gui_para.data_buf[index], (u8 *)&temp, 2);
                 index += 2;
 
                 hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_2);
                 EDIT_GetText(hItem, buf, 16);
                 temp = atoi(buf);
-                memcpy(&g_gui_prm.data_buf[index], (u8 *)&temp, 2);
+                memcpy(&g_gui_para.data_buf[index], (u8 *)&temp, 2);
                 index += 2;
                 
-                g_gui_prm.state = FHD_GUI_TRM_CONF;
-                g_gui_prm.cmd = FHD_CMD_WRITE_TRM_CONF;
-                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_prm);    
+                g_gui_para.state = FHD_GUI_TRM_CONF;
+                g_gui_para.cmd = FHD_CMD_WRITE_TRM_CONF;
+                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);    
                 break;
                 
             case '*':
@@ -381,14 +381,14 @@ void GUI_Trm_Conf_Proc(void)
     u8 buf[128];
     
 
-    switch(g_gui_prm.cmd)
+    switch(g_gui_para.cmd)
     {
     case FHD_CMD_READ_TRM_CONF:
         u8 *pdata;
         u32 tmp1, tmp2;
         
         
-        pdata = (u8 *)g_fhd_prm.data_buf;
+        pdata = (u8 *)g_fhd_para.data_buf;
 
         tmp1 = mb_swap_32((u8 *)pdata);
         pdata += 4;

@@ -76,17 +76,15 @@ typedef struct {
 
 
 //任务栏资源列表
-static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { WINDOW_CreateIndirect,  NULL,           ID_WINDOW_0,  0,   0, 240, 25, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,    "00:00",     ID_TEXT_0,    3,   3, 70,  15, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,    "\0" ,       ID_TEXT_1,    108,  6, 40,  15, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,    "\0",           ID_TEXT_10,   75, 5,  30,  15, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,    DownloadIcon,   ID_TEXT_5,    156, 3, 17,  17, 0, 0x0, 0 }, 
-  { TEXT_CreateIndirect,    UploadIcon,     ID_TEXT_6,    166, 3, 17,  17, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,    "\0",           ID_TEXT_7,    196, 3, 42,  25, 0, 0x0, 0 },
+static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {/* x    y  长度 高度 */
+  { WINDOW_CreateIndirect,  NULL,           ID_WINDOW_0,   0,   0, 240, 25, 0, 0x0, 0 }, //任务栏
+  { TEXT_CreateIndirect,    "00:00:00",     ID_TEXT_0,     3,   3, 66,  15, 0, 0x0, 0 }, //时间
+  { TEXT_CreateIndirect,    "\0" ,          ID_TEXT_1,     111, 6, 40,  15, 0, 0x0, 0 }, //内存卡
+  { TEXT_CreateIndirect,    "\0",           ID_TEXT_10,    70,  5, 40,  15, 0, 0x0, 0 }, //声音
+  { TEXT_CreateIndirect,    DownloadIcon,   ID_TEXT_5,     156, 3, 17,  17, 0, 0x0, 0 }, //下行 
+  { TEXT_CreateIndirect,    UploadIcon,     ID_TEXT_6,     166, 3, 17,  17, 0, 0x0, 0 }, //上行
+  { TEXT_CreateIndirect,    "\0",           ID_TEXT_7,     196, 3, 42,  25, 0, 0x0, 0 }, //电池
 };
-
-
 
 static const BITMAP_ITEM _aBitmapItem[] = 
 {
@@ -275,7 +273,7 @@ void SetBeepState(void)
     WM_HWIN hItem;
     hItem = WM_GetDialogItem(g_hWin_task,ID_TEXT_10);
     TEXT_SetFont(hItem,&GUI_Font_Battery_40);
-    if(SYS_BEEP_ON == g_rom_prm.beep_switch)
+    if(SYS_BEEP_ON == g_rom_para.beep_switch)
     {
         TEXT_SetText(hItem, BeepOn);
     }
@@ -309,7 +307,7 @@ static void _cbTaskDialog(WM_MESSAGE * pMsg)
         TEXT_SetTextColor(hItem,GUI_DARKGRAY);
         TEXT_SetFont(hItem, &GUI_Font_Battery_40);
 
-        if(SYS_BEEP_ON == g_rom_prm.beep_switch)
+        if(SYS_BEEP_ON == g_rom_para.beep_switch)
         {
             TEXT_SetText(hItem, BeepOn);
         }

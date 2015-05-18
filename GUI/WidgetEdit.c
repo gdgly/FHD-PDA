@@ -19,13 +19,13 @@
 static const GUI_WIDGET_CREATE_INFO _aListBoxCreate[] = {
   { FRAMEWIN_CreateIndirect,  "ListBox",  ID_FRAMEWIN_0,  20,  40,  200, 200,  0, 0x0, 0 },
   { LISTBOX_CreateIndirect,   "Listbox",  ID_LISTBOX_0,   5,   7,   182, 120,  0, 0x0, 0 },
-  { BUTTON_CreateIndirect,    Save,       ID_BUTTON_0,    5,   140, 55,  25,   0, 0x0, 0 },
+  { BUTTON_CreateIndirect,    TextOK,     ID_BUTTON_0,    5,   140, 55,  25,   0, 0x0, 0 },
   { BUTTON_CreateIndirect,    Quit,       ID_BUTTON_1,    138, 140, 55,  25,   0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aEditCreate[] = {
   { FRAMEWIN_CreateIndirect, "Edit",  ID_FRAMEWIN_0, 20,  60, 200, 160, 0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Save,    ID_BUTTON_0,   5,   82, 55,  25,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   TextOK,  ID_BUTTON_0,   5,   82, 55,  25,  0, 0x0,  0 },
   { BUTTON_CreateIndirect,   Quit,    ID_BUTTON_1,   138, 82, 55,  25,  0, 0x0,  0 },
   { EDIT_CreateIndirect,     "Edit",  ID_EDIT_0,     14,  38, 165, 25,  0, 0x64, 0 },
 };
@@ -129,24 +129,24 @@ static void SelectInputEdit(int  EditNum)
             break;
         case EDT_SRC_TIME:
             EDIT_GetText(hItem, tmpTextBuf,4);
-            g_rom_prm.auto_sleep_time = atoi(tmpTextBuf);
-            if(g_rom_prm.auto_sleep_time < 5)
+            g_rom_para.auto_sleep_time = atoi(tmpTextBuf);
+            if(g_rom_para.auto_sleep_time < 5)
             {
-                g_rom_prm.auto_sleep_time = 5;
+                g_rom_para.auto_sleep_time = 5;
 
-                sprintf(tmpTextBuf, "%d", g_rom_prm.auto_sleep_time);
+                sprintf(tmpTextBuf, "%d", g_rom_para.auto_sleep_time);
             }
             DEV_Parameters_Write();
             hItem = SST_GetSrcTime();
             break;
         case EDT_SHUTDOWN:
             EDIT_GetText(hItem, tmpTextBuf,4);
-            g_rom_prm.auto_shutdown_time = atoi(tmpTextBuf);
-            if(g_rom_prm.auto_shutdown_time < 60)
+            g_rom_para.auto_shutdown_time = atoi(tmpTextBuf);
+            if(g_rom_para.auto_shutdown_time < 60)
             {
-                g_rom_prm.auto_shutdown_time = 60;
+                g_rom_para.auto_shutdown_time = 60;
 
-                sprintf(tmpTextBuf, "%d", g_rom_prm.auto_shutdown_time);
+                sprintf(tmpTextBuf, "%d", g_rom_para.auto_shutdown_time);
             }
             DEV_Parameters_Write();
             hItem = SST_GetShutDown();

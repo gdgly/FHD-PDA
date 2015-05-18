@@ -110,8 +110,7 @@ typedef enum
     RECV_RES_TIMEOUT
 } RECV_RES_TYPE; //华兄
 
-typedef struct _plc_prm
-{
+typedef struct _plc_para_ {
     u8 send_buf[256]; //DL645发送帧
     u16 send_len; //DL645发送帧长度
 
@@ -125,9 +124,9 @@ typedef struct _plc_prm
 
     u8 sendStatus;
     u8 result; //PLC通信结果: PLC_RES_SUCC、PLC_RES_FAIL、PLC_RES_TIMEOUT    
-} PLC_PRM, *P_PLC_PRM;
+} PLC_PARA, *P_PLC_PARA;
 
-typedef struct _fhd_prm {
+typedef struct _fhd_para_ {
 	u8 msg_state; //MSG_STATE_SENDING, MSG_STATE_RECEIVED
 	u8 recv_result; //RECV_RES_SUCC, RECV_RES_INVALID, RECV_RES_TIMEOUT
 	u8 send_buf[256];
@@ -137,7 +136,7 @@ typedef struct _fhd_prm {
 	u8 data_buf[256];
 	u16 data_len;
     u8 fm_buf[512];
-} FHD_PRM, P_FHD_PRM;
+} FHD_PARA, P_FHD_PARA;
 
 extern OS_EVENT *g_sem_plc;
 extern OS_EVENT *g_sem_rf;
@@ -148,8 +147,8 @@ extern OS_EVENT *g_sem_check;
 extern OS_EVENT *g_sem_chk_plc;
 extern OS_EVENT *g_sem_chk_rf;
 extern u8 g_cur_freq;
-extern PLC_PRM g_plc_prm;
-extern FHD_PRM g_fhd_prm;
+extern PLC_PARA g_plc_para;
+extern FHD_PARA g_fhd_para;
 extern u8 rf_send_buf[256];
 extern DL645_Frame_C dl645_frame_send;
 extern DL645_Frame_C dl645_frame_recv;

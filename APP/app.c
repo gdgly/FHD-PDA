@@ -368,8 +368,13 @@ static  void  App_TaskStart (void *p_arg)
             {
                 switch(n)
                 {
-                case 0:                                   
+                case 0:  
+                    g_sys_ctrl.sd_format_flag = TRUE;
+                    
                     FM_Format_Disk();
+                    
+                    g_sys_ctrl.sd_format_flag = FALSE;
+                    
                     SYS_DEL_TASK(SYS_TASK_FORMAT_DISK);
                     break;
                 }
@@ -400,12 +405,9 @@ static  void  App_TaskGUI (void *p_arg)
     WM_HWIN hItem;
     unsigned char timebuf[16];
     int n = 0;
-    u32 val = 0; //µçÑ¹
+    u32 val = 0;
     INT32U count = 0;
-    
-#if OS_CRITICAL_METHOD == 3u
-    OS_CPU_SR  cpu_sr = 0u;
-#endif  
+    //CPU_SR_ALLOC(); 
 
 
     (void)p_arg;
@@ -463,9 +465,11 @@ static  void  App_TaskGUI (void *p_arg)
             TEXT_SetText(g_hWin_Date, timebuf);            
         }
         
-        if(!(count % 50))
+        if((!(count % 50)) && (FALSE == g_sys_ctrl.sd_format_flag))
         {
             hItem = TSK_GetSD();
+
+            //CPU_INT_DIS();
             
             if(TRUE == fdisk_detect())
             {
@@ -475,6 +479,8 @@ static  void  App_TaskGUI (void *p_arg)
             {
                 TEXT_SetText(hItem, "\0");
             }
+
+            //CPU_INT_EN();
         }
         
         count++;
@@ -526,15 +532,15 @@ static  void  App_TaskPower (void *p_arg)
 
         if(GPIO_PIN_RESET == GET_USB_VOL())
         {
-            g_sys_ctrl.usb_state = 1;
+            g_sys_ctrl.usb_state = TRUE;
         }
         else
         {
-            g_sys_ctrl.usb_state = 0;
+            g_sys_ctrl.usb_state = FALSE;
         }        
 
         g_sys_ctrl.shutdown_timeout++;
-        if(g_sys_ctrl.shutdown_timeout > (g_rom_prm.auto_shutdown_time * 100))
+        if(g_sys_ctrl.shutdown_timeout > (g_rom_para.auto_shutdown_time * 100))
         {
             g_sys_ctrl.shutdown_timeout = 0;
             
@@ -542,7 +548,7 @@ static  void  App_TaskPower (void *p_arg)
         }
         
         g_sys_ctrl.sleep_timeout++;
-        if(g_sys_ctrl.sleep_timeout > (g_rom_prm.auto_sleep_time * 100))
+        if(g_sys_ctrl.sleep_timeout > (g_rom_para.auto_sleep_time * 100))
         {
             g_sys_ctrl.sleep_timeout = 0;
             
