@@ -28,6 +28,15 @@ typedef WM_HWIN (*pGetHandler)(void);
 #define SYS_EDT_NUMBER           4   //ϵͳ״̬ҳ
 #define SST_EDT_NUMBER           2
 
+#define WARN_UPDATE                  0
+#define WARN_FORMAT                  1
+#define ERR_PROTECT_TIME             2
+#define WARN_SET_PARA_SUCESS         3
+#define WARN_SET_PARA_FAIL           4
+#define ERR_SRC_TIME                 5
+#define ERR_SHUTDOWN_TIME            6
+#define ERR_COMMUNICATE              7
+#define ERR_RECEIVE_DATA             8
 
 WM_HWIN CPS_GetCheck(void);
 
@@ -36,9 +45,10 @@ WM_HWIN CPS_GetVtgChk(void);
 WM_HWIN CPS_GetVtgRead(void);
 
 void PRW_FocusSel(void);
-void SSD_FocusSel(void);
+//void SSD_FocusSel(void);
 void SST_FocusSel(void);
 void SST_ColorChange(void);
+void SST_SetVoltage(void);
 
 
 

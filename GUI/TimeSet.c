@@ -59,7 +59,7 @@
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { WINDOW_CreateIndirect, HBWIN_NULL,ID_WINDOW_0, 0,   0,   240, 295, 0, 0x0, 0 },
+  { WINDOW_CreateIndirect, WM_HWIN_NULL,ID_WINDOW_0, 0,   0,   240, 295, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   Year,      ID_TEXT_0,   51,  43,  40,  20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   Month,     ID_TEXT_1,   51,  79,  40,  20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   Day,       ID_TEXT_2,   51,  114, 40,  20, 0, 0x0, 0 },
@@ -239,8 +239,9 @@ static void Time_Init(WM_MESSAGE *pMsg)
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_5);
     EDIT_SetText(hItem, sec);
+    
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_6);
-    EDIT_SetText(hItem, TextWeek[(g_rtc_time[DAY_POS] % 7)]);
+    EDIT_SetText(hItem, TextWeek[g_rtc_time[DAY_POS] % 7]);
 }
 
 
@@ -407,7 +408,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                     {
                         RTC_WriteTime(g_gui_time);
                         WM_DeleteWindow(g_hWin_TimeSet);
-                        g_hWin_TimeSet=HBWIN_NULL;
+                        g_hWin_TimeSet=WM_HWIN_NULL;
                         WM_SetFocus(g_hWin_SysSet);
                         //WM_ShowWindow(g_hWin_TimeBar);
                         //WM_ShowWindow(g_hWin_Date);
@@ -417,7 +418,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                 //因为没有在edit中拦截消息，所以在edit中也可以直接删除窗口
                 case GUI_KEY_YELLOW:
                     WM_DeleteWindow(g_hWin_TimeSet);
-                    g_hWin_TimeSet=HBWIN_NULL;
+                    g_hWin_TimeSet=WM_HWIN_NULL;
                     WM_SetFocus(g_hWin_SysSet);
                     //WM_ShowWindow(g_hWin_TimeBar);
                     //WM_ShowWindow(g_hWin_Date);

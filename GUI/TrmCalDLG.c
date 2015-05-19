@@ -79,7 +79,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect,   TrmTime,     ID_TEXT_5,   15,  192, 120, 20, 0, 0x0, 0 },
     
   { EDIT_CreateIndirect,   "Edit",      ID_EDIT_0,   142, 14,  80,  20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect,   "Edit",      ID_EDIT_1,   142, 47,  80,  20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect,   "Edit",      ID_EDIT_1,   142, 47,  80,  20, 0, 0x64, 0 },
   { EDIT_CreateIndirect,   "Edit",      ID_EDIT_2,   15,  220, 210, 20, EDIT_CF_HCENTER, 0x64, 0 },
     
   { BUTTON_CreateIndirect, "F1",        ID_BUTTON_0, 142, 80,  80, 20, 0, 0x0, 0 },
@@ -194,7 +194,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         {
             case GUI_KEY_YELLOW:
                 WM_DeleteWindow(g_hWin_TrmCal);
-                g_hWin_TrmCal=HBWIN_NULL;
+                g_hWin_TrmCal=WM_HWIN_NULL;
                 WM_SetFocus(g_hWin_menu);
                 WM_ShowWindow(g_hWin_TimeBar);
                 WM_ShowWindow(g_hWin_Date);
@@ -212,7 +212,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);   
 #if 0
                 WM_DeleteWindow(g_hWin_TrmCal);
-                g_hWin_TrmCal=HBWIN_NULL;
+                g_hWin_TrmCal=WM_HWIN_NULL;
                 WM_SetFocus(g_hWin_menu);
                 WM_ShowWindow(g_hWin_TimeBar);
                 WM_ShowWindow(g_hWin_Date);
@@ -298,6 +298,8 @@ WM_HWIN CreateCal(void) {
 }
 
 // USER START (Optionally insert additional public code)
+
+u8 cal_buf[16];
 
 void GUI_Trm_Cal_Proc(void)
 {

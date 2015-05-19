@@ -72,7 +72,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 case GUI_KEY_YELLOW:
                     WM_DeleteWindow(g_hWin_about);
-                    g_hWin_about=HBWIN_NULL;
+                    g_hWin_about=WM_HWIN_NULL;
                     WM_ShowWindow(g_hWin_TimeBar);
                     WM_ShowWindow(g_hWin_Date);
                     WM_SetFocus(g_hWin_menu);

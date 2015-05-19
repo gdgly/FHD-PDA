@@ -75,7 +75,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, HardVersion, ID_TEXT_6, 15, 191, 110, 20, 0, 0x0, 0 },
   { EDIT_CreateIndirect, "Edit",      ID_EDIT_3, 140, 191, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { TEXT_CreateIndirect, BtrVoltage, ID_TEXT_7, 15, 221, 110, 20, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "Edit",      ID_EDIT_4, 140, 221, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",      ID_EDIT_4, 140, 221, 80, 20, 0, 0x64, 0 },
 
   
   { BUTTON_CreateIndirect, TimeSet, ID_BUTTON_3, 15, 261, 80, 25, 0, 0x0, 0 },
@@ -172,6 +172,16 @@ WM_HWIN SST_GetVoltage(void)
     return WM_GetDialogItem(g_hWin_SysSet, ID_EDIT_4);
 }
 
+
+void SST_SetVoltage(void)
+{
+    WM_HWIN hItem;
+
+
+    hItem = WM_GetDialogItem(g_hWin_SysSet, ID_EDIT_4);
+    EDIT_SetFloatValue(hItem, ((float)g_sys_ctrl.pwr_val * 3.3) / 2048);
+}
+
 /*********************************************************************
 *
 *       _cbDialog
@@ -185,12 +195,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   {
       case WM_INIT_DIALOG:
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
-          sprintf(tmpBuf, "%d", (g_rom_para.auto_sleep_time));
+          sprintf(tmpBuf, "%d", g_rom_para.auto_sleep_time);
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
           
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
-          sprintf(tmpBuf, "%d", (g_rom_para .auto_shutdown_time));
+          sprintf(tmpBuf, "%d", g_rom_para .auto_shutdown_time);
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
           
@@ -203,6 +213,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
           sprintf(tmpBuf, "v%d.%d", HARDWARE_VERSION / 10, HARDWARE_VERSION % 10);
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
+
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_4);
           EDIT_SetFloatMode(hItem, ((float)g_sys_ctrl.pwr_val * 3.3) / 2048, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
           WM_DisableWindow(hItem);
@@ -236,11 +247,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
               switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key) 
               {
                 case '*':
-                    ERR_NOTE(g_hWin_SysSet,0);
+                    ERR_NOTE(g_hWin_SysSet,WARN_UPDATE);
                     break;
                 case GUI_KEY_YELLOW:
                     WM_DeleteWindow(g_hWin_SysSet);
-                    g_hWin_SysSet = HBWIN_NULL;
+                    g_hWin_SysSet = WM_HWIN_NULL;
                     WM_ShowWindow(g_hWin_TimeBar);
                     WM_ShowWindow(g_hWin_Date);
                     WM_SetFocus(g_hWin_menu);

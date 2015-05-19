@@ -46,7 +46,7 @@ void Select_Focus(void)
     if(g_hWin_TrmState > 0)
     {
         WM_SetFocus(g_hWin_TrmState);
-        SSD_FocusSel();
+        //SSD_FocusSel();
     }
     
     if((g_hWin_SysSet > 0)&&(g_hWin_SDInfo > 0)&&(g_hWin_TimeSet <= 0))
@@ -65,6 +65,11 @@ void Select_Focus(void)
         WM_SetFocus(g_hWin_SysSet);
         SST_FocusSel();
     }
+
+    if(g_hWin_TrmLog > 0)
+    {
+        WM_SetFocus(g_hWin_TrmLog);
+    }
 }
 
 #if 1
@@ -80,6 +85,7 @@ static void SelectInputEdit(int  EditNum)
     WM_HWIN hItem;
     u8 tmpTextBuf[32];
     u8 tmpListBuf[32];
+    u32 tmp;
     
     hItem=WM_GetDialogItem(g_hWin_Input,ID_EDIT_0);
     switch(EditNum)
@@ -90,6 +96,11 @@ static void SelectInputEdit(int  EditNum)
             break;
         case EDT_ANIP_TIME:
             EDIT_GetText(hItem, tmpTextBuf,5);
+            tmp = atoi(tmpTextBuf);
+            if(tmp > 2000)
+            {
+                //ERR_NOTE(g_hWin_Input)
+            }
             hItem = PRW_GetPrtTime();
             break;
         case EDT_DEV_ADDR:
@@ -272,14 +283,14 @@ static void _cbEditDlg(WM_MESSAGE *pMsg)
             {
               case GUI_KEY_YELLOW:
                   WM_DeleteWindow(g_hWin_Input);
-                  g_hWin_Input = HBWIN_NULL;
+                  g_hWin_Input = WM_HWIN_NULL;
                   Select_Focus();
                   break;
               case GUI_KEY_GREEN:
                   SelectInputEdit(g_sys_ctrl.selectWidget);
                   WM_DeleteWindow(g_hWin_Input);
                   Select_Focus();
-                  g_hWin_Input = HBWIN_NULL;
+                  g_hWin_Input = WM_HWIN_NULL;
                   break;
             }
         }

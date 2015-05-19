@@ -48,6 +48,11 @@
 #define ID_BUTTON_2 (GUI_ID_USER + 0x1C)
 
 #define ID_TEXT_6  (GUI_ID_USER + 0x1D)
+#define ID_EDIT_6  (GUI_ID_USER + 0x1E)
+
+#define ID_TEXT_7  (GUI_ID_USER + 0x1F)
+#define ID_EDIT_7  (GUI_ID_USER + 0x20)
+
 
 // USER START (Optionally insert additional defines)
 // USER END
@@ -66,20 +71,39 @@
 *
 *       _aDialogCreate
 */
+
+
+//{ EDIT_CreateIndirect,   "edit", ID_EDIT_0, 155, 10, 80, 20, 0, 0x64, 0 },
+  //{ EDIT_CreateIndirect,   "edit",          ID_EDIT_1, 155, 40, 80, 20, 0, 0x64, 0 },
+  //{ EDIT_CreateIndirect, "addr",             ID_EDIT_2, 155, 70, 80, 20, 0, 0x64, 0 },
+ // { TEXT_CreateIndirect, InterElecPrt,          ID_TEXT_0, 7, 10, 122, 20, 0, 0x0, 0 },
+ // { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_1,   5,   40,  128, 20, 0, 0x0, 0 },
+ // { TEXT_CreateIndirect, DevAddr,          ID_TEXT_2, 5, 71, 80, 20, 0, 0x0, 0 },
+
+
+
+
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { WINDOW_CreateIndirect, "SysCtl", ID_WINDOW_0,     0,   0,   240, 295, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "EEPROM",       ID_TEXT_0,   8,   11,  80, 20, 0, 0x0, 0 },
+  { WINDOW_CreateIndirect, "SysCtl", ID_WINDOW_0,     0,   0,   240, 295,0, 0x0, 0 },
+  { TEXT_CreateIndirect, "EEPROM",       ID_TEXT_0,   8,   11,  80,  20, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect, RelaySwitch,    ID_TEXT_1,   8,   38,  120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ContactorState, ID_TEXT_2,   8,   38,  120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, Voltage,        ID_TEXT_3,   8,   70,  120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, ProtectNum,     ID_TEXT_4,   8,   100, 120, 20, 0, 0x0, 0 },
-  //{ TEXT_CreateIndirect, ,     ID_TEXT_5,   8,   156, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, ProtectNum,     ID_TEXT_3,   8,   70,  120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, InterElecPrt,   ID_TEXT_4,   8,   97, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_5,   8,   126, 125, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, DevAddr,        ID_TEXT_6,   8,   156, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, Voltage,        ID_TEXT_7,   8,   186, 120, 20, 0, 0x0, 0 },
+
+  
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_0,   153, 6,   80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   //{ EDIT_CreateIndirect, "Edit",         ID_EDIT_1,   153, 35,  80, 20, 0, 0x64, 0 },
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_2,   153, 35,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_3,   153, 64,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_4,   153, 93,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  //{ EDIT_CreateIndirect, "Edit",         ID_EDIT_5,   153, 150, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_4,   153, 93, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_5,   153, 121, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_6,   153, 150, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_7,   153, 179, 80, 20, 0, 0x64, 0 },
+
   { BUTTON_CreateIndirect, ReadData,         ID_BUTTON_0, 7,   260, 60, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,         ID_BUTTON_2, 172, 260, 60, 25, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect, ReadSysState,   ID_TEXT_5,   8,   126, 100, 20, 0, 0x0, 0 },
@@ -111,11 +135,23 @@ static void _init_SysCtlDialog(WM_MESSAGE *pMsg)
     WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_3);
-    EDIT_SetFloatMode(hItem, 0.00, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
+    EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_4);
     EDIT_SetText(hItem, " ");
+    WM_DisableWindow(hItem);
+
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_5);
+    EDIT_SetText(hItem, " ");
+    WM_DisableWindow(hItem);
+
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_6);
+    EDIT_SetText(hItem, " ");
+    WM_DisableWindow(hItem);
+
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_7);
+    EDIT_SetFloatMode(hItem, 0.00, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
     WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin,ID_BUTTON_0);
@@ -137,10 +173,12 @@ WM_HWIN SSD_GetEEPROM(void)
     return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_0);
 }
 
+#if 0
 WM_HWIN SSD_GetRelaySwitch(void)
 {
     return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_1);
 }
+#endif
 
 WM_HWIN SSD_GetCtrState(void)
 {
@@ -152,10 +190,27 @@ WM_HWIN SSD_GetPrtNum(void)
     return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
 }
 
+WM_HWIN SSD_GetPrtSwitch(void)
+{
+    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_4);
+}
 
+WM_HWIN SSD_GetPrtTime(void)
+{
+    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_5);
+}
 
+WM_HWIN SSD_GetDevAddr(void)
+{
+    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_6);
+}
 
+WM_HWIN SSD_GetVoltage(void)
+{
+    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_7);
+}
 
+#if 0
 static int SSD_KeyCnt = 0;
 
 void SSD_SelectUp(void)
@@ -191,7 +246,6 @@ void SSD_SelectDown(void)
         WM_SetFocus(hItem);
     }
 }
-
 void SSD_ColorChange(void)
 {
     WM_HWIN hItem;
@@ -218,6 +272,7 @@ void SSD_FocusSel(void)
 }
 
 
+#endif
 
 
 
@@ -254,17 +309,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 case GUI_KEY_YELLOW:
                     WM_DeleteWindow(g_hWin_TrmState);
-                    g_hWin_TrmState=HBWIN_NULL;
+                    g_hWin_TrmState=WM_HWIN_NULL;
                     WM_SetFocus(g_hWin_menu);
                     WM_ShowWindow(g_hWin_TimeBar);
                     WM_ShowWindow(g_hWin_Date);
-                    SSD_KeyCnt = 0;
+                    //SSD_KeyCnt = 0;
                     break;
                 case GUI_KEY_GREEN:
                     g_gui_para.state = FHD_GUI_TRM_STATE;
                     g_gui_para.cmd = FHD_CMD_READ_TRM_STATE;
-                    OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para); 
+                    OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);
                     break;
+#if 0
                 case GUI_KEY_UP:
                     SSD_SelectUp();
                     SSD_ColorChange();
@@ -273,6 +329,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     SSD_SelectDown();
                     SSD_ColorChange();
                     break;
+#endif
 #if 0 
                 case GUI_KEY_F1:
                     g_gui_para.state = FHD_GUI_SYS_STATE;
@@ -314,6 +371,8 @@ WM_HWIN CreateTrmState(void) {
   return hWin;
 }
 
+
+
 // USER START (Optionally insert additional public code)
 
 void GUI_Trm_State_Proc(void)
@@ -345,6 +404,21 @@ void GUI_Trm_State_Proc(void)
 
         hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_0);
         EDIT_SetText(hItem, buf);
+#if 0
+        tmp2 = (tmp1 >> 3) & 0x00000001; //电容继电器
+        if(tmp2)
+        {
+            sprintf(buf, HaveAction);
+        }
+        else
+        {
+            sprintf(buf, NoneAction);
+        }
+
+
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_1);
+        EDIT_SetText(hItem, buf);
+#endif
 
         tmp2 = (tmp1 >> 4) & 0x00000001; //接触器
         if(tmp2)
@@ -359,23 +433,15 @@ void GUI_Trm_State_Proc(void)
         hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_2);
         EDIT_SetText(hItem, buf);
 
-#if 0
-        sprintf(buf, "%0.2f", ((float)mb_swap_32((u8 *)pdata)) / 100); //电压
-        pdata += 4;
-
-        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
-        EDIT_SetText(hItem, buf);
-#else
-        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3); //电压
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_7); //电压
         EDIT_SetFloatValue(hItem, ((float)mb_swap_32((u8 *)pdata)) / 100);  
         pdata += 4;
-#endif
 
         sprintf(buf, "%d", mb_swap(*((u16 *)pdata))); //晃电保护次数
         pdata += 2;
         
-        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_4);
-        EDIT_SetText(hItem, buf);        
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
+        EDIT_SetText(hItem, buf); 
         break;
         
     default:

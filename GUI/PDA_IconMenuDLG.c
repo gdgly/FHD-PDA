@@ -79,22 +79,22 @@ typedef struct {
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {/* x    y  长度 高度 */
   { WINDOW_CreateIndirect,  NULL,           ID_WINDOW_0,   0,   0, 240, 25, 0, 0x0, 0 }, //任务栏
   { TEXT_CreateIndirect,    "00:00:00",     ID_TEXT_0,     3,   3, 66,  15, 0, 0x0, 0 }, //时间
-  { TEXT_CreateIndirect,    "\0" ,          ID_TEXT_1,     111, 6, 40,  15, 0, 0x0, 0 }, //内存卡
-  { TEXT_CreateIndirect,    "\0",           ID_TEXT_10,    70,  5, 40,  15, 0, 0x0, 0 }, //声音
+  { TEXT_CreateIndirect,    "" ,          ID_TEXT_1,     111, 6, 40,  15, 0, 0x0, 0 }, //内存卡
+  { TEXT_CreateIndirect,    "",           ID_TEXT_10,    70,  5, 40,  15, 0, 0x0, 0 }, //声音
   { TEXT_CreateIndirect,    DownloadIcon,   ID_TEXT_5,     156, 3, 17,  17, 0, 0x0, 0 }, //下行 
   { TEXT_CreateIndirect,    UploadIcon,     ID_TEXT_6,     166, 3, 17,  17, 0, 0x0, 0 }, //上行
-  { TEXT_CreateIndirect,    "\0",           ID_TEXT_7,     196, 3, 42,  25, 0, 0x0, 0 }, //电池
+  { TEXT_CreateIndirect,    "",           ID_TEXT_7,     196, 3, 42,  25, 0, 0x0, 0 }, //电池
 };
 
 static const BITMAP_ITEM _aBitmapItem[] = 
 {
   
-  {&bmCalPara,    TrmChk     },  
-  {&bmRdWt,      TrmRdWt    },  
-  {&bmSysState,   SysState    }, 
-  {&bmprotocal,   SysLog      }, 
+  {&bmSysState,  SysState    },  
+  {&bmRdWt,      TrmRdWt     },  
+  {&bmCalPara,    TrmChk     }, 
+  {&bmprotocal,   SysLog     }, 
   {&bmSysSet,     SysSet     },
-  {&bmabout,       TextHelp     },  
+  {&bmabout,     TextHelp    },  
  
 };
 
@@ -315,7 +315,9 @@ static void _cbTaskDialog(WM_MESSAGE * pMsg)
         {
             TEXT_SetText(hItem, BeepOff);
         }
+        
 
+        //TSK_Set_Protocol_Text();
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
         TEXT_SetTextColor(hItem,GUI_DARKGRAY);
         TEXT_SetFont(hItem, &GUI_Font_Battery_40);
@@ -362,7 +364,7 @@ static void _cbIconWin(WM_MESSAGE * pMsg)
 				case GUI_KEY_ENTER:
 					switch(IconViewIndex)
 					{	
-						case 0:
+						case 2:
 							g_hWin_TrmCal = CreateCal();
                             //WM_BringToBottom(g_hWin_msg);
                             WM_HideWindow(g_hWin_TimeBar);
@@ -381,16 +383,21 @@ static void _cbIconWin(WM_MESSAGE * pMsg)
                             hItem = PRW_GetElecPrtSwth();
                             WM_SetFocus(hItem);
                             PRW_ColorChange();
+                            
+                            g_gui_para.state = FHD_GUI_TRM_CONF;
+                            g_gui_para.cmd = FHD_CMD_READ_TRM_CONF;
+                            OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);        
+                            
 							break;
                             
-						case 2:
+						case 0:
                             g_hWin_TrmState=CreateTrmState();
                             //WM_BringToBottom(g_hWin_msg);
                             WM_HideWindow(g_hWin_TimeBar);
                             WM_HideWindow(g_hWin_Date);
                             hItem = SSD_GetEEPROM();
                             WM_SetFocus(hItem);
-                            SSD_ColorChange();
+                            //SSD_ColorChange();
 							break;
 
                         case 4:

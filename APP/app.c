@@ -440,7 +440,7 @@ static  void  App_TaskGUI (void *p_arg)
             
             if(g_hWin_SysSet >0)
             {
-                EDIT_SetFloatValue(SST_GetVoltage(), ((float)g_sys_ctrl.pwr_val * 3.3) / 2048);
+                SST_SetVoltage();
             }
            
             if((((float)g_sys_ctrl.pwr_val * 3.3) / 2048 * 10) <= 30)

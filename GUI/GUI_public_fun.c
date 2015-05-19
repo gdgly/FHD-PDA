@@ -266,29 +266,95 @@ void GUI_print_recv_buf()
 #else //ЛЊаж
 void GUI_Recv_Msg_Proc(void)
 {
-    if(g_fhd_para.recv_len)
+    switch(g_gui_para.state)
     {
-        switch(g_gui_para.state)
+    case FHD_GUI_TRM_CAL:
+        if(RECV_RES_SUCC == g_fhd_para.recv_result)
         {
-        case FHD_GUI_TRM_CAL:
-            GUI_Trm_Cal_Proc();
-            break;
-
-        case FHD_GUI_TRM_CONF:
-            GUI_Trm_Conf_Proc();
-            break;
-
-        case FHD_GUI_TRM_STATE:
-            GUI_Trm_State_Proc();
-            break;
-
-        case FHD_GUI_TRM_LOG:
-            GUI_Trm_Log_Proc();
-            break;
-
-        default:
-            break;
+           if(g_fhd_para.recv_len)
+           {
+               GUI_Trm_Cal_Proc();
+           }
         }
+        else if(RECV_RES_INVALID == g_fhd_para.recv_result)
+        {
+            ERR_NOTE(g_hWin_TrmCal, ERR_RECEIVE_DATA);
+        }
+        else 
+        {
+            ERR_NOTE(g_hWin_TrmCal, ERR_COMMUNICATE);
+        }
+        
+        break;
+
+    case FHD_GUI_TRM_CONF:
+        if(RECV_RES_SUCC == g_fhd_para.recv_result)
+        {
+           if(g_fhd_para.recv_len)
+           {
+               GUI_Trm_Conf_Proc();
+           }
+        }
+        else if(RECV_RES_INVALID == g_fhd_para.recv_result)
+        {
+            if(FHD_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
+            {
+                ERR_NOTE(g_hWin_TrmConf, ERR_RECEIVE_DATA);
+            }
+        }
+        else 
+        {   
+            if(FHD_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
+            {
+                ERR_NOTE(g_hWin_TrmConf, ERR_COMMUNICATE);
+            }
+        }
+        break;
+
+    case FHD_GUI_TRM_STATE:
+        if(RECV_RES_SUCC == g_fhd_para.recv_result)
+        {
+           if(g_fhd_para.recv_len)
+           {
+               GUI_Trm_State_Proc();
+           }
+        }
+        else if(RECV_RES_INVALID == g_fhd_para.recv_result)
+        {
+            if(FHD_CMD_READ_TRM_STATE == g_gui_para.cmd)
+            {
+                ERR_NOTE(g_hWin_TrmState, ERR_RECEIVE_DATA);
+            }
+        }
+        else 
+        {
+            if(FHD_CMD_READ_TRM_STATE == g_gui_para.cmd)
+            {
+                ERR_NOTE(g_hWin_TrmState, ERR_COMMUNICATE);
+            }
+        }
+        break;
+
+    case FHD_GUI_TRM_LOG:
+        if(RECV_RES_SUCC == g_fhd_para.recv_result)
+        {
+            if(g_fhd_para.recv_len)
+            {
+                GUI_Trm_Log_Proc();
+            }
+        }
+        else if(RECV_RES_INVALID == g_fhd_para.recv_result)
+        {
+            ERR_NOTE(g_hWin_TrmLog, ERR_RECEIVE_DATA);
+        }
+        else
+        {
+            ERR_NOTE(g_hWin_TrmLog, ERR_COMMUNICATE);
+        }
+        break;
+
+    default:
+        break;
     }
 }
 #endif
@@ -416,17 +482,26 @@ void GUI_Msg_Proc(void)
     }    
     else if(MSG_STATE_RECEIVED == g_fhd_para.msg_state)
     {
-        if(RECV_RES_SUCC == g_fhd_para.recv_result)
+        if(RECV_RES_TIMEOUT != g_fhd_para.recv_result)
         {
             GUI_Msg_Download(ON);
 
             fhd_msg_record(FHD_MSG_RECV);
-
-            GUI_Recv_Msg_Proc();
         }
 
-        g_fhd_para.msg_state = MSG_STATE_NONE;
-        g_fhd_para.recv_result = RECV_RES_IDLE;        
+        GUI_Recv_Msg_Proc();
+
+        if(FHD_CMD_READ_TRM_STATE == g_gui_para.cmd)
+        {
+            g_gui_para.state = FHD_GUI_TRM_CONF;
+            g_gui_para.cmd = FHD_CMD_READ_TRM_CONF;
+            OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);        
+        }
+        else
+        {
+            g_fhd_para.msg_state = MSG_STATE_NONE;
+            g_fhd_para.recv_result = RECV_RES_IDLE;
+        }        
     }
 }
 #endif

@@ -106,11 +106,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         {
             case GUI_KEY_YELLOW:
                 WM_DeleteWindow(g_hWin_Err);
-                g_hWin_Err = HBWIN_NULL;
+                g_hWin_Err = WM_HWIN_NULL;
                 Select_Focus();
                 break;
             case GUI_KEY_GREEN:
                 WM_DeleteWindow(g_hWin_Err);
+                g_hWin_Err = WM_HWIN_NULL;
                 
                 if((g_hWin_SysSet > 0) && (g_hWin_SDInfo <= 0))
                 {
@@ -159,17 +160,20 @@ WM_HWIN CreateErrNote(WM_HWIN paraentWin)
   return hWin;
 }
 
-void ERR_NOTE(WM_HWIN paraentWin,int err_no);//,unsigned char *err_text);
-
-void ERR_NOTE(WM_HWIN paraentWin,int err_no)//unsigned char *err_text)
+void ERR_NOTE(WM_HWIN paraentWin,int err_no)
 {
-    //WM_HWIN hWin;
     WM_HWIN hItem;
-    g_hWin_Err=CreateErrNote(paraentWin);
-    WM_SetFocus(g_hWin_Err);
-    hItem=WM_GetDialogItem(g_hWin_Err,ID_TEXT_0);
-    TEXT_SetText(hItem,&gc_messageBoxText[err_no][0]);
 
+
+    if(WM_HWIN_NULL == g_hWin_Err)
+    {
+        g_hWin_Err = CreateErrNote(paraentWin);
+        
+        WM_SetFocus(g_hWin_Err);
+        
+        hItem=WM_GetDialogItem(g_hWin_Err, ID_TEXT_0);
+        TEXT_SetText(hItem, &gc_messageBoxText[err_no][0]);
+    }
 }
 
 /*************************** End of file ****************************/

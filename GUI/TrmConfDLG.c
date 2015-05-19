@@ -67,17 +67,17 @@
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "ParaRdWt",       ID_WINDOW_0, 0, 1, 240, 295, 0, 0x0, 0 },
-  { EDIT_CreateIndirect,   "edit", ID_EDIT_0, 155, 10, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect,   "edit",          ID_EDIT_1, 155, 40, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect, "addr",             ID_EDIT_2, 155, 70, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect,   "edit", ID_EDIT_0, 155, 10, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect,   "edit",          ID_EDIT_1, 155, 40, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "addr",             ID_EDIT_2, 155, 70, 80, 20, 0, 0x64, 0 },
   { TEXT_CreateIndirect, InterElecPrt,          ID_TEXT_0, 7, 10, 122, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_1,   5,   40,  128, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, DevAddr,          ID_TEXT_2, 5, 71, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, ReadPara,         ID_BUTTON_0, 8,   262, 70, 25, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, DevAddr,          ID_TEXT_2, 5, 71, 120, 20, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, SetPara,         ID_BUTTON_0, 8,   262, 70, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 160, 262, 70, 25, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, ReadData,     ID_BUTTON_2, 81,  262, 81, 25, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, SetPara,        ID_TEXT_3,   5,   101,  80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "F1",         ID_BUTTON_3, 155,   101, 80, 20, 0, 0x0, 0 },
+  //{ TEXT_CreateIndirect, SetPara,        ID_TEXT_3,   5,   101,  80, 20, 0, 0x0, 0 },
+  //{ BUTTON_CreateIndirect, "F1",         ID_BUTTON_3, 155,   101, 80, 20, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect, SetPara,        ID_TEXT_4,   5,   131,  80, 20, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "F2",         ID_BUTTON_4, 155,   131, 80, 20, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
@@ -162,7 +162,6 @@ static void _init_ParaDialog(WM_MESSAGE * pMsg)
     WM_HWIN hItem;
     u8 buf[16];
 
-    
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
@@ -171,9 +170,9 @@ static void _init_ParaDialog(WM_MESSAGE * pMsg)
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
-    sprintf(buf, "%d", g_sys_ctrl.dev_addr);
+    //sprintf(buf, "%d", g_sys_ctrl.dev_addr);
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_2);
-    EDIT_SetText(hItem, buf);
+    EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
@@ -251,7 +250,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         {
             case GUI_KEY_YELLOW:
                  WM_DeleteWindow(g_hWin_TrmConf);
-                 g_hWin_TrmConf = HBWIN_NULL;
+                 g_hWin_TrmConf = WM_HWIN_NULL;
                  WM_SetFocus(g_hWin_menu);
                  WM_ShowWindow(g_hWin_TimeBar);
                  WM_ShowWindow(g_hWin_Date);
@@ -260,7 +259,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 #if 0
             case GUI_KEY_GREEN:
                 WM_DeleteWindow(g_hWin_ParaRdWt);
-                g_hWin_ParaRdWt=HBWIN_NULL;
+                g_hWin_ParaRdWt=WM_HWIN_NULL;
                 WM_SetFocus(g_hWin_menu);
                 WM_ShowWindow(g_hWin_TimeBar);
                 WM_ShowWindow(g_hWin_Date);
@@ -275,14 +274,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 PRW_SelectDown();
                 PRW_ColorChange();
                 break;
-                
+#if 0
             case GUI_KEY_GREEN:
                 g_gui_para.state = FHD_GUI_TRM_CONF;
                 g_gui_para.cmd = FHD_CMD_READ_TRM_CONF;
                 OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                              
                 break;
-                
-            case GUI_KEY_F1:
+#endif  
+            case GUI_KEY_GREEN:
                 u8 buf[16], index;
                 u16 temp;
                 
@@ -403,8 +402,14 @@ void GUI_Trm_Conf_Proc(void)
         {
             sprintf(buf, SwitchOff);
         }
-        
-        hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_0);
+        if(g_hWin_TrmState > 0)
+        {
+            hItem = SSD_GetPrtSwitch();
+        }
+        if(g_hWin_TrmConf > 0)
+        {
+            hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_0);
+        }
         EDIT_SetText(hItem, buf); 
         
         tmp2 = (tmp1 >> 1) & 0x00000001;
@@ -414,8 +419,17 @@ void GUI_Trm_Conf_Proc(void)
         pdata += 2;
 
         sprintf(buf, "%d", tmp1);
+
         
-        hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_1);
+        if(g_hWin_TrmState > 0)
+        {
+            hItem = SSD_GetPrtTime();
+        }
+        
+        if(g_hWin_TrmConf > 0)
+        {
+             hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_1);
+        }
         EDIT_SetText(hItem, buf);
 
         tmp1 = mb_swap(*((u16 *)pdata));
@@ -431,8 +445,18 @@ void GUI_Trm_Conf_Proc(void)
         pdata += 2;        
 
         sprintf(buf, "%d", tmp1);
+
         
-        hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_2);
+        if(g_hWin_TrmState > 0)
+        {
+            hItem = SSD_GetDevAddr();
+        }
+        
+        if(g_hWin_TrmConf > 0)
+        {
+            hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_2);
+        }
+        
         EDIT_SetText(hItem, buf);
         break;
         
