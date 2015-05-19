@@ -407,7 +407,6 @@ static  void  App_TaskGUI (void *p_arg)
     int n = 0;
     u32 val = 0;
     INT32U count = 0;
-    //CPU_SR_ALLOC(); 
 
 
     (void)p_arg;
@@ -441,10 +440,10 @@ static  void  App_TaskGUI (void *p_arg)
             
             if(g_hWin_SysSet >0)
             {
-                EDIT_SetFloatValue(SST_GetVoltage(),(g_sys_ctrl.pwr_val*3.3)/2048);
+                EDIT_SetFloatValue(SST_GetVoltage(), ((float)g_sys_ctrl.pwr_val * 3.3) / 2048);
             }
            
-            if((g_sys_ctrl.pwr_val*3.3)/2048 <= 3.0)
+            if((((float)g_sys_ctrl.pwr_val * 3.3) / 2048 * 10) <= 30)
             {
                 //ERR_NOTE(g_hWin_menu,11);
                 //APP_Shutdown();
@@ -465,11 +464,9 @@ static  void  App_TaskGUI (void *p_arg)
             TEXT_SetText(g_hWin_Date, timebuf);            
         }
         
-        if((!(count % 50)) && (FALSE == g_sys_ctrl.sd_format_flag))
+        if((!(count % 150)) && (FALSE == g_sys_ctrl.sd_format_flag))
         {
             hItem = TSK_GetSD();
-
-            //CPU_INT_DIS();
             
             if(TRUE == fdisk_detect())
             {
@@ -477,10 +474,8 @@ static  void  App_TaskGUI (void *p_arg)
             }
             else
             {
-                TEXT_SetText(hItem, "\0");
+                TEXT_SetText(hItem, " ");
             }
-
-            //CPU_INT_EN();
         }
         
         count++;

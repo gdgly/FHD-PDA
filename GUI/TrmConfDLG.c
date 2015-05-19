@@ -67,9 +67,9 @@
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "ParaRdWt",       ID_WINDOW_0, 0, 1, 240, 295, 0, 0x0, 0 },
-  { EDIT_CreateIndirect,   "edit", ID_EDIT_0, 155, 10, 80, 20, 0, 0x64, 0 },
-  { EDIT_CreateIndirect,   "edit",          ID_EDIT_1, 155, 40, 80, 20, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "addr",             ID_EDIT_2, 155, 70, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect,   "edit", ID_EDIT_0, 155, 10, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect,   "edit",          ID_EDIT_1, 155, 40, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "addr",             ID_EDIT_2, 155, 70, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { TEXT_CreateIndirect, InterElecPrt,          ID_TEXT_0, 7, 10, 122, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_1,   5,   40,  128, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, DevAddr,          ID_TEXT_2, 5, 71, 80, 20, 0, 0x0, 0 },
@@ -164,11 +164,11 @@ static void _init_ParaDialog(WM_MESSAGE * pMsg)
 
     
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
-    EDIT_SetText(hItem, SwitchOn);
+    EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
-    EDIT_SetText(hItem, "800");
+    EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
     sprintf(buf, "%d", g_sys_ctrl.dev_addr);

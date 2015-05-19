@@ -69,16 +69,16 @@
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "SysCtl", ID_WINDOW_0,     0,   0,   240, 295, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "EEPROM",       ID_TEXT_0,   8,   11,  80, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, RelaySwitch,    ID_TEXT_1,   8,   38,  120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, ContactorState, ID_TEXT_2,   8,   70,  120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, ProtectNum,     ID_TEXT_3,   8,   97,  120, 20, 0, 0x0, 0 },
-  //{ TEXT_CreateIndirect, ,        ID_TEXT_4,   8,   126, 120, 20, 0, 0x0, 0 },
+  //{ TEXT_CreateIndirect, RelaySwitch,    ID_TEXT_1,   8,   38,  120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, ContactorState, ID_TEXT_2,   8,   38,  120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, Voltage,        ID_TEXT_3,   8,   70,  120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, ProtectNum,     ID_TEXT_4,   8,   100, 120, 20, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect, ,     ID_TEXT_5,   8,   156, 120, 20, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_0,   153, 6,   80, 20, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_1,   153, 35,  80, 20, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_2,   153, 64,  80, 20, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_3,   153, 93,  80, 20, 0, 0x64, 0 },
-  //{ EDIT_CreateIndirect, "Edit",         ID_EDIT_4,   153, 121, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_0,   153, 6,   80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  //{ EDIT_CreateIndirect, "Edit",         ID_EDIT_1,   153, 35,  80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_2,   153, 35,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_3,   153, 64,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_4,   153, 93,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   //{ EDIT_CreateIndirect, "Edit",         ID_EDIT_5,   153, 150, 80, 20, 0, 0x64, 0 },
   { BUTTON_CreateIndirect, ReadData,         ID_BUTTON_0, 7,   260, 60, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,         ID_BUTTON_2, 172, 260, 60, 25, 0, 0x0, 0 },
@@ -96,23 +96,27 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 static void _init_SysCtlDialog(WM_MESSAGE *pMsg)
 {
     WM_HWIN hItem;
+
+    
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
-    EDIT_SetText(hItem, " ");
-    WM_DisableWindow(hItem);
+    //hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
+    //EDIT_SetText(hItem, " ");
+    //WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_2);
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_3);
-    EDIT_SetText(hItem, " ");
+    EDIT_SetFloatMode(hItem, 0.00, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
     WM_DisableWindow(hItem);
 
-
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_4);
+    EDIT_SetText(hItem, " ");
+    WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin,ID_BUTTON_0);
     BUTTON_SetBkColor(hItem, 0, GUI_GREEN);
@@ -342,19 +346,6 @@ void GUI_Trm_State_Proc(void)
         hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_0);
         EDIT_SetText(hItem, buf);
 
-        tmp2 = (tmp1 >> 3) & 0x00000001; //电容继电器
-        if(tmp2)
-        {
-            sprintf(buf, HaveAction);
-        }
-        else
-        {
-            sprintf(buf, NoneAction);
-        }
-
-        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_1);
-        EDIT_SetText(hItem, buf);
-
         tmp2 = (tmp1 >> 4) & 0x00000001; //接触器
         if(tmp2)
         {
@@ -368,13 +359,22 @@ void GUI_Trm_State_Proc(void)
         hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_2);
         EDIT_SetText(hItem, buf);
 
-        sprintf(buf, "%0.2f", 1.0 * mb_swap_32((u8 *)pdata) / 100);
+#if 0
+        sprintf(buf, "%0.2f", ((float)mb_swap_32((u8 *)pdata)) / 100); //电压
         pdata += 4;
+
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
+        EDIT_SetText(hItem, buf);
+#else
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3); //电压
+        EDIT_SetFloatValue(hItem, ((float)mb_swap_32((u8 *)pdata)) / 100);  
+        pdata += 4;
+#endif
 
         sprintf(buf, "%d", mb_swap(*((u16 *)pdata))); //晃电保护次数
         pdata += 2;
         
-        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_4);
         EDIT_SetText(hItem, buf);        
         break;
         

@@ -406,16 +406,11 @@ void GUI_Msg_Proc()
 #else //ЛЊаж
 void GUI_Msg_Proc(void)
 {
-    //CPU_SR_ALLOC();
-
-    
     if(MSG_STATE_SENDING == g_fhd_para.msg_state)    
     {        
         GUI_Msg_Upload(ON);
 
-        //CPU_INT_DIS();
         fhd_msg_record(FHD_MSG_SEND);
-        //CPU_INT_EN();
 
         GUI_Send_Msg_Proc();
     }    
@@ -425,9 +420,7 @@ void GUI_Msg_Proc(void)
         {
             GUI_Msg_Download(ON);
 
-            //CPU_INT_DIS();
             fhd_msg_record(FHD_MSG_RECV);
-            //CPU_INT_EN();
 
             GUI_Recv_Msg_Proc();
         }

@@ -74,12 +74,12 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect,   ReferVtg,    ID_TEXT_0,   15,  17,  120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   VtgValue,    ID_TEXT_1,   15,  50,  120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   RdSysTime,   ID_TEXT_2,   15,  82,  120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   TimeCrt,     ID_TEXT_3,   15,  113, 120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   VoltageChk,  ID_TEXT_4,   15,  150, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   TimeCrt,     ID_TEXT_3,   15,  115, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   VoltageChk,  ID_TEXT_4,   15,  147, 120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   TrmTime,     ID_TEXT_5,   15,  192, 120, 20, 0, 0x0, 0 },
     
-  { EDIT_CreateIndirect,   "Edit",      ID_EDIT_0,   142, 15,  80,  20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect,   "Edit",      ID_EDIT_1,   142, 47,  80,  20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect,   "Edit",      ID_EDIT_0,   142, 14,  80,  20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect,   "Edit",      ID_EDIT_1,   142, 47,  80,  20, EDIT_CF_HCENTER, 0x64, 0 },
   { EDIT_CreateIndirect,   "Edit",      ID_EDIT_2,   15,  220, 210, 20, EDIT_CF_HCENTER, 0x64, 0 },
     
   { BUTTON_CreateIndirect, "F1",        ID_BUTTON_0, 142, 80,  80, 20, 0, 0x0, 0 },
@@ -312,9 +312,16 @@ void GUI_Trm_Cal_Proc(void)
         
         
         pdata = (u32 *)g_fhd_para.data_buf;
-                
+
+#if 0                
+        sprintf(buf, "%0.2f", ((float)(*pdata)) / 100);
+
         hItem = WM_GetDialogItem(g_hWin_TrmCal, ID_EDIT_1);
-        EDIT_SetFloatValue(hItem, 1.0 * ((float)(*pdata)) / 100);
+        EDIT_SetText(hItem, buf);        
+#else
+        hItem = WM_GetDialogItem(g_hWin_TrmCal, ID_EDIT_1);
+        EDIT_SetFloatValue(hItem, ((float)(*pdata)) / 100);
+#endif
         break;
         
     case FHD_CMD_CALIBRATE_TRM_VOLTAGE:

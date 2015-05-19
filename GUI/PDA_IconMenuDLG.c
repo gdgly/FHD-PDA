@@ -315,19 +315,11 @@ static void _cbTaskDialog(WM_MESSAGE * pMsg)
         {
             TEXT_SetText(hItem, BeepOff);
         }
-        
 
-        //TSK_Set_Protocol_Text();
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
         TEXT_SetTextColor(hItem,GUI_DARKGRAY);
         TEXT_SetFont(hItem, &GUI_Font_Battery_40);
-        if(TRUE == fdisk_detect())
-        {
-            TEXT_SetText(hItem, SD_Mount);
-        }
-        else
-            TEXT_SetText(hItem, SD_Unmount);
-        
+        TEXT_SetText(hItem, " ");
         break;
 
       default:

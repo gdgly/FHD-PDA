@@ -283,6 +283,7 @@ uint16 FHD_MakeFrame(uint8 ctrl, uint16 reg_addr, uint8 *pdata, uint16 len, uint
 
 uint8 FHD_CheckFrame(uint8 *buf, uint16 len)
 {
+#if 0    
     uint16 crc1, crc2;
 
 
@@ -297,6 +298,16 @@ uint8 FHD_CheckFrame(uint8 *buf, uint16 len)
     {
         return (FHD_RRAME_ERROR);
     }
+#else
+    if(0 == mb_crc16(buf, len))
+    {
+        return (FHD_FRAME_OK);
+    }
+    else
+    {
+        return (FHD_RRAME_ERROR);
+    }
+#endif
 }
 
 uint8 FHD_GetDevAddr(void)

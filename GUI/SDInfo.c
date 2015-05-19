@@ -156,7 +156,8 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 
 #if 1
             hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-            PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
+            PROGBAR_SetBarColor(hItem, 0, GUI_RED);
+            //PROGBAR_SetBarColor(hItem, 1, GUI_GREEN);
             NCode = (100*g_sys_ctrl.sd_free_capacity)/g_sys_ctrl.sd_total_capacity;
             NCode %= 100;
             NCode = 100-NCode;
