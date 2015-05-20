@@ -1608,6 +1608,49 @@ void  App_TaskFHD (void *p_arg)
 
                 OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);                
                 break;
+
+            case FHD_CMD_RESET_TRM:
+                index = 0;
+                
+                temp = mb_swap(0xFF00);
+                memcpy(data_buf, (u8 *)&temp, 2);
+                index += 2;
+
+                g_fhd_para.send_len = FHD_MakeFrame(MODBUS_CTRL_OUTPUT, MODBUS_CTRL_START_ADDR + MODBUS_CTRL_RESET_ADDR, data_buf, index, g_fhd_para.send_buf);
+
+                OSSemAccept(g_sem_rs485);
+                OSSemAccept(g_sem_fhd);
+                
+                rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
+
+                g_fhd_para.msg_state = MSG_STATE_SENDING;
+
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+
+                OSTimeDlyHMSM(0, 0, 0, 200);
+                
+                OSSemPend(g_sem_fhd, 2 * OS_TICKS_PER_SEC, &err);
+
+                if(OS_ERR_NONE == err)
+                {
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_para.recv_buf, g_fhd_para.recv_len))
+                    {
+                        g_fhd_para.recv_result = RECV_RES_SUCC;    
+                    }
+                    else
+                    {
+                        g_fhd_para.recv_result = RECV_RES_INVALID;
+                    }                    
+                }
+                else
+                {
+                    g_fhd_para.recv_result = RECV_RES_TIMEOUT;
+                }
+
+                g_fhd_para.msg_state = MSG_STATE_RECEIVED;
+
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);                
+                break;
                 
             default:
                 break;

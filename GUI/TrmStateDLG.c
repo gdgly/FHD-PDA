@@ -386,6 +386,7 @@ void GUI_Trm_State_Proc(void)
     case FHD_CMD_READ_TRM_STATE:
         u8 *pdata;
         u32 tmp1, tmp2;
+        
 
         pdata = (u8 *)g_fhd_para.data_buf;
         
@@ -404,6 +405,7 @@ void GUI_Trm_State_Proc(void)
 
         hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_0);
         EDIT_SetText(hItem, buf);
+        
 #if 0
         tmp2 = (tmp1 >> 3) & 0x00000001; //µçÈİ¼ÌµçÆ÷
         if(tmp2)

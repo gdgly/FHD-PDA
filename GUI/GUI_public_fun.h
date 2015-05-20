@@ -4,7 +4,7 @@
 
 
 #define HARDWARE_VERSION    22
-#define SOFTWARE_VERSION    21
+#define SOFTWARE_VERSION    22
 
 
 #define GUI_645_ADDR_LENGTH 12
@@ -86,6 +86,7 @@ typedef enum
     FHD_CMD_WRITE_TRM_CONF,
     FHD_CMD_READ_TRM_STATE,
     FHD_CMD_READ_TRM_LOG,
+    FHD_CMD_RESET_TRM,
     MAX_FHD_CMD_TYPE
 } FHD_CMD_TYPE; //ЛЊаж
 

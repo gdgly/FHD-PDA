@@ -99,7 +99,9 @@ typedef struct _sys_ctrl_ {
     u32 sd_file_num; //文件数目 
     u32 usb_state; //USB在位状态
     u32 pwr_val; //电池电量
-    u8 dev_addr; //设备地址 
+    u8 dev_addr; //设备地址
+    u8 new_dev_addr; //新设备地址
+    u8 fhd_sw; //防晃电开关
 
     // ---------------------------------
     

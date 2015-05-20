@@ -105,7 +105,7 @@ static void SelectInputEdit(int  EditNum)
             break;
         case EDT_DEV_ADDR:
             EDIT_GetText(hItem, tmpTextBuf,5);
-            g_sys_ctrl.dev_addr = atoi(tmpTextBuf);
+            g_sys_ctrl.new_dev_addr = atoi(tmpTextBuf);
             hItem = PRW_GetDevAddr();
             break;
         case EDT_YEAR:
@@ -139,7 +139,7 @@ static void SelectInputEdit(int  EditNum)
             hItem = TMS_GetSec();
             break;
         case EDT_SRC_TIME:
-            EDIT_GetText(hItem, tmpTextBuf,4);
+            EDIT_GetText(hItem, tmpTextBuf,8);
             g_rom_para.auto_sleep_time = atoi(tmpTextBuf);
             if(g_rom_para.auto_sleep_time < 5)
             {
@@ -151,7 +151,7 @@ static void SelectInputEdit(int  EditNum)
             hItem = SST_GetSrcTime();
             break;
         case EDT_SHUTDOWN:
-            EDIT_GetText(hItem, tmpTextBuf,4);
+            EDIT_GetText(hItem, tmpTextBuf,8);
             g_rom_para.auto_shutdown_time = atoi(tmpTextBuf);
             if(g_rom_para.auto_shutdown_time < 60)
             {
@@ -336,27 +336,39 @@ static void _Init_ListBox(WM_MESSAGE *pMsg, int ListBoxNum)
 
 static void SelectLSTRow(int  WidgetNum)
 {
-
     WM_HWIN hItem;
     WM_HWIN hWin;
     int  SelNum;
+
+    
     hItem=WM_GetDialogItem(g_hWin_Input,ID_LISTBOX_0);
     SelNum=LISTBOX_GetSel(hItem);
+    
     switch(WidgetNum) /*WidgetNum是为了把不同的页面的不同Edit工具句柄传回来*/
     {
-        case LST_ANIP_SWITCH: 
-            hItem = PRW_GetElecPrtSwth();
-            EDIT_SetText(hItem,TextSwitch[SelNum]);
-            break;
-        case LST_WEEK:
-            g_gui_time[DAY_POS] = SelNum;
-            hItem = TMS_GetWeek();
-            EDIT_SetText(hItem,TextWeek[SelNum]);
-            break;
-        default:
-            break;
+    case LST_ANIP_SWITCH: 
+        hItem = PRW_GetElecPrtSwth();
+        EDIT_SetText(hItem,TextSwitch[SelNum]);
 
-      }
+        if(0 == SelNum)
+        {
+            g_sys_ctrl.fhd_sw = ON;
+        }
+        else
+        {
+            g_sys_ctrl.fhd_sw = OFF;
+        }
+        break;
+        
+    case LST_WEEK:
+        g_gui_time[DAY_POS] = SelNum;
+        hItem = TMS_GetWeek();
+        EDIT_SetText(hItem,TextWeek[SelNum]);
+        break;
+        
+    default:
+        break;
+    }
 }
 
 #endif

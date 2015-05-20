@@ -299,8 +299,6 @@ WM_HWIN CreateCal(void) {
 
 // USER START (Optionally insert additional public code)
 
-u8 cal_buf[16];
-
 void GUI_Trm_Cal_Proc(void)
 {
     WM_HWIN hItem;

@@ -5,7 +5,7 @@ ROM_PARA g_rom_para = {
     TAG_WORD_TABLE_MAP, //标签
     0xffffbb00, //启动标志，不能更改
     0, //CRC              
-    0x20150519, //版本日期    
+    0x20150520, //版本日期    
 
     SYS_BEEP_ON, //蜂鸣器开关
     60, //自动睡眠时间
@@ -228,6 +228,8 @@ void DEV_Init(void)
     g_sys_ctrl.sysPowerState = SYS_POWER_WAKEUP;
 
     g_sys_ctrl.dev_addr = 1;
+
+    g_sys_ctrl.new_dev_addr = g_sys_ctrl.dev_addr;
 
     g_sys_ctrl.sd_format_flag = FALSE;
 }

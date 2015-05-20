@@ -23,6 +23,7 @@ typedef double				fp64;				/* double precision floating point variable (64bits) 
 /* REG */
 #define MODBUS_CTRL_START_ADDR      10000		//遥控寄存器地址
 #define MODBUS_CTRL_END_ADDR	    20000		//遥控寄存器地址
+#define MODBUS_CTRL_RESET_ADDR		10			//系统重置寄存器地址
 #define MODBUS_FAST_START_ADDR	    30000		//快速寄存器地址
 #define MODBUS_FAST_END_ADDR	    40000		//快速寄存器地址
 #define MODBUS_GRP_START_ADDR	    40000		//遥测和定值寄存器地址

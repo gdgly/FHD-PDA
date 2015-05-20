@@ -200,7 +200,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
           WM_DisableWindow(hItem);
           
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
-          sprintf(tmpBuf, "%d", g_rom_para .auto_shutdown_time);
+          sprintf(tmpBuf, "%d", g_rom_para.auto_shutdown_time);
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
           
