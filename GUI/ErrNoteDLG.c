@@ -56,10 +56,10 @@
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { FRAMEWIN_CreateIndirect, "ErrNote", ID_FRAMEWIN_0, 50,  82,  140, 120, 0, 0x64, 0 },
+  { FRAMEWIN_CreateIndirect, "ErrNote", ID_FRAMEWIN_0, 40,  82,  160, 130, 0, 0x64, 0 },
   { BUTTON_CreateIndirect,   Confirm,   ID_BUTTON_0,   7,   70, 50,  20,  0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Quit,    ID_BUTTON_1,   76,  70, 50,  20,  0, 0x0,  0 },
-  { TEXT_CreateIndirect,     WrnText,    ID_TEXT_0,    7,   32,  125, 20,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   Quit,    ID_BUTTON_1,   96,  70, 50,  20,  0, 0x0,  0 },
+  { TEXT_CreateIndirect,     WrnText,    ID_TEXT_0,    7,   32,  150, 20,  0, 0x0,  0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -113,7 +113,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 WM_DeleteWindow(g_hWin_Err);
                 g_hWin_Err = WM_HWIN_NULL;
                 
-                if((g_hWin_SysSet > 0) && (g_hWin_SDInfo <= 0))
+                if((g_hWin_SysSet > 0) && (g_hWin_SysInfo <= 0))
                 {
                   if(BOOT_REQUEST_ACT != g_rom_para.bootFlag)
                   {
@@ -124,9 +124,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                   
                   DEV_SoftReset();
                 }
-                else if(g_hWin_SDInfo > 0)
+                else if(g_hWin_SysInfo > 0)
                 {
                     SYS_ADD_TASK(SYS_TASK_FORMAT_DISK);
+                }
+                
+                if(g_hWin_TrmConf > 0)
+                {
+                    g_gui_para.state = FHD_GUI_TRM_CONF;
+                    g_gui_para.cmd = FHD_CMD_RESET_TRM;
+                    OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);  
                 }
                 
                 Select_Focus();

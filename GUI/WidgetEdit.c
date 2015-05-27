@@ -49,18 +49,18 @@ void Select_Focus(void)
         //SSD_FocusSel();
     }
     
-    if((g_hWin_SysSet > 0)&&(g_hWin_SDInfo > 0)&&(g_hWin_TimeSet <= 0))
+    if((g_hWin_SysSet > 0)&&(g_hWin_SysInfo > 0)&&(g_hWin_TimeSet <= 0))
     {
-        WM_SetFocus(g_hWin_SDInfo);
+        WM_SetFocus(g_hWin_SysInfo);
     }
     
-    if((g_hWin_SysSet > 0)&&(g_hWin_SDInfo <= 0)&&(g_hWin_TimeSet > 0))
+    if((g_hWin_SysSet > 0)&&(g_hWin_SysInfo <= 0)&&(g_hWin_TimeSet > 0))
     {
         WM_SetFocus(g_hWin_TimeSet);
         TMS_SetFocus();
     }
 
-    if((g_hWin_SysSet > 0)&&(g_hWin_SDInfo <= 0)&&(g_hWin_TimeSet <= 0))
+    if((g_hWin_SysSet > 0)&&(g_hWin_SysInfo <= 0)&&(g_hWin_TimeSet <= 0))
     {
         WM_SetFocus(g_hWin_SysSet);
         SST_FocusSel();
@@ -105,7 +105,18 @@ static void SelectInputEdit(int  EditNum)
             break;
         case EDT_DEV_ADDR:
             EDIT_GetText(hItem, tmpTextBuf,5);
-            g_sys_ctrl.new_dev_addr = atoi(tmpTextBuf);
+
+            if(atoi(tmpTextBuf) > 255)
+            {
+                g_sys_ctrl.new_dev_addr = 255;
+
+                sprintf(tmpTextBuf, "%d", g_sys_ctrl.new_dev_addr);
+            }
+            else
+            {
+                g_sys_ctrl.new_dev_addr = atoi(tmpTextBuf);
+            }
+            
             hItem = PRW_GetDevAddr();
             break;
         case EDT_YEAR:
@@ -162,6 +173,26 @@ static void SelectInputEdit(int  EditNum)
             DEV_Parameters_Write();
             hItem = SST_GetShutDown();
             break;
+
+        case EDT_COMMUNICATE_ADDR:
+            EDIT_GetText(hItem, tmpTextBuf, 6);
+
+            if(atoi(tmpTextBuf) > 255)
+            {
+                g_sys_ctrl.dev_addr = 255;
+
+                sprintf(tmpTextBuf, "%d", g_sys_ctrl.dev_addr);
+            }
+            else
+            {
+                g_sys_ctrl.dev_addr = atoi(tmpTextBuf);
+            }
+
+            g_sys_ctrl.new_dev_addr = g_sys_ctrl.dev_addr;
+            
+            hItem = SST_GetCommAddr();
+            break;
+            
         default:
             break;
     }
@@ -225,6 +256,10 @@ static void _init_edit(WM_MESSAGE *pMsg,int EditNum)
         case EDT_SHUTDOWN:
             hItem = SST_GetShutDown();
             EDIT_GetText(hItem, tmpTextBuf,4);
+            break;
+        case EDT_COMMUNICATE_ADDR:
+            hItem = SST_GetCommAddr();
+            EDIT_GetText(hItem, tmpTextBuf, 6);
             break;
         default:
             break;

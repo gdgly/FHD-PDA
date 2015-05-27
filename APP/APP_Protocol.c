@@ -885,7 +885,7 @@ void  App_TaskPC (void *p_arg)
 
                             send_len = pc_frame_send.L + DL645_FIX_LEN;
 
-                            OSSemAccept(g_sem_pc);
+                            while(OSSemAccept(g_sem_pc));
 
                             pc_uart_send((u8 *)&pc_frame_send, send_len);
                             break;
@@ -931,7 +931,7 @@ void  App_TaskPC (void *p_arg)
         
                                 send_len = pc_frame_send.L + DL645_FIX_LEN;
 
-                                OSSemAccept(g_sem_pc);
+                                while(OSSemAccept(g_sem_pc));
                             
                                 pc_uart_send((u8 *)&pc_frame_send, send_len);                                    
                             } 
@@ -982,7 +982,7 @@ void  App_TaskPC (void *p_arg)
                                 
                                             send_len = pc_frame_send.L + DL645_FIX_LEN;
                                 
-                                            OSSemAccept(g_sem_pc);
+                                            while(OSSemAccept(g_sem_pc));
                                         
                                             pc_uart_send((u8 *)&pc_frame_send, send_len);                                            
                                         }    
@@ -1034,7 +1034,7 @@ void  App_TaskPC (void *p_arg)
                                 
                                             send_len = pc_frame_send.L + DL645_FIX_LEN;
                                 
-                                            OSSemAccept(g_sem_pc);
+                                            while(OSSemAccept(g_sem_pc));
                                         
                                             pc_uart_send((u8 *)&pc_frame_send, send_len);                                            
                                         }    
@@ -1120,7 +1120,7 @@ void  App_TaskRS485 (void *p_arg)
 
                             send_len = rs485_frame_send.L + DL645_FIX_LEN;
 
-                            OSSemAccept(g_sem_rs485);
+                            while(OSSemAccept(g_sem_rs485));
 
                             rs485_uart_send((u8 *)&rs485_frame_send, send_len);
                             break;
@@ -1178,8 +1178,8 @@ void  App_TaskFHD (void *p_arg)
                 
                 g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF4_ADDR, data_buf, index, g_fhd_para.send_buf);
 
-                OSSemAccept(g_sem_rs485);
-                OSSemAccept(g_sem_fhd);
+                while(OSSemAccept(g_sem_rs485));
+                while(OSSemAccept(g_sem_fhd));
                 
                 rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
 
@@ -1236,8 +1236,8 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_WRITE_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF4_ADDR, data_buf, index, g_fhd_para.send_buf);
 
-                OSSemAccept(g_sem_rs485);
-                OSSemAccept(g_sem_fhd);
+                while(OSSemAccept(g_sem_rs485));
+                while(OSSemAccept(g_sem_fhd));
                 
                 rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
 
@@ -1279,8 +1279,8 @@ void  App_TaskFHD (void *p_arg)
                 
                 g_fhd_para.send_len = FHD_MakeFrame(MODBUS_READ_REG, MODBUS_TIME_START_ADDR, data_buf, index, g_fhd_para.send_buf);
 
-                OSSemAccept(g_sem_rs485);
-                OSSemAccept(g_sem_fhd);
+                while(OSSemAccept(g_sem_rs485));
+                while(OSSemAccept(g_sem_fhd));
                 
                 rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
 
@@ -1357,8 +1357,8 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_para.send_len = FHD_MakeFrame(MODBUS_WRITE_REG, MODBUS_TIME_START_ADDR, data_buf, index, g_fhd_para.send_buf);
 
-                OSSemAccept(g_sem_rs485);
-                OSSemAccept(g_sem_fhd);
+                while(OSSemAccept(g_sem_rs485));
+                while(OSSemAccept(g_sem_fhd));
                 
                 rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
 
@@ -1400,8 +1400,8 @@ void  App_TaskFHD (void *p_arg)
                 
                 g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR, data_buf, index, g_fhd_para.send_buf);
 
-                OSSemAccept(g_sem_rs485);
-                OSSemAccept(g_sem_fhd);
+                while(OSSemAccept(g_sem_rs485));
+                while(OSSemAccept(g_sem_fhd));
                 
                 rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
 
@@ -1477,8 +1477,8 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_WRITE_REG, MODBUS_CONF_START_ADDR, data_buf, index, g_fhd_para.send_buf);
 
-                OSSemAccept(g_sem_rs485);
-                OSSemAccept(g_sem_fhd);
+                while(OSSemAccept(g_sem_rs485));
+                while(OSSemAccept(g_sem_fhd));
                 
                 rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
 
@@ -1520,8 +1520,8 @@ void  App_TaskFHD (void *p_arg)
                 
                 g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF1_ADDR, data_buf, index, g_fhd_para.send_buf);
 
-                OSSemAccept(g_sem_rs485);
-                OSSemAccept(g_sem_fhd);
+                while(OSSemAccept(g_sem_rs485));
+                while(OSSemAccept(g_sem_fhd));
                 
                 rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
 
@@ -1569,8 +1569,8 @@ void  App_TaskFHD (void *p_arg)
                 
                 g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF2_ADDR, data_buf, index, g_fhd_para.send_buf);
 
-                OSSemAccept(g_sem_rs485);
-                OSSemAccept(g_sem_fhd);
+                while(OSSemAccept(g_sem_rs485));
+                while(OSSemAccept(g_sem_fhd));
                 
                 rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
 
@@ -1618,8 +1618,8 @@ void  App_TaskFHD (void *p_arg)
 
                 g_fhd_para.send_len = FHD_MakeFrame(MODBUS_CTRL_OUTPUT, MODBUS_CTRL_START_ADDR + MODBUS_CTRL_RESET_ADDR, data_buf, index, g_fhd_para.send_buf);
 
-                OSSemAccept(g_sem_rs485);
-                OSSemAccept(g_sem_fhd);
+                while(OSSemAccept(g_sem_rs485));
+                while(OSSemAccept(g_sem_fhd));
                 
                 rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
 

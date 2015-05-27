@@ -2,11 +2,6 @@
 #define __GUI_PUBLIC_FUN__
 
 
-
-#define HARDWARE_VERSION    22
-#define SOFTWARE_VERSION    22
-
-
 #define GUI_645_ADDR_LENGTH 12
 
 /*dropdown中下拉列表中的量，备用*/

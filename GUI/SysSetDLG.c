@@ -38,16 +38,18 @@
 #define ID_TEXT_4 (GUI_ID_USER + 0x05)
 #define ID_EDIT_0 (GUI_ID_USER + 0x08)
 #define ID_EDIT_1 (GUI_ID_USER + 0x09)
-#define ID_BUTTON_0 (GUI_ID_USER + 0x0A)
-#define ID_BUTTON_1 (GUI_ID_USER + 0x0B)
-#define ID_BUTTON_2 (GUI_ID_USER + 0x0C)
-#define ID_BUTTON_3 (GUI_ID_USER + 0x0D)
-#define ID_BUTTON_4 (GUI_ID_USER + 0x0E)
+#define ID_EDIT_2   (GUI_ID_USER + 0x0A)
+#define ID_EDIT_3   (GUI_ID_USER + 0x0B)
 
-#define ID_TEXT_5   (GUI_ID_USER + 0x0F)
-#define ID_TEXT_6   (GUI_ID_USER + 0x10)
-#define ID_EDIT_2   (GUI_ID_USER + 0x11)
-#define ID_EDIT_3   (GUI_ID_USER + 0x12)
+#define ID_BUTTON_0 (GUI_ID_USER + 0x0C)
+#define ID_BUTTON_1 (GUI_ID_USER + 0x0D)
+#define ID_BUTTON_2 (GUI_ID_USER + 0x0E)
+#define ID_BUTTON_3 (GUI_ID_USER + 0x0F)
+#define ID_BUTTON_4 (GUI_ID_USER + 0x10)
+
+#define ID_TEXT_5   (GUI_ID_USER + 0x11)
+#define ID_TEXT_6   (GUI_ID_USER + 0x12)
+
 
 #define ID_TEXT_7   (GUI_ID_USER + 0x13)
 #define ID_EDIT_4   (GUI_ID_USER + 0x14)
@@ -58,28 +60,30 @@
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "SysSet",    ID_WINDOW_0, 0, 0, 240, 295, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, SrcTime,     ID_TEXT_0, 15, 14, 110, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, ShutTime,    ID_TEXT_1, 15, 44, 120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, MemState,     ID_TEXT_2, 15, 74, 110, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, BeepSound,   ID_TEXT_3, 15, 104, 110, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, Promotion,    ID_TEXT_4, 15, 134, 110, 20, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "Edit",      ID_EDIT_0, 140, 10, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",      ID_EDIT_1, 140, 39, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { BUTTON_CreateIndirect, "F1",      ID_BUTTON_0, 140, 70, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "F2",      ID_BUTTON_1, 140, 100, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "*",       ID_BUTTON_2, 140, 131, 80, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, SrcTime,     ID_TEXT_0,   15,  14,  110, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, ShutTime,    ID_TEXT_1,   15,  44,  120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, MemState,    ID_TEXT_2,   15,  104,  110, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, BeepSound,   ID_TEXT_3,   15,  134, 110, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, Promotion,   ID_TEXT_4,   15,  164, 110, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, CommAddr,    ID_TEXT_5,   15,  74, 120, 20, 0, 0x0, 0 },
+    
+  { EDIT_CreateIndirect, "Edit",      ID_EDIT_0,   150, 10,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",      ID_EDIT_1,   150, 40,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",      ID_EDIT_2,   150, 70, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+    
+  { BUTTON_CreateIndirect, "F1",      ID_BUTTON_0, 150, 100,  80, 20, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "F2",      ID_BUTTON_1, 150, 130, 80, 20, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "*",       ID_BUTTON_2, 150, 160, 80, 20, 0, 0x0, 0 },
 
-  { TEXT_CreateIndirect, SoftVersion, ID_TEXT_5, 15, 161, 110, 20, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "Edit",      ID_EDIT_2, 140, 161, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
 
-  { TEXT_CreateIndirect, HardVersion, ID_TEXT_6, 15, 191, 110, 20, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "Edit",      ID_EDIT_3, 140, 191, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { TEXT_CreateIndirect, BtrVoltage, ID_TEXT_7, 15, 221, 110, 20, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "Edit",      ID_EDIT_4, 140, 221, 80, 20, 0, 0x64, 0 },
+  //{ TEXT_CreateIndirect, HardVersion, ID_TEXT_6, 15, 191, 110, 20, 0, 0x0, 0 },
+  //{ EDIT_CreateIndirect, "Edit",      ID_EDIT_3, 140, 191, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  //{ TEXT_CreateIndirect, BtrVoltage, ID_TEXT_7, 15, 221, 110, 20, 0, 0x0, 0 },
+  //{ EDIT_CreateIndirect, "Edit",      ID_EDIT_4, 140, 221, 80, 20, 0, 0x64, 0 },
 
   
   { BUTTON_CreateIndirect, TimeSet, ID_BUTTON_3, 15, 261, 80, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,      ID_BUTTON_4, 140, 261, 80, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, Quit,      ID_BUTTON_4, 150, 261, 80, 25, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -103,7 +107,7 @@ void SST_SelectUp(void)
     WM_HWIN hItem;
     if(SST_KeyCnt == 0)
     {
-        hItem=WM_GetDialogItem(g_hWin_SysSet, ID_EDIT_1);
+        hItem=WM_GetDialogItem(g_hWin_SysSet, ID_EDIT_2);
         WM_SetFocus(hItem);
         SST_KeyCnt = (SST_EDT_NUMBER - 1);
     }
@@ -167,19 +171,9 @@ WM_HWIN SST_GetShutDown(void)
     return WM_GetDialogItem(g_hWin_SysSet,ID_EDIT_1);
 }
 
-WM_HWIN SST_GetVoltage(void)
+WM_HWIN SST_GetCommAddr(void)
 {
-    return WM_GetDialogItem(g_hWin_SysSet, ID_EDIT_4);
-}
-
-
-void SST_SetVoltage(void)
-{
-    WM_HWIN hItem;
-
-
-    hItem = WM_GetDialogItem(g_hWin_SysSet, ID_EDIT_4);
-    EDIT_SetFloatValue(hItem, ((float)g_sys_ctrl.pwr_val * 3.3) / 2048);
+    return WM_GetDialogItem(g_hWin_SysSet,ID_EDIT_2);
 }
 
 /*********************************************************************
@@ -203,21 +197,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
           sprintf(tmpBuf, "%d", g_rom_para.auto_shutdown_time);
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
-          
+
           hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_2);
-          sprintf(tmpBuf, "v%d.%d", SOFTWARE_VERSION / 10, SOFTWARE_VERSION % 10);
+          sprintf(tmpBuf, "%d", g_sys_ctrl.dev_addr);
           EDIT_SetText(hItem, tmpBuf);
           WM_DisableWindow(hItem);
-
-          hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_3);
-          sprintf(tmpBuf, "v%d.%d", HARDWARE_VERSION / 10, HARDWARE_VERSION % 10);
-          EDIT_SetText(hItem, tmpBuf);
-          WM_DisableWindow(hItem);
-
-          hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_4);
-          EDIT_SetFloatMode(hItem, ((float)g_sys_ctrl.pwr_val * 3.3) / 2048, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
-          WM_DisableWindow(hItem);
-          WIDGET_AndState(hItem,WIDGET_STATE_FOCUSSABLE);
 
           hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
           BUTTON_SetBkColor(hItem, 0, GUI_CYAN);
@@ -255,11 +239,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     WM_ShowWindow(g_hWin_TimeBar);
                     WM_ShowWindow(g_hWin_Date);
                     WM_SetFocus(g_hWin_menu);
+                    SST_KeyCnt = 0;
                     break;
                     
                 case GUI_KEY_F1:
-                    g_hWin_SDInfo = CreateSDInfo();
-                    WM_SetFocus(g_hWin_SDInfo);  
+                    g_hWin_SysInfo = CreateSDInfo();
+                    WM_SetFocus(g_hWin_SysInfo);  
                     break;
                     
                 case GUI_KEY_F2:
@@ -301,6 +286,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                             break;
                         case ID_EDIT_1:
                             g_sys_ctrl.selectWidget = EDT_SHUTDOWN;
+                            g_hWin_Input = Create_Edit_Set(g_hWin_SysSet);
+                            break;
+                        case ID_EDIT_2:
+                            g_sys_ctrl.selectWidget = EDT_COMMUNICATE_ADDR;
                             g_hWin_Input = Create_Edit_Set(g_hWin_SysSet);
                             break;
                     }

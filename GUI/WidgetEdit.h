@@ -22,11 +22,12 @@ typedef WM_HWIN (*pGetHandler)(void);
 
 #define EDT_SRC_TIME             9
 #define EDT_SHUTDOWN             10
+#define EDT_COMMUNICATE_ADDR     11
 
 //#define CPS_EDT_NUMBER           4   //通信参数设置页的edit数量
 #define PRW_EDT_NUMBER           3   //参数抄设页
 #define SYS_EDT_NUMBER           4   //系统状态页
-#define SST_EDT_NUMBER           2
+#define SST_EDT_NUMBER           3
 
 #define WARN_UPDATE                  0
 #define WARN_FORMAT                  1
@@ -37,6 +38,7 @@ typedef WM_HWIN (*pGetHandler)(void);
 #define ERR_SHUTDOWN_TIME            6
 #define ERR_COMMUNICATE              7
 #define ERR_RECEIVE_DATA             8
+#define WARN_CONFIRM_RESET           9
 
 WM_HWIN CPS_GetCheck(void);
 
@@ -48,7 +50,8 @@ void PRW_FocusSel(void);
 //void SSD_FocusSel(void);
 void SST_FocusSel(void);
 void SST_ColorChange(void);
-void SST_SetVoltage(void);
+
+void SDI_SetVoltage(void);
 
 
 

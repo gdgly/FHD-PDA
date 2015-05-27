@@ -89,20 +89,20 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   //{ TEXT_CreateIndirect, RelaySwitch,    ID_TEXT_1,   8,   38,  120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ContactorState, ID_TEXT_2,   8,   38,  120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ProtectNum,     ID_TEXT_3,   8,   70,  120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, InterElecPrt,   ID_TEXT_4,   8,   97, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, Voltage,        ID_TEXT_4,   8,   97, 120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_5,   8,   126, 125, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, DevAddr,        ID_TEXT_6,   8,   156, 120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, Voltage,        ID_TEXT_7,   8,   186, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, InterElecPrt,        ID_TEXT_7,   8,   186, 120, 20, 0, 0x0, 0 },
 
   
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_0,   153, 6,   80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   //{ EDIT_CreateIndirect, "Edit",         ID_EDIT_1,   153, 35,  80, 20, 0, 0x64, 0 },
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_2,   153, 35,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_3,   153, 64,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_4,   153, 93, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_4,   153, 93, 80, 20, 0, 0x64, 0 },
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_5,   153, 121, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_6,   153, 150, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_7,   153, 179, 80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_7,   153, 179, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
 
   { BUTTON_CreateIndirect, ReadData,         ID_BUTTON_0, 7,   260, 60, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,         ID_BUTTON_2, 172, 260, 60, 25, 0, 0x0, 0 },
@@ -138,7 +138,7 @@ static void _init_SysCtlDialog(WM_MESSAGE *pMsg)
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_4);
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_7);
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
@@ -150,7 +150,7 @@ static void _init_SysCtlDialog(WM_MESSAGE *pMsg)
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_7);
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_4);
     EDIT_SetFloatMode(hItem, 0.00, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
     WM_DisableWindow(hItem);
 
@@ -192,7 +192,7 @@ WM_HWIN SSD_GetPrtNum(void)
 
 WM_HWIN SSD_GetPrtSwitch(void)
 {
-    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_4);
+    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_7);
 }
 
 WM_HWIN SSD_GetPrtTime(void)
@@ -207,7 +207,7 @@ WM_HWIN SSD_GetDevAddr(void)
 
 WM_HWIN SSD_GetVoltage(void)
 {
-    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_7);
+    return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_4);
 }
 
 #if 0
@@ -435,7 +435,7 @@ void GUI_Trm_State_Proc(void)
         hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_2);
         EDIT_SetText(hItem, buf);
 
-        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_7); //µÁ—π
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_4); //µÁ—π
         EDIT_SetFloatValue(hItem, ((float)mb_swap_32((u8 *)pdata)) / 100);  
         pdata += 4;
 

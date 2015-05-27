@@ -192,7 +192,7 @@ WM_HWIN g_hWin_TimeBar;  //主页时间
 WM_HWIN g_hWin_Date;     //显示日期
 WM_HWIN g_hWin_Input;    //各种输入小框体
 WM_HWIN g_hWin_SysSet;
-WM_HWIN g_hWin_SDInfo;
+WM_HWIN g_hWin_SysInfo;
 
 /**********
 
@@ -438,9 +438,9 @@ static  void  App_TaskGUI (void *p_arg)
             n = 0;
             val = 0;
             
-            if(g_hWin_SysSet >0)
+            if(g_hWin_SysInfo > 0)
             {
-                SST_SetVoltage();
+                SDI_SetVoltage();
             }
            
             if((((float)g_sys_ctrl.pwr_val * 3.3) / 2048 * 10) <= 30)
@@ -794,7 +794,7 @@ static  void  App_TaskCheck (void *p_arg)
 
     /* 初始化显示环境 */
     WM_HideWin(g_hWin_task);
-//    WM_HideWin(g_hWin_SysInfo);
+    WM_HideWin(g_hWin_SysInfo);
     WM_SetFocus(WM_HBKWIN);
     GUI_SetFont(&GUI_Font_Song_16);
     GUI_SetBkColor(GUI_BLACK);
@@ -851,7 +851,7 @@ static  void  App_TaskCheck (void *p_arg)
     }
 
     /* 检测载波 */
-    OSSemAccept(g_sem_chk_plc);
+    while(OSSemAccept(g_sem_chk_plc));
     plc_uart_send((INT8U *)plc_read_addr, sizeof(plc_read_addr));
     OSSemPend(g_sem_chk_plc, 2 * OS_TICKS_PER_SEC, &err);
     if(OS_ERR_NONE == err)
@@ -879,7 +879,7 @@ static  void  App_TaskCheck (void *p_arg)
     }
 
     /* 检测无线 */
-    OSSemAccept(g_sem_chk_rf);
+    while(OSSemAccept(g_sem_chk_rf));
     rf_send_len = GDW_RF_Protocol_2013((INT8U *)rf_addr, 0x00, 0x00, 0x00, (INT8U *)rf_dl645_read, sizeof(rf_dl645_read), RF_SEND_BUF);
     OSSemPend(g_sem_chk_rf, 2 * OS_TICKS_PER_SEC, &err);
     if(OS_ERR_NONE == err)

@@ -143,7 +143,8 @@ extern const char MemState[];
 
 extern const char TextHelp[];
 extern const char FHD_PDA[];
-
+extern const char SysReset[];
+extern const char CommAddr[];
 
 extern const char *EditFrameTitle[];
 extern const char *ListViewFrameTitle[];

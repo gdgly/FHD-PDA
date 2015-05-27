@@ -163,7 +163,7 @@ extern WM_HWIN g_hWin_Date;
 
 extern WM_HWIN g_hWin_Input;
 extern WM_HWIN g_hWin_SysSet;   //œµÕ≥…Ë÷√
-extern WM_HWIN g_hWin_SDInfo;
+extern WM_HWIN g_hWin_SysInfo;
 
 
 

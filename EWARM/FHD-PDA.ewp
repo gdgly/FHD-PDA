@@ -2155,7 +2155,7 @@
       <name>$PROJ_DIR$\..\GUI\phrase.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\GUI\SDInfo.c</name>
+      <name>$PROJ_DIR$\..\GUI\SysInfo.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\SysSetDLG.c</name>

@@ -306,8 +306,6 @@ void GUI_Recv_Msg_Proc(void)
             if(FHD_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
             {
                 ERR_NOTE(g_hWin_TrmConf, ERR_COMMUNICATE);
-
-                g_sys_ctrl.dev_addr = g_sys_ctrl.new_dev_addr;  
             }
         }
         break;

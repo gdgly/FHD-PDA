@@ -2,6 +2,10 @@
 #define __APP_STORAGE_H__
 
 
+#define HARDWARE_VERSION        22
+#define SOFTWARE_VERSION        23
+#define VERSION_DATE    0x20150527
+
 #define BOOT_REQUEST_ACT   0xffffbbcc
 #define BOOT_FINISH_ACT    0xffff0000
 

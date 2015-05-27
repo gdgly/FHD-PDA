@@ -76,7 +76,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { BUTTON_CreateIndirect, SetPara,         ID_BUTTON_0, 8,   262, 70, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 160, 262, 70, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "F1",     ID_BUTTON_2, 155, 100, 80, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Reset",        ID_TEXT_3,   5, 101,  80, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, SysReset,        ID_TEXT_3,   5, 101,  110, 20, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "F1",         ID_BUTTON_3, 155,   101, 80, 20, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect, SetPara,        ID_TEXT_4,   5,   131,  80, 20, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "F2",         ID_BUTTON_4, 155,   131, 80, 20, 0, 0x0, 0 },
@@ -320,9 +320,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
 
             case GUI_KEY_F1:
-                g_gui_para.state = FHD_GUI_TRM_CONF;
-                g_gui_para.cmd = FHD_CMD_RESET_TRM;
-                OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                 
+                ERR_NOTE(g_hWin_TrmConf, WARN_CONFIRM_RESET);
                 break;
                 
             case '*':

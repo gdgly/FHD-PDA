@@ -5,7 +5,7 @@ ROM_PARA g_rom_para = {
     TAG_WORD_TABLE_MAP, //标签
     0xffffbb00, //启动标志，不能更改
     0, //CRC              
-    0x20150520, //版本日期    
+    VERSION_DATE, //版本日期    
 
     SYS_BEEP_ON, //蜂鸣器开关
     60, //自动睡眠时间
