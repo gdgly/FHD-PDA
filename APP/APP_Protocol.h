@@ -81,10 +81,15 @@
 #define FILE_SIZE_LEN            4
 #define MAX_FILE_NUM            11
 #define SEQ_LEN                  1
+#define VERSION_LEN              6
 
-#define SHAKE_HANDS_CMD  0xF0000000
-#define SCAN_FILE_CMD    0xF0000100
-#define READ_FILE_CMD    0xF0010100
+#define SHAKE_HANDS_CMD     0xF0000000
+#define SCAN_FILE_CMD       0xF0000100
+#define READ_FILE_CMD       0xF0010100
+#define READ_TIME_CMD       0xF0100000
+#define WRITE_TIME_CMD      0xF0110000
+#define READ_VERSION_CMD    0xF0100001
+#define RESET_CMD           0xF0100100
 
 typedef enum
 {
@@ -110,7 +115,7 @@ typedef enum
     RECV_RES_TIMEOUT
 } RECV_RES_TYPE; //华兄
 
-typedef struct _plc_para_ {
+typedef struct _proto_para_ {
     u8 send_buf[256]; //DL645发送帧
     u16 send_len; //DL645发送帧长度
 
@@ -120,13 +125,13 @@ typedef struct _plc_para_ {
     u8 data_buf[30]; //提取数据
     u16 data_len; //提取数据的长度
 
-    u8 sd_buf[512];
+    u8 fm_buf[512];
 
     u8 sendStatus;
     u8 result; //PLC通信结果: PLC_RES_SUCC、PLC_RES_FAIL、PLC_RES_TIMEOUT    
-} PLC_PARA, *P_PLC_PARA;
+} PROTO_PARA, *P_PROTO_PARA;
 
-typedef struct _fhd_para_ {
+typedef struct _fhdp_para_ {
 	u8 msg_state; //MSG_STATE_SENDING, MSG_STATE_RECEIVED
 	u8 recv_result; //RECV_RES_SUCC, RECV_RES_INVALID, RECV_RES_TIMEOUT
 	u8 send_buf[256];
@@ -136,19 +141,19 @@ typedef struct _fhd_para_ {
 	u8 data_buf[256];
 	u16 data_len;
     u8 fm_buf[512];
-} FHD_PARA, P_FHD_PARA;
+} FHDP_PARA, P_FHDP_PARA;
 
 extern OS_EVENT *g_sem_plc;
 extern OS_EVENT *g_sem_rf;
 extern OS_EVENT *g_sem_pc;
 extern OS_EVENT *g_sem_rs485;
-extern OS_EVENT *g_sem_fhd;
+extern OS_EVENT *g_sem_fhdp;
 extern OS_EVENT *g_sem_check;
 extern OS_EVENT *g_sem_chk_plc;
 extern OS_EVENT *g_sem_chk_rf;
 extern u8 g_cur_freq;
-extern PLC_PARA g_plc_para;
-extern FHD_PARA g_fhd_para;
+extern PROTO_PARA g_proto_para;
+extern FHDP_PARA g_fhdp_para;
 extern u8 rf_send_buf[256];
 extern DL645_Frame_C dl645_frame_send;
 extern DL645_Frame_C dl645_frame_recv;
@@ -161,10 +166,10 @@ u16 cplc_read_addr(void);
 unsigned int PC_postProcess(pvoid h);
 unsigned int RS485_postProcess(pvoid h);
 unsigned int PLC_postProcess(pvoid h);
-void App_TaskPLC(void *p_arg);
+void App_TaskProto(void *p_arg);
 void App_TaskPC(void *p_arg);
 void App_TaskRS485(void *p_arg);
-void App_TaskFHD(void *p_arg);
+void App_TaskFHDP(void *p_arg);
 
 
 #ifdef __cplusplus

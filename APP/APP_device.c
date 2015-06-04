@@ -12,6 +12,17 @@ ROM_PARA g_rom_para = {
     180, //自动关机时间
 };
 
+const ROM_PARA g_rom_para_default = {
+    TAG_WORD_TABLE_MAP, //标签
+    0xffffbb00, //启动标志，不能更改
+    0, //CRC              
+    VERSION_DATE, //版本日期    
+
+    SYS_BEEP_ON, //蜂鸣器开关
+    60, //自动睡眠时间
+    180, //自动关机时间
+};
+
 SYS_CTRL g_sys_ctrl;
 
 /**
@@ -232,5 +243,14 @@ void DEV_Init(void)
     g_sys_ctrl.new_dev_addr = g_sys_ctrl.dev_addr;
 
     g_sys_ctrl.sd_format_flag = FALSE;
+}
+
+void dev_para_recover(void)
+{
+    memcpy(&g_rom_para, &g_rom_para_default, sizeof(ROM_PARA));
+
+    DEV_Parameters_Write();
+
+    DEV_Init();
 }
 

@@ -191,7 +191,7 @@ void GUI_Trm_Log_Proc(void)
 #define POWER_DROP_TIMESTAMP_COL       0
 #define POWER_DROP_KEEP_TIME_COL       1
 
-        pdata = (u8 *)g_fhd_para.data_buf;
+        pdata = (u8 *)g_fhdp_para.data_buf;
 
         row = *((u16 *)pdata);
         pdata += 2;

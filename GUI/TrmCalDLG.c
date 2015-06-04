@@ -311,7 +311,7 @@ void GUI_Trm_Cal_Proc(void)
         u32 *pdata;
         
         
-        pdata = (u32 *)g_fhd_para.data_buf;
+        pdata = (u32 *)g_fhdp_para.data_buf;
 
 #if 0                
         sprintf(buf, "%0.2f", ((float)(*pdata)) / 100);
@@ -331,7 +331,7 @@ void GUI_Trm_Cal_Proc(void)
         u8 *ptr;
         
         
-        ptr = g_fhd_para.data_buf;
+        ptr = g_fhdp_para.data_buf;
         
         sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d %s", 
                 mb_swap(*((u16 *)((u32)ptr + 0))),

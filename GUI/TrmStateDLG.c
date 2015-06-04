@@ -209,6 +209,25 @@ WM_HWIN SSD_GetVoltage(void)
 {
     return WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_4);
 }
+WM_HWIN SSD_ClearData(void)
+{
+    WM_HWIN hItem;
+    hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_0);
+    EDIT_SetText(hItem, "");
+    hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_2);
+    EDIT_SetText(hItem, "");
+    hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
+    EDIT_SetText(hItem, "");
+    hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_4);
+    EDIT_SetFloatMode(hItem, 0.00, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
+    hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_5);
+    EDIT_SetText(hItem, "");
+    hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_6);
+    EDIT_SetText(hItem, "");
+    hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_7);
+    EDIT_SetText(hItem, "");
+    OSTimeDlyHMSM(0, 0, 0, 20);
+}
 
 #if 0
 static int SSD_KeyCnt = 0;
@@ -388,7 +407,7 @@ void GUI_Trm_State_Proc(void)
         u32 tmp1, tmp2;
         
 
-        pdata = (u8 *)g_fhd_para.data_buf;
+        pdata = (u8 *)g_fhdp_para.data_buf;
         
         tmp1 = mb_swap_32((u8 *)pdata);
         pdata += 4;

@@ -62,6 +62,7 @@
 #define ON                         0
 #define OFF                        1
 
+extern const u8 g_self_check_pwd[];
 typedef enum
 {
     FHD_GUI_TRM_CAL = 0,

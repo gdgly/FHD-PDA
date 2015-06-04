@@ -52,6 +52,7 @@ void SST_FocusSel(void);
 void SST_ColorChange(void);
 
 void SDI_SetVoltage(void);
+WM_HWIN SSD_ClearData(void);
 
 
 

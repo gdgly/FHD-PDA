@@ -369,8 +369,8 @@ static void _cbIconWin(WM_MESSAGE * pMsg)
                             //WM_BringToBottom(g_hWin_msg);
                             WM_HideWindow(g_hWin_TimeBar);
                             WM_HideWindow(g_hWin_Date);
-                            //hItem = CPS_GetOverTime();
-                            WM_SetFocus(g_hWin_TrmCal);
+                            hItem = CPS_GetReferVtg();
+                            WM_SetFocus(hItem);
                             //CPS_ColorChange();
 							break;
 

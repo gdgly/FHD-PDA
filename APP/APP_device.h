@@ -1,10 +1,10 @@
-#ifndef __APP_STORAGE_H__
-#define __APP_STORAGE_H__
+#ifndef __APP_DEVICE_H__
+#define __APP_DEVICE_H__
 
 
 #define HARDWARE_VERSION        22
-#define SOFTWARE_VERSION        23
-#define VERSION_DATE    0x20150527
+#define SOFTWARE_VERSION        25
+#define VERSION_DATE    0x20150605
 
 #define BOOT_REQUEST_ACT   0xffffbbcc
 #define BOOT_FINISH_ACT    0xffff0000
@@ -106,6 +106,7 @@ typedef struct _sys_ctrl_ {
     u8 dev_addr; //设备地址
     u8 new_dev_addr; //新设备地址
     u8 fhd_sw; //防晃电开关
+    u8 self_check; //自检
 
     // ---------------------------------
     
@@ -127,6 +128,7 @@ extern ROM_PARA g_rom_para;
 extern SYS_CTRL g_sys_ctrl;
 
 void DEV_Init(void);
+void dev_para_recover(void);
 
 unsigned int DEV_Parameters_Write(void);
 void DEV_Parameters_Read(void);

@@ -504,6 +504,16 @@ void  App_TaskEndTick (void *p_arg)
 
         GUI_Msg_Upload(OFF);
         GUI_Msg_Download(OFF);
+
+        if(g_sys_ctrl.led_count)
+        {
+            g_sys_ctrl.led_count--;
+
+            if(!g_sys_ctrl.led_count)
+            {
+                LED_KEY_OFF();
+            }
+        }        
         
         if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
         {

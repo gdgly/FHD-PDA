@@ -5498,8 +5498,45 @@ GUI_CONST_STORAGE unsigned char acGUI_Fontns16_6062[ 32] = { /* code 6062 */
 
 
 
+/* Start of unicode area <CJK Unified Ideographs> */
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_53D8[ 32] = { /* code 53D8 */
+  ______X_,________,
+  _______X,________,
+  XXXXXXXX,XXXXXXX_,
+  _____X__,_X______,
+  ___X_X__,_X_X____,
+  __X__X__,_X__X___,
+  _X___X__,_X___X__,
+  ________,________,
+  __XXXXXX,XXXX____,
+  ____X___,__X_____,
+  _____X__,_X______,
+  ______X_,X_______,
+  _______X,________,
+  _____XX_,XX______,
+  ___XX___,__XX____,
+  XXX_____,____XXX_};
 
-GUI_CONST_STORAGE GUI_CHARINFO GUI_Fontns16_CharInfo[298] = {
+GUI_CONST_STORAGE unsigned char acGUI_Fontns16_6539[ 32] = { /* code 6539 */
+  ________,_X______,
+  ________,_X______,
+  XXXXXX__,X_______,
+  _____X__,XXXXXXX_,
+  _____X_X,____X___,
+  _____X_X,____X___,
+  _____XX_,X___X___,
+  _XXXXX__,X___X___,
+  _X______,X___X___,
+  _X______,_X_X____,
+  _X______,_X_X____,
+  _X___X__,__X_____,
+  _X_XX___,_X_X____,
+  _XX_____,X___X___,
+  _X_____X,_____X__,
+  ______X_,______X_};
+
+
+GUI_CONST_STORAGE GUI_CHARINFO GUI_Fontns16_CharInfo[300] = {
    {   8,   8,  1, acGUI_Fontns16_0020 } /* code 0020 */
   ,{   8,   8,  1, acGUI_Fontns16_0021 } /* code 0021 */
   ,{   8,   8,  1, acGUI_Fontns16_0022 } /* code 0022 */
@@ -5808,15 +5845,32 @@ GUI_CONST_STORAGE GUI_CHARINFO GUI_Fontns16_CharInfo[298] = {
   ,{  16,  16,  2, acGUI_Fontns16_6548 } /* code 6548 */
   ,{  16,  16,  2, acGUI_Fontns16_5382 } /* code 5382 */
   ,{  16,  16,  2, acGUI_Fontns16_6062 } /* code 6062 */
+  ,{  16,  16,  2, acGUI_Fontns16_53D8 } /* code 53D8 */
+  ,{  16,  16,  2, acGUI_Fontns16_6539 } /* code 6539 */
 };
 
+
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop201 = {
+   0x6539 /* first character */
+  ,0x6539 /* last character  */
+  ,&GUI_Fontns16_CharInfo[299] /* address of first character */
+  ,(GUI_CONST_STORAGE GUI_FONT_PROP *)0 /* pointer to next GUI_FONT_PROP */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop200 = {
+   0x53D8 /* first character */
+  ,0x53D8 /* last character  */
+  ,&GUI_Fontns16_CharInfo[298] /* address of first character */
+  ,&GUI_Fontns16_Prop201 /* pointer to next GUI_FONT_PROP */
+};
 
 
 GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop199 = {
    0x6062 /* first character */
   ,0x6062 /* last character  */
   ,&GUI_Fontns16_CharInfo[297] /* address of first character */
-  ,(GUI_CONST_STORAGE GUI_FONT_PROP *)0 /* pointer to next GUI_FONT_PROP */
+  ,&GUI_Fontns16_Prop200 /* pointer to next GUI_FONT_PROP */
 };
 
 GUI_CONST_STORAGE GUI_FONT_PROP GUI_Fontns16_Prop198 = {

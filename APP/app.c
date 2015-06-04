@@ -60,13 +60,13 @@ static  OS_STK         App_TaskEndTickStk[APP_CFG_TASK_END_TICK_STK_SIZE];
 static  OS_STK         App_TaskEndProcStk[APP_CFG_TASK_END_PROC_STK_SIZE];
 static  OS_STK         App_TaskGUIStk[APP_CFG_TASK_GUI_STK_SIZE]; //added on  01.15
 static  OS_STK         App_TaskKeyStk[APP_CFG_TASK_KEY_STK_SIZE];
-static  OS_STK         App_TaskPLCStk[APP_CFG_TASK_PLC_STK_SIZE];
+static  OS_STK         App_TaskProtoStk[APP_CFG_TASK_PROTO_STK_SIZE];
 static  OS_STK         App_TaskGMPStk[APP_CFG_TASK_GMP_STK_SIZE];
 static  OS_STK         App_TaskPowerStk[APP_CFG_TASK_POWER_STK_SIZE];
 static  OS_STK         App_TaskPCStk[APP_CFG_TASK_PC_STK_SIZE];
 static  OS_STK         App_TaskRS485Stk[APP_CFG_TASK_RS485_STK_SIZE];
 static  OS_STK         App_TaskCheckStk[APP_CFG_TASK_CHECK_STK_SIZE];
-static  OS_STK         App_TaskFHDStk[APP_CFG_TASK_FHD_STK_SIZE];
+static  OS_STK         App_TaskFHDPStk[APP_CFG_TASK_FHDP_STK_SIZE];
 static  OS_STK         App_TaskWDTStk[APP_CFG_TASK_WDT_STK_SIZE];
 
 /*
@@ -344,7 +344,7 @@ static  void  App_TaskStart (void *p_arg)
     App_TaskCreate();/* Create application Tasks                                 */ 
 
     /* 挂起不相关的任务 */
-    OSTaskSuspend(APP_CFG_TASK_PLC_PRIO);
+    OSTaskSuspend(APP_CFG_TASK_PROTO_PRIO);
 
     BSP_IWDG_Init();  //4.1
 
@@ -450,7 +450,7 @@ static  void  App_TaskGUI (void *p_arg)
             }
         }
 
-        if(!(count % 10))
+        if(!(count % 5))
         {
             RTC_ReadTime(g_rtc_time); 
             
@@ -462,6 +462,11 @@ static  void  App_TaskGUI (void *p_arg)
             
             RTC2Text_Date(timebuf);
             TEXT_SetText(g_hWin_Date, timebuf);            
+        }
+
+        if(!(count % 30))
+        {
+            SetBeepState();
         }
         
         if((!(count % 150)) && (FALSE == g_sys_ctrl.sd_format_flag))
@@ -548,17 +553,7 @@ static  void  App_TaskPower (void *p_arg)
             g_sys_ctrl.sleep_timeout = 0;
             
             APP_Sleep();
-        }        
-
-        if(g_sys_ctrl.led_count)
-        {
-            g_sys_ctrl.led_count--;
-
-            if(!g_sys_ctrl.led_count)
-            {
-                LED_KEY_OFF();
-            }
-        }        
+        }                
 
         OSTimeDlyHMSM(0, 0, 0, 10);
     }
@@ -719,8 +714,7 @@ typedef enum
     CHECK_INFO_LCD,
     CHECK_INFO_SD,
     CHECK_INFO_FATFS,
-    CHECK_INFO_PLC,
-    CHECK_INFO_WIRELESS,
+    CHECK_INFO_KEY,
     CHECK_INFO_POWER,
     MAX_CHECK_INFO,
 } CHECK_INFO_TYPE;
@@ -735,8 +729,8 @@ typedef struct _check_info_pos
 
 const char *g_check_info[] = 
 {
-    "HRK Technology Inc.",
-    "Copyright (C) 2011-2015",
+    "HRK Technology Inc.           ",
+    "Copyright (C) 2011-2015       ",
     "                              ",
     "HARDWARE:     , SOFTWARE:     ",
     "CPU: STM32F207ZET6, 120MHz    ",
@@ -744,15 +738,14 @@ const char *g_check_info[] =
     "1. LCD Type:                  ",
     "2. SD Card:                   ",
     "3. FATFS Check                ",
-    "4. PLC Check                  ",
-    "5. Wireless Check             ",
+    "Waiting for the key:          ",
     "System Shutting Down ... (30s)"
 };
 
 CHECK_INFO_POS g_check_info_pos[] = 
 {
     {30,  0 * 16, 0, 0}, //INC
-    {30,  1 * 16, 0, 0}, //COPYRIGHT
+    {30,  1 * 16, 199, 0}, //COPYRIGHT
     { 0,  2 * 16, 0, 0}, //NULL
     { 0,  3 * 16, 80, 208}, //VERSION 
     { 0,  4 * 16, 0, 0}, //CPU
@@ -760,9 +753,25 @@ CHECK_INFO_POS g_check_info_pos[] =
     { 0,  6 * 16, 104, 0}, //LCD  
     { 0,  7 * 16, 96, 0}, //SD
     { 0,  8 * 16, 0, 0}, //FATFS   
-    { 0,  9 * 16, 0, 0}, //PLC 
-    { 0, 10 * 16, 0, 0}, //WIRELESS   
-    { 0, 11 * 16, 208, 0}, //POWER
+    { 0,  9 * 16, 192, 0}, //KEY 
+    { 0, 10 * 16, 208, 0}, //POWER
+};
+
+const int key_chk_map[KEYBOARD_COL_NUM * KEYBOARD_ROW_NUM] = 
+{
+    GUI_KEY_GREEN, GUI_KEY_YELLOW, GUI_KEY_ESCAPE, GUI_KEY_TAB, GUI_KEY_UP, GUI_KEY_DOWN,
+    GUI_KEY_LEFT, GUI_KEY_RIGHT, GUI_KEY_ENTER, GUI_KEY_BACKSPACE, '1', '2',
+    '3', '4', '5', '6', '7', '8',
+    '9', '*', '0', '#', GUI_KEY_F1, GUI_KEY_F2,
+};
+
+const char *key_chk_msg[KEYBOARD_COL_NUM * KEYBOARD_ROW_NUM + 2] = 
+{
+    "GREEN ", "YELLOW", "ESC   ", "TAB   ", "UP    ", "DOWN  ", 
+    "LEFT  ", "RIGHT ", "OK    ", "C     ", "1     ", "2     ",
+    "3     ", "4     ", "5     ", "6     ", "7     ", "8     ",
+    "9     ", "*     ", "0     ", "#     ", "F1    ", "F2    ",
+    "PWR   ", "      ",
 };
 
 #if (EWARM_OPTIMIZATION_EN > 0u)
@@ -770,13 +779,13 @@ CHECK_INFO_POS g_check_info_pos[] =
 #endif
 static  void  App_TaskCheck (void *p_arg)
 {
-    INT8U err, count, rf_send_len, buf[32];
-    const INT8U plc_read_addr[] = {0xFA, 0x68, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0x68, 0x13, 0x00, 0xDF, 0x16};
-    const INT8U rf_addr[] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88};
-    const INT8U rf_dl645_read[] = {0x68, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x68, 0x11, 0x04, 0x33, 0x32, 0x34, 0x33, 0xE1, 0x16};
+    INT8U i, err, count, buf[32];
+    int *p_key_msg;
+    
 
-
+    g_sys_ctrl.self_check = FALSE;
     OSSemPend(g_sem_check, 0, &err);
+    g_sys_ctrl.self_check = TRUE;
     
     (void)p_arg;
 
@@ -786,15 +795,14 @@ static  void  App_TaskCheck (void *p_arg)
     OSTaskSuspend(APP_CFG_TASK_START_PRIO);
     OSTaskSuspend(APP_CFG_TASK_GUI_PRIO);
     OSTaskSuspend(APP_CFG_TASK_GMP_PRIO);
-    OSTaskSuspend(APP_CFG_TASK_KEY_PRIO);
-    OSTaskSuspend(APP_CFG_TASK_PLC_PRIO);
+    OSTaskSuspend(APP_CFG_TASK_PROTO_PRIO);
     OSTaskSuspend(APP_CFG_TASK_POWER_PRIO);
     OSTaskSuspend(APP_CFG_TASK_PC_PRIO);
     OSTaskSuspend(APP_CFG_TASK_RS485_PRIO);
 
     /* 初始化显示环境 */
     WM_HideWin(g_hWin_task);
-    WM_HideWin(g_hWin_SysInfo);
+    WM_HideWin(g_hWin_SysSet);
     WM_SetFocus(WM_HBKWIN);
     GUI_SetFont(&GUI_Font_Song_16);
     GUI_SetBkColor(GUI_BLACK);
@@ -803,7 +811,11 @@ static  void  App_TaskCheck (void *p_arg)
 
     /* 显示版权信息 */
     GUI_DispStringAt(g_check_info[CHECK_INFO_INC], g_check_info_pos[CHECK_INFO_INC].x, g_check_info_pos[CHECK_INFO_INC].y);
+
     GUI_DispStringAt(g_check_info[CHECK_INFO_COPYRIGHT], g_check_info_pos[CHECK_INFO_COPYRIGHT].x, g_check_info_pos[CHECK_INFO_COPYRIGHT].y);
+    sprintf(buf, "%02x", g_rtc_time[YEAR_POS]);
+    GUI_DispStringAt(buf, g_check_info_pos[CHECK_INFO_COPYRIGHT].x1, g_check_info_pos[CHECK_INFO_COPYRIGHT].y);
+
     GUI_DispStringAt(g_check_info[CHECK_INFO_NULL], g_check_info_pos[CHECK_INFO_NULL].x, g_check_info_pos[CHECK_INFO_NULL].y);
 
     /* 显示版本信息 */
@@ -850,64 +862,41 @@ static  void  App_TaskCheck (void *p_arg)
         GUI_DispStringAt(buf, CHECK_INFO_ERROR_POS, g_check_info_pos[CHECK_INFO_FATFS].y);        
     }
 
-    /* 检测载波 */
-    while(OSSemAccept(g_sem_chk_plc));
-    plc_uart_send((INT8U *)plc_read_addr, sizeof(plc_read_addr));
-    OSSemPend(g_sem_chk_plc, 2 * OS_TICKS_PER_SEC, &err);
-    if(OS_ERR_NONE == err)
-    {
-        if(DL645_FRAME_OK == Analysis_DL645_Frame( g_send_para_pkg.dstAddr, 
-                                                  (u8 *)&dl645_frame_recv,
-                                                  &dl645_frame_stat))
-        {
-            GUI_DispStringAt(g_check_info[CHECK_INFO_PLC], g_check_info_pos[CHECK_INFO_PLC].x, g_check_info_pos[CHECK_INFO_PLC].y);
-            sprintf(buf, "OK");
-            GUI_DispStringAt(buf, CHECK_INFO_OK_POS, g_check_info_pos[CHECK_INFO_PLC].y); 
-        }
-        else
-        {
-            GUI_DispStringAt(g_check_info[CHECK_INFO_PLC], g_check_info_pos[CHECK_INFO_PLC].x, g_check_info_pos[CHECK_INFO_PLC].y);
-            sprintf(buf, "ERROR");
-            GUI_DispStringAt(buf, CHECK_INFO_ERROR_POS, g_check_info_pos[CHECK_INFO_PLC].y); 
-        }
-    }
-    else
-    {
-        GUI_DispStringAt(g_check_info[CHECK_INFO_PLC], g_check_info_pos[CHECK_INFO_PLC].x, g_check_info_pos[CHECK_INFO_PLC].y);
-        sprintf(buf, "ERROR");
-        GUI_DispStringAt(buf, CHECK_INFO_ERROR_POS, g_check_info_pos[CHECK_INFO_PLC].y); 
-    }
+    /* 检测按键 */
+    GUI_DispStringAt(g_check_info[CHECK_INFO_KEY], g_check_info_pos[CHECK_INFO_KEY].x, g_check_info_pos[CHECK_INFO_KEY].y);
 
-    /* 检测无线 */
-    while(OSSemAccept(g_sem_chk_rf));
-    rf_send_len = GDW_RF_Protocol_2013((INT8U *)rf_addr, 0x00, 0x00, 0x00, (INT8U *)rf_dl645_read, sizeof(rf_dl645_read), RF_SEND_BUF);
-    OSSemPend(g_sem_chk_rf, 2 * OS_TICKS_PER_SEC, &err);
-    if(OS_ERR_NONE == err)
-    {
-        memcpy(&dl645_frame_recv, &RF_RECV_BUF[RF_RECV_FIX_LEN], RF_RECV_LEN - RF_RECV_FIX_LEN);                                       
+    for(i = 0; i < (KEYBOARD_COL_NUM * KEYBOARD_ROW_NUM); i++)
+    { 
+        GUI_DispStringAtCEOL(key_chk_msg[i], g_check_info_pos[CHECK_INFO_KEY].x1, g_check_info_pos[CHECK_INFO_KEY].y);
 
-        if(DL645_FRAME_OK == Analysis_DL645_Frame( g_send_para_pkg.dstAddr, 
-                                                  (u8 *)&dl645_frame_recv,
-                                                  &dl645_frame_stat))
+        OSMboxAccept(g_key_mbox);
+
+        do {
+            p_key_msg = (int *)OSMboxPend(g_key_mbox, 0, &err);
+        } while((OS_ERR_NONE != err) || (key_chk_map[i] != *p_key_msg));
+    }
+    
+    GUI_DispStringAtCEOL(key_chk_msg[i], g_check_info_pos[CHECK_INFO_KEY].x1, g_check_info_pos[CHECK_INFO_KEY].y);
+
+    while(1) //PWR
+    {
+        OSTimeDlyHMSM(0, 0, 0, 10);
+        
+        if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
         {
-            GUI_DispStringAt(g_check_info[CHECK_INFO_WIRELESS], g_check_info_pos[CHECK_INFO_WIRELESS].x, g_check_info_pos[CHECK_INFO_WIRELESS].y);
-            sprintf(buf, "OK");
-            GUI_DispStringAt(buf, CHECK_INFO_OK_POS, g_check_info_pos[CHECK_INFO_WIRELESS].y); 
-        }
-        else
-        {
-            GUI_DispStringAt(g_check_info[CHECK_INFO_WIRELESS], g_check_info_pos[CHECK_INFO_WIRELESS].x, g_check_info_pos[CHECK_INFO_WIRELESS].y);
-            sprintf(buf, "ERROR");
-            GUI_DispStringAt(buf, CHECK_INFO_ERROR_POS, g_check_info_pos[CHECK_INFO_WIRELESS].y); 
+            OSTimeDlyHMSM(0, 0, 0, 30);
+
+            if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
+            {
+                break;
+            }
         }
     }
-    else
-    {
-        GUI_DispStringAt(g_check_info[CHECK_INFO_WIRELESS], g_check_info_pos[CHECK_INFO_WIRELESS].x, g_check_info_pos[CHECK_INFO_WIRELESS].y);
-        sprintf(buf, "ERROR");
-        GUI_DispStringAt(buf, CHECK_INFO_ERROR_POS, g_check_info_pos[CHECK_INFO_WIRELESS].y); 
-    }
-
+    
+    i++;
+    
+    GUI_DispStringAtCEOL(key_chk_msg[i], g_check_info_pos[CHECK_INFO_KEY].x1, g_check_info_pos[CHECK_INFO_KEY].y);
+    
     /* 关机 */
     GUI_DispStringAt(g_check_info[CHECK_INFO_POWER], g_check_info_pos[CHECK_INFO_POWER].x, g_check_info_pos[CHECK_INFO_POWER].y);
 
@@ -954,16 +943,17 @@ static  void  App_EventCreate (void)
     g_sem_rf = OSSemCreate(0);
     g_sem_pc = OSSemCreate(0);
     g_sem_rs485 = OSSemCreate(0);
-    g_sem_fhd = OSSemCreate(0);
+    g_sem_fhdp = OSSemCreate(0);
 	g_sem_check = OSSemCreate(0);
     g_sem_chk_plc = OSSemCreate(0);
     g_sem_chk_rf = OSSemCreate(0);
-	g_key_control.key_sem = OSSemCreate(0);    
+	g_key_ctrl.key_sem = OSSemCreate(0);    
     
     g_sys_ctrl.up_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/
-    g_sys_ctrl.down_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/        
-}
+    g_sys_ctrl.down_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/   
 
+    g_key_mbox = OSMboxCreate(NULL);
+}
 
 /*
 *********************************************************************************************************
@@ -1055,18 +1045,18 @@ static  void  App_TaskCreate (void)
     OSTaskNameSet(APP_CFG_TASK_END_PROC_PRIO, "EndProc", &err);      
 #endif
 
-    OSTaskCreateExt((void (*)(void *)) App_TaskPLC,
+    OSTaskCreateExt((void (*)(void *)) App_TaskProto,
                     (void           *) 0,
-                    (OS_STK         *)&App_TaskPLCStk[APP_CFG_TASK_PLC_STK_SIZE - 1],
-                    (INT8U           ) APP_CFG_TASK_PLC_PRIO,
-                    (INT16U          ) APP_CFG_TASK_PLC_PRIO,
-                    (OS_STK         *)&App_TaskPLCStk[0],
-                    (INT32U          ) APP_CFG_TASK_PLC_STK_SIZE,
+                    (OS_STK         *)&App_TaskProtoStk[APP_CFG_TASK_PROTO_STK_SIZE - 1],
+                    (INT8U           ) APP_CFG_TASK_PROTO_PRIO,
+                    (INT16U          ) APP_CFG_TASK_PROTO_PRIO,
+                    (OS_STK         *)&App_TaskProtoStk[0],
+                    (INT32U          ) APP_CFG_TASK_PROTO_STK_SIZE,
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
 #if (OS_TASK_NAME_EN > 0)
-    OSTaskNameSet(APP_CFG_TASK_PLC_PRIO, "PLC", &err);    
+    OSTaskNameSet(APP_CFG_TASK_PROTO_PRIO, "Protocol", &err);    
 #endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskPower,
@@ -1139,18 +1129,18 @@ static  void  App_TaskCreate (void)
     OSTaskNameSet(APP_CFG_TASK_WDT_PRIO, "WDT", &err);    
 #endif
 
-    OSTaskCreateExt((void (*)(void *)) App_TaskFHD,
+    OSTaskCreateExt((void (*)(void *)) App_TaskFHDP,
                     (void           *) 0,
-                    (OS_STK         *)&App_TaskFHDStk[APP_CFG_TASK_FHD_STK_SIZE - 1],
-                    (INT8U           ) APP_CFG_TASK_FHD_PRIO,
-                    (INT16U          ) APP_CFG_TASK_FHD_PRIO,
-                    (OS_STK         *)&App_TaskFHDStk[0],
-                    (INT32U          ) APP_CFG_TASK_FHD_STK_SIZE,
+                    (OS_STK         *)&App_TaskFHDPStk[APP_CFG_TASK_FHDP_STK_SIZE - 1],
+                    (INT8U           ) APP_CFG_TASK_FHDP_PRIO,
+                    (INT16U          ) APP_CFG_TASK_FHDP_PRIO,
+                    (OS_STK         *)&App_TaskFHDPStk[0],
+                    (INT32U          ) APP_CFG_TASK_FHDP_STK_SIZE,
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
 #if (OS_TASK_NAME_EN > 0)
-    OSTaskNameSet(APP_CFG_TASK_FHD_PRIO, "FHD", &err);    
+    OSTaskNameSet(APP_CFG_TASK_FHDP_PRIO, "FHDP", &err);    
 #endif
 }
 

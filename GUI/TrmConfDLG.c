@@ -335,8 +335,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                         g_hWin_Input = Create_ListBox_Set(g_hWin_TrmConf);
                         break;
                     case ID_EDIT_1:
-                        g_sys_ctrl.selectWidget = EDT_ANIP_TIME;
-                        g_hWin_Input = Create_Edit_Set(g_hWin_TrmConf);
+                        //g_sys_ctrl.selectWidget = EDT_ANIP_TIME;
+                        g_hWin_Input = Create_EditPrt(g_hWin_TrmConf);
+                        hItem = WM_GetDialogItem(g_hWin_Input, ID_EDIT_0);
+                        WM_SetFocus(hItem);
                         break;
                     case ID_EDIT_2:
                         g_sys_ctrl.selectWidget = EDT_DEV_ADDR;
@@ -390,7 +392,7 @@ void GUI_Trm_Conf_Proc(void)
         u32 tmp1, tmp2;
         
         
-        pdata = (u8 *)g_fhd_para.data_buf;
+        pdata = (u8 *)g_fhdp_para.data_buf;
 
         tmp1 = mb_swap_32((u8 *)pdata);
         pdata += 4;

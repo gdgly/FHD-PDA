@@ -226,6 +226,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
           break;
       case WM_KEY:
           Id    = WM_GetId(pMsg->hWinSrc);
+          if( strlen(g_sys_ctrl.DevCheckCode) == 8)
+          {
+              g_sys_ctrl.DevCheckCode[8] = '\0';
+              if(0 == strcmp(g_sys_ctrl.DevCheckCode, g_self_check_pwd))
+              {
+                  OSSemPost(g_sem_check);  
+              }
+              memset(g_sys_ctrl.DevCheckCode,0,sizeof(g_sys_ctrl.DevCheckCode));
+          }
           if(_BUTTON_PRESSED == ((WM_KEY_INFO *)(pMsg->Data.p))->PressedCnt)
           {
               switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key) 
@@ -234,6 +243,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     ERR_NOTE(g_hWin_SysSet,WARN_UPDATE);
                     break;
                 case GUI_KEY_YELLOW:
+                    memset(g_sys_ctrl.DevCheckCode,0,sizeof(g_sys_ctrl.DevCheckCode));
                     WM_DeleteWindow(g_hWin_SysSet);
                     g_hWin_SysSet = WM_HWIN_NULL;
                     WM_ShowWindow(g_hWin_TimeBar);
@@ -258,7 +268,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     }
                     
                     DEV_Parameters_Write();
-                        
+
                     SetBeepState();
                     break;
                     
@@ -293,6 +303,36 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                             g_hWin_Input = Create_Edit_Set(g_hWin_SysSet);
                             break;
                     }
+                    break;
+                case '0':
+                    g_sys_ctrl.DevCheckCode[strlen(g_sys_ctrl.DevCheckCode)] = '0';
+                    break;
+                case '1':
+                    g_sys_ctrl.DevCheckCode[strlen(g_sys_ctrl.DevCheckCode)] = '1';
+                    break;
+                case '2':
+                    g_sys_ctrl.DevCheckCode[strlen(g_sys_ctrl.DevCheckCode)] = '2';
+                    break;
+                case '3':
+                    g_sys_ctrl.DevCheckCode[strlen(g_sys_ctrl.DevCheckCode)] = '3';
+                    break;
+                case '4':
+                    g_sys_ctrl.DevCheckCode[strlen(g_sys_ctrl.DevCheckCode)] = '4';
+                    break;
+                case '5':
+                    g_sys_ctrl.DevCheckCode[strlen(g_sys_ctrl.DevCheckCode)] = '5';
+                    break;
+                case '6':
+                    g_sys_ctrl.DevCheckCode[strlen(g_sys_ctrl.DevCheckCode)] = '6';
+                    break;
+                case '7':
+                    g_sys_ctrl.DevCheckCode[strlen(g_sys_ctrl.DevCheckCode)] = '7';
+                    break;
+                case '8':
+                    g_sys_ctrl.DevCheckCode[strlen(g_sys_ctrl.DevCheckCode)] = '8';
+                    break;
+                case '9':
+                    g_sys_ctrl.DevCheckCode[strlen(g_sys_ctrl.DevCheckCode)] = '9';
                     break;
               }
           }

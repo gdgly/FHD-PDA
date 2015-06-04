@@ -14,7 +14,7 @@
 #define ID_TEXT_0      (GUI_ID_USER + 0x05)
 #define ID_EDIT_0      (GUI_ID_USER + 0x06)
 
-
+#define ID_TEXT_0      (GUI_ID_USER + 0x07)
 
 static const GUI_WIDGET_CREATE_INFO _aListBoxCreate[] = {
   { FRAMEWIN_CreateIndirect,  "ListBox",  ID_FRAMEWIN_0,  20,  40,  200, 200,  0, 0x0, 0 },
@@ -25,6 +25,13 @@ static const GUI_WIDGET_CREATE_INFO _aListBoxCreate[] = {
 
 static const GUI_WIDGET_CREATE_INFO _aEditCreate[] = {
   { FRAMEWIN_CreateIndirect, "Edit",  ID_FRAMEWIN_0, 20,  60, 200, 160, 0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   TextOK,  ID_BUTTON_0,   5,   82, 55,  25,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   Quit,    ID_BUTTON_1,   138, 82, 55,  25,  0, 0x0,  0 },
+  { EDIT_CreateIndirect,     "Edit",  ID_EDIT_0,     14,  38, 165, 25,  0, 0x64, 0 },
+};
+static const GUI_WIDGET_CREATE_INFO _aPrtCreate[] = {
+  { FRAMEWIN_CreateIndirect, "Edit",  ID_FRAMEWIN_0, 20,  60, 200, 160, 0, 0x0,  0 },
+  { TEXT_CreateIndirect,     OpNote,  ID_TEXT_0,     13,  5,  180, 20,  0, 0x0,  0 },
   { BUTTON_CreateIndirect,   TextOK,  ID_BUTTON_0,   5,   82, 55,  25,  0, 0x0,  0 },
   { BUTTON_CreateIndirect,   Quit,    ID_BUTTON_1,   138, 82, 55,  25,  0, 0x0,  0 },
   { EDIT_CreateIndirect,     "Edit",  ID_EDIT_0,     14,  38, 165, 25,  0, 0x64, 0 },
@@ -85,7 +92,7 @@ static void SelectInputEdit(int  EditNum)
     WM_HWIN hItem;
     u8 tmpTextBuf[32];
     u8 tmpListBuf[32];
-    u32 tmp;
+    int tmp;
     
     hItem=WM_GetDialogItem(g_hWin_Input,ID_EDIT_0);
     switch(EditNum)
@@ -99,8 +106,14 @@ static void SelectInputEdit(int  EditNum)
             tmp = atoi(tmpTextBuf);
             if(tmp > 2000)
             {
-                //ERR_NOTE(g_hWin_Input)
+                tmp = 2000;
             }
+            if(tmp < 800)
+            {
+                tmp = 800;
+            }
+            tmp = (tmp/100) * 100;
+            sprintf(tmpTextBuf, "%d", tmp);
             hItem = PRW_GetPrtTime();
             break;
         case EDT_DEV_ADDR:
@@ -449,6 +462,100 @@ static void _cbListBoxDlg(WM_MESSAGE *pMsg)
     }
 }
 
+void EdtValDown(void)
+{
+    WM_HWIN hItem;
+    u32 tmp;
+    u8 tmpBuf[8];
+    hItem = WM_GetDialogItem(g_hWin_Input, ID_EDIT_0);
+    EDIT_GetText(hItem, tmpBuf, 5);
+    tmp = atoi(tmpBuf);
+    if(tmp < 100)
+    {
+        tmp = 100;
+    }
+    else if(tmp > 2000)
+    {
+        tmp = 2000;
+    }
+    else if((tmp > 100)&&(tmp <= 2000))
+    {
+        tmp -= 100;
+    }
+    sprintf(tmpBuf, "%d", tmp);
+    EDIT_SetText(hItem, tmpBuf);
+}
+void EdtValUp(void)
+{
+    WM_HWIN hItem;
+    u32 tmp;
+    u8 tmpBuf[8];
+    hItem = WM_GetDialogItem(g_hWin_Input, ID_EDIT_0);
+    EDIT_GetText(hItem, tmpBuf, 5);
+    tmp = atoi(tmpBuf);
+    if(tmp < 100)
+    {
+        tmp = 100;
+    }
+    else if(tmp > 2000)
+    {
+        tmp = 2000;
+    }
+    else if((tmp>= 100)&&(tmp < 2000))
+    {
+        tmp += 100;
+    }
+    sprintf(tmpBuf, "%d", tmp);
+    EDIT_SetText(hItem, tmpBuf);
+}
+static void _cbProtWin(WM_MESSAGE *pMsg)
+{
+    WM_HWIN hItem;
+    u8 tmpBuf[8];
+    switch(pMsg->MsgId)
+    {
+        case WM_INIT_DIALOG:
+            GUI_UC_SetEncodeUTF8();
+            FRAMEWIN_SetTitleHeight(pMsg->hWin,25);
+            FRAMEWIN_SetText(pMsg->hWin, ProtectTime);
+            hItem = PRW_GetPrtTime();
+            EDIT_GetText(hItem, tmpBuf, 5);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
+            EDIT_SetText(hItem, tmpBuf);
+            WM_DisableWindow(hItem);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+            BUTTON_SetBkColor(hItem, 0, GUI_GREEN);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+            BUTTON_SetBkColor(hItem, 0, GUI_YELLOW);
+            break;
+        case WM_KEY:
+            if((((WM_KEY_INFO *)(pMsg->Data.p))->PressedCnt)==0)
+            {
+                switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key)
+                {
+                    case GUI_KEY_YELLOW:
+                        WM_DeleteWindow(g_hWin_Input);
+                        Select_Focus();
+                        break;
+                    case GUI_KEY_GREEN:
+                        hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
+                        EDIT_GetText(hItem, tmpBuf, 5);
+                        hItem = PRW_GetPrtTime();
+                        EDIT_SetText(hItem, tmpBuf);
+                        WM_DeleteWindow(g_hWin_Input);
+                        Select_Focus();
+                        break;
+                    case GUI_KEY_UP:
+                        EdtValUp();
+                        break;
+                    case GUI_KEY_DOWN:
+                        EdtValDown();
+                        break;
+                }
+            }
+            break;
+    }
+}
 
 /*********************************************************************
 *
@@ -482,4 +589,11 @@ WM_HWIN Create_Edit_Set(WM_HWIN parentWin)
 
 
 
+WM_HWIN Create_EditPrt(WM_HWIN parentWin);
 
+WM_HWIN Create_EditPrt(WM_HWIN parentWin)
+{
+    WM_HWIN hWin;
+    hWin=GUI_CreateDialogBox(_aPrtCreate , GUI_COUNTOF(_aPrtCreate), _cbProtWin ,parentWin,0,0);
+    return hWin;
+}

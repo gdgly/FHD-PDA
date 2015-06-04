@@ -35,7 +35,7 @@ OS_EVENT *g_sem_plc;
 OS_EVENT *g_sem_rf;
 OS_EVENT *g_sem_pc;
 OS_EVENT *g_sem_rs485;
-OS_EVENT *g_sem_fhd;
+OS_EVENT *g_sem_fhdp;
 OS_EVENT *g_sem_check;
 OS_EVENT *g_sem_chk_plc;
 OS_EVENT *g_sem_chk_rf;
@@ -50,8 +50,8 @@ u8 g_cur_freq;
 DL645_Frame_C dl645_frame_send;
 DL645_Frame_C dl645_frame_recv;
 DL645_Frame_Stat_C dl645_frame_stat;
-PLC_PARA g_plc_para;
-FHD_PARA g_fhd_para;
+PROTO_PARA g_proto_para;
+FHDP_PARA g_fhdp_para;
 DL645_Frame_C pc_frame_send;
 DL645_Frame_C pc_frame_recv;
 DL645_Frame_Stat_C pc_frame_stat;
@@ -231,8 +231,8 @@ unsigned int RS485_postProcess(pvoid h)
 
     OS_ENTER_CRITICAL();
     memcpy(&rs485_frame_recv, pBuf, mLen);
-    memcpy(g_fhd_para.recv_buf, pBuf, mLen);
-    g_fhd_para.recv_len = mLen;
+    memcpy(g_fhdp_para.recv_buf, pBuf, mLen);
+    g_fhdp_para.recv_len = mLen;
     OS_EXIT_CRITICAL();
 
     OSSemPost(g_sem_rs485);
@@ -246,25 +246,25 @@ u32 PRO_DL645_Proc()
                                         (u8 *)&dl645_frame_recv,
                                         &dl645_frame_stat))
     {
-         g_plc_para.result = PLC_RES_FAIL;                                                 
+         g_proto_para.result = PLC_RES_FAIL;                                                 
     }
     else
     {                
         if((0 == dl645_frame_stat.Status)                            
             || (dl645_frame_stat.C == 0))
         {
-            g_plc_para.result = PLC_RES_FAIL;                            
+            g_proto_para.result = PLC_RES_FAIL;                            
         }
         else if ((dl645_frame_stat.C & DL645_REPLY_STAT_MASK))
         {
-            g_plc_para.result = PLC_RES_ERROR_FRAME;
+            g_proto_para.result = PLC_RES_ERROR_FRAME;
         }
         else
         {
-            g_plc_para.result = PLC_RES_SUCC;
+            g_proto_para.result = PLC_RES_SUCC;
         }
     }
-    return g_plc_para.result;
+    return g_proto_para.result;
 }
 
 #if (EWARM_OPTIMIZATION_EN > 0u)
@@ -282,8 +282,8 @@ unsigned int PLC_postProcess(pvoid h)
 
     OS_ENTER_CRITICAL();
     memcpy(&dl645_frame_recv, pBuf, mLen);
-    memcpy(g_plc_para.recv_buf, pBuf, mLen);
-    g_plc_para.recv_len = mLen;
+    memcpy(g_proto_para.recv_buf, pBuf, mLen);
+    g_proto_para.recv_len = mLen;
     OS_EXIT_CRITICAL();
 
     OSSemPost(g_sem_plc);
@@ -307,8 +307,8 @@ void  PRO_Databuf_Proc()
             
             if(len >= DL645_97_DATA_ITEM_LEN)
             {
-                g_plc_para.data_len = len - DL645_97_DATA_ITEM_LEN;
-                memcpy(g_plc_para.data_buf, &dl645_frame_recv.Data[DL645_97_DATA_ITEM_LEN], len - DL645_97_DATA_ITEM_LEN);
+                g_proto_para.data_len = len - DL645_97_DATA_ITEM_LEN;
+                memcpy(g_proto_para.data_buf, &dl645_frame_recv.Data[DL645_97_DATA_ITEM_LEN], len - DL645_97_DATA_ITEM_LEN);
             }
 
             
@@ -320,9 +320,9 @@ void  PRO_Databuf_Proc()
             if(len >= DL645_07_DATA_ITEM_LEN)
             {
                 /* 2007读写命令，4个字节数据标识 */
-                memcpy(g_plc_para.data_buf, &dl645_frame_recv.Data[DL645_07_DATA_ITEM_LEN], len - DL645_07_DATA_ITEM_LEN);
+                memcpy(g_proto_para.data_buf, &dl645_frame_recv.Data[DL645_07_DATA_ITEM_LEN], len - DL645_07_DATA_ITEM_LEN);
     
-                g_plc_para.data_len = len - DL645_07_DATA_ITEM_LEN;
+                g_proto_para.data_len = len - DL645_07_DATA_ITEM_LEN;
             }
 
         }      
@@ -331,8 +331,8 @@ void  PRO_Databuf_Proc()
             if(len == 6)
             {
                 /* 2007读写命令，4个字节数据标识 */
-                memcpy(g_plc_para.data_buf, &dl645_frame_recv.Data[0], 6);    
-                g_plc_para.data_len = 6;
+                memcpy(g_proto_para.data_buf, &dl645_frame_recv.Data[0], 6);    
+                g_proto_para.data_len = 6;
             }
         }
             
@@ -341,11 +341,11 @@ void  PRO_Databuf_Proc()
 
 /*
 *********************************************************************************************************
-*                                             App_TaskPLC()
+*                                             App_TaskProto()
 *
 * Description : This task monitors the state of the push buttons and passes messages to AppTaskUserIF()
 *
-* Argument(s) : p_arg   is the argument passed to 'App_TaskPLC()' by 'OSTaskCreateExt()'.
+* Argument(s) : p_arg   is the argument passed to 'App_TaskProto()' by 'OSTaskCreateExt()'.
 *
 * Return(s)  : none.
 *
@@ -357,23 +357,22 @@ void  PRO_Databuf_Proc()
 #if (EWARM_OPTIMIZATION_EN > 0u)
 #pragma optimize = low
 #endif
-void  App_TaskPLC (void *p_arg)
+void  App_TaskProto (void *p_arg)
 {
     INT8U err;
     u8 len;
     WM_HWIN wh;
     int i;
     u8 rf_addr[] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0x00, 0x36, 0x19, 0x00, 0x00, 0x00};
-    //u8 rf_addr[] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
     u32 rf_send_len;
     u8 plc_read_addr[20];
     
     
     (void)p_arg; 
 
-    while (DEF_TRUE) {   
+    while (DEF_TRUE) {    
         OSMboxPend(g_sys_ctrl.up_mbox, 5, &err);
-        
+
 #if 0
         if(OS_ERR_NONE == err)
         {
@@ -384,12 +383,12 @@ void  App_TaskPLC (void *p_arg)
                 PROGBAR_SetValue(wh, g_sys_ctrl.testProgBarVal);         
             }
             
-            switch(g_send_para_pkg.cmdType)
+            switch(g_gui_para.cmdType)
             {
             case PLC_CMD_BROAD_READ: //广播命令
                 if(CHANNEL_PLC == g_rom_para.channel)
                 {
-                    OSSemAccept(g_sem_plc);
+                    while(OSSemAccept(g_sem_plc));
   
                     memcpy(&plc_read_addr[1], lBroadcast_Read_Meter, sizeof(lBroadcast_Read_Meter));
 
@@ -397,21 +396,21 @@ void  App_TaskPLC (void *p_arg)
                       
                     plc_uart_send((u8 *)plc_read_addr, sizeof(lBroadcast_Read_Meter) + 1);
 
-                    g_plc_para.sendStatus = PLC_MSG_SENDING;
+                    g_proto_para.sendStatus = PLC_MSG_SENDING;
 
-                    g_plc_para.send_len = 12 + 1;
+                    g_proto_para.send_len = 12 + 1;
 
-                    memcpy(g_plc_para.send_buf, plc_read_addr, g_plc_para.send_len);                    
+                    memcpy(g_proto_para.send_buf, plc_read_addr, g_proto_para.send_len);                    
 
-                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
 
                     OSTimeDly(200);
 
-                    g_plc_para.result = PLC_RES_NONE;
+                    g_proto_para.result = PLC_RES_NONE;
                     
                     OSSemPend(g_sem_plc, g_rom_para.bpsSpeed * OS_TICKS_PER_SEC, &err);
 
-                    g_plc_para.data_len = 0;
+                    g_proto_para.data_len = 0;
 
                     if(OS_ERR_NONE == err)
                     {
@@ -419,63 +418,63 @@ void  App_TaskPLC (void *p_arg)
                     }
                     else
                     {
-                        g_plc_para.result = PLC_RES_TIMEOUT;
+                        g_proto_para.result = PLC_RES_TIMEOUT;
                     }
 
-                    g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                    g_proto_para.sendStatus = PLC_MSG_RECEIVED;
 
-                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
                 }
                 else if(CHANNEL_WIRELESS == g_rom_para.channel) //无线
                 {
-                    OSSemAccept(g_sem_rf);
+                    while(OSSemAccept(g_sem_rf));
 
                     memset(RF_SEND_BUF, 0, sizeof(RF_SEND_BUF));
                     
                     GDW_RF_Protocol_2013(rf_addr, 0x00, 0x00, 0x00, (u8 *)&lBroadcast_Read_Meter, 12, RF_SEND_BUF);
 
-                    g_plc_para.sendStatus = PLC_MSG_SENDING;
+                    g_proto_para.sendStatus = PLC_MSG_SENDING;
 
-                    g_plc_para.send_len = 12;
+                    g_proto_para.send_len = 12;
 
-                    memcpy(g_plc_para.send_buf, lBroadcast_Read_Meter, g_plc_para.send_len);
+                    memcpy(g_proto_para.send_buf, lBroadcast_Read_Meter, g_proto_para.send_len);
 
-                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
 
                     OSTimeDly(200);                    
 
                     OSSemPend(g_sem_rf, 5 * OS_TICKS_PER_SEC, &err);
 
-                    g_plc_para.data_len = 0;
+                    g_proto_para.data_len = 0;
 
                     if(OS_ERR_NONE == err)
                     {
                         memcpy(&dl645_frame_recv, &RF_RECV_BUF[RF_RECV_FIX_LEN], RF_RECV_LEN - RF_RECV_FIX_LEN);                                       
-                        memcpy(&g_plc_para.recv_buf,&RF_RECV_BUF[RF_RECV_FIX_LEN], RF_RECV_LEN - RF_RECV_FIX_LEN);
-                        g_plc_para.recv_len = RF_RECV_LEN - RF_RECV_FIX_LEN - RF_PRINT_FIX_LEN;
+                        memcpy(&g_proto_para.recv_buf,&RF_RECV_BUF[RF_RECV_FIX_LEN], RF_RECV_LEN - RF_RECV_FIX_LEN);
+                        g_proto_para.recv_len = RF_RECV_LEN - RF_RECV_FIX_LEN - RF_PRINT_FIX_LEN;
                         PRO_Databuf_Proc();
                     }
                     else
                     {   
-                         g_plc_para.result = PLC_RES_TIMEOUT;                                        
+                         g_proto_para.result = PLC_RES_TIMEOUT;                                        
                     }
                     
-                    g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                    g_proto_para.sendStatus = PLC_MSG_RECEIVED;
                     
-                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
                 }
                 break;
                 
             case PLC_CMD_TYPE_R2L: //切换为监控态
-                OSSemAccept(g_sem_plc);
+                while(OSSemAccept(g_sem_plc));
                 
                 plc_uart_send((u8 *)rPLC_TO_lPLC, sizeof(rPLC_TO_lPLC));
 
-                g_plc_para.sendStatus = PLC_MSG_SENDING;
+                g_proto_para.sendStatus = PLC_MSG_SENDING;
                 
                 OSSemPend(g_sem_plc, g_rom_para.bpsSpeed * OS_TICKS_PER_SEC, &err);
 
-                g_plc_para.data_len = 0;
+                g_proto_para.data_len = 0;
 
                 if(OS_ERR_NONE == err)
                 {
@@ -483,26 +482,26 @@ void  App_TaskPLC (void *p_arg)
                 }
                 else
                 {
-                    g_plc_para.result = PLC_RES_TIMEOUT;
+                    g_proto_para.result = PLC_RES_TIMEOUT;
 
-                    g_plc_para.data_len = 0;
+                    g_proto_para.data_len = 0;
                 }
 
-                g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                g_proto_para.sendStatus = PLC_MSG_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
                 break;
 
             case PLC_CMD_TYPE_L2R:     //抄控态
-                OSSemAccept(g_sem_plc);
+                while(OSSemAccept(g_sem_plc));
 
                 plc_uart_send((u8 *)lPLC_TO_rPLC, sizeof(lPLC_TO_rPLC));
 
-                g_plc_para.sendStatus = PLC_MSG_SENDING;
+                g_proto_para.sendStatus = PLC_MSG_SENDING;
                 
                 OSSemPend(g_sem_plc, g_rom_para.bpsSpeed * OS_TICKS_PER_SEC, &err);
 
-                g_plc_para.data_len = 0;
+                g_proto_para.data_len = 0;
 
                 if(OS_ERR_NONE == err)
                 {
@@ -510,24 +509,24 @@ void  App_TaskPLC (void *p_arg)
                 }
                 else
                 {
-                    g_plc_para.result = PLC_RES_TIMEOUT;
+                    g_proto_para.result = PLC_RES_TIMEOUT;
                 }
 
-                g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                g_proto_para.sendStatus = PLC_MSG_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
                 break;
 
             case PLC_CMD_TYPE_NODE:  //读载波节点
-                OSSemAccept(g_sem_plc);
+                while(OSSemAccept(g_sem_plc));
                 
                 plc_uart_send((u8 *)READ_PLC_NODE, sizeof(READ_PLC_NODE));
 
-                g_plc_para.sendStatus = PLC_MSG_SENDING;
+                g_proto_para.sendStatus = PLC_MSG_SENDING;
                 
                 OSSemPend(g_sem_plc, g_rom_para.bpsSpeed * OS_TICKS_PER_SEC, &err);
 
-                g_plc_para.data_len = 0;
+                g_proto_para.data_len = 0;
 
                 if(OS_ERR_NONE == err)
                 {
@@ -535,17 +534,17 @@ void  App_TaskPLC (void *p_arg)
                 }
                 else
                 {
-                    g_plc_para.result = PLC_RES_TIMEOUT;
+                    g_proto_para.result = PLC_RES_TIMEOUT;
                 }
 
-                g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                g_proto_para.sendStatus = PLC_MSG_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
                 break;
 
             case PLC_CMD_FREQ_SET:   //速率设置
                 
-                OSSemAccept(g_sem_plc);
+                while(OSSemAccept(g_sem_plc));
                 
                 switch(g_rom_para.freqSel)
                 {
@@ -574,11 +573,11 @@ void  App_TaskPLC (void *p_arg)
                         break;
                 }
 
-                g_plc_para.sendStatus = PLC_MSG_SENDING;
+                g_proto_para.sendStatus = PLC_MSG_SENDING;
                 
                 OSSemPend(g_sem_plc, g_rom_para.bpsSpeed * OS_TICKS_PER_SEC, &err);
 
-                g_plc_para.data_len = 0;
+                g_proto_para.data_len = 0;
 
                 if(OS_ERR_NONE == err)
                 {
@@ -586,103 +585,103 @@ void  App_TaskPLC (void *p_arg)
                 }
                 else
                 {
-                    g_plc_para.result = PLC_RES_TIMEOUT;
+                    g_proto_para.result = PLC_RES_TIMEOUT;
                 }
 
-                g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                g_proto_para.sendStatus = PLC_MSG_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);                
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);                
                 break;
 
             case PLC_CMD_TYPE_COMMON:
-                if((FRM_CTRW_97_READ_SLVS_DATA == (g_send_para_pkg.ctlCode & CCTT_CONTROL_CODE_MASK)) ||
-                   (FRM_CTRW_97_WRITE_SLVS_DATA == (g_send_para_pkg.ctlCode & CCTT_CONTROL_CODE_MASK)))
+                if((FRM_CTRW_97_READ_SLVS_DATA == (g_gui_para.ctlCode & CCTT_CONTROL_CODE_MASK)) ||
+                   (FRM_CTRW_97_WRITE_SLVS_DATA == (g_gui_para.ctlCode & CCTT_CONTROL_CODE_MASK)))
                 {   /* 1997读写命令，2个字节数据标识 */
-                    memcpy(dl645_frame_send.Data, g_send_para_pkg.dataFlag, DL645_97_DATA_ITEM_LEN);
-                    memcpy(&dl645_frame_send.Data[DL645_97_DATA_ITEM_LEN], g_send_para_pkg.dataBuf, g_send_para_pkg.dataLen);
-                    g_send_para_pkg.dataLen += DL645_97_DATA_ITEM_LEN;
+                    memcpy(dl645_frame_send.Data, g_gui_para.dataFlag, DL645_97_DATA_ITEM_LEN);
+                    memcpy(&dl645_frame_send.Data[DL645_97_DATA_ITEM_LEN], g_gui_para.dataBuf, g_gui_para.dataLen);
+                    g_gui_para.dataLen += DL645_97_DATA_ITEM_LEN;
                 }
-                else if((FRM_CTRW_07_READ_SLVS_DATA == (g_send_para_pkg.ctlCode & CCTT_CONTROL_CODE_MASK))
-                        ||(FRM_CTRW_07_WRITE_SLVS_DATA == (g_send_para_pkg.ctlCode & CCTT_CONTROL_CODE_MASK)))
+                else if((FRM_CTRW_07_READ_SLVS_DATA == (g_gui_para.ctlCode & CCTT_CONTROL_CODE_MASK))
+                        ||(FRM_CTRW_07_WRITE_SLVS_DATA == (g_gui_para.ctlCode & CCTT_CONTROL_CODE_MASK)))
                 
                 { 
-                    if(FRM_CTRW_07_READ_SLVS_DATA == (g_send_para_pkg.ctlCode & CCTT_CONTROL_CODE_MASK))
+                    if(FRM_CTRW_07_READ_SLVS_DATA == (g_gui_para.ctlCode & CCTT_CONTROL_CODE_MASK))
                     {
                         /* 2007读命令，4个字节数据标识 */
-                        memcpy(dl645_frame_send.Data, g_send_para_pkg.dataFlag, DL645_07_DATA_ITEM_LEN);
-                        memcpy(&dl645_frame_send.Data[DL645_07_DATA_ITEM_LEN], g_send_para_pkg.dataBuf, g_send_para_pkg.dataLen);
-                        g_send_para_pkg.dataLen += DL645_07_DATA_ITEM_LEN;
+                        memcpy(dl645_frame_send.Data, g_gui_para.dataFlag, DL645_07_DATA_ITEM_LEN);
+                        memcpy(&dl645_frame_send.Data[DL645_07_DATA_ITEM_LEN], g_gui_para.dataBuf, g_gui_para.dataLen);
+                        g_gui_para.dataLen += DL645_07_DATA_ITEM_LEN;
                     }
                 }
                 else
                 {   /* 非读写命令，无数据标识 */
-                    memcpy(dl645_frame_send.Data, g_send_para_pkg.dataBuf, g_send_para_pkg.dataLen);
+                    memcpy(dl645_frame_send.Data, g_gui_para.dataBuf, g_gui_para.dataLen);
                 } 
                 
-                Create_DL645_Frame(g_send_para_pkg.dstAddr, g_send_para_pkg.ctlCode, g_send_para_pkg.dataLen, &dl645_frame_send);
+                Create_DL645_Frame(g_gui_para.dstAddr, g_gui_para.ctlCode, g_gui_para.dataLen, &dl645_frame_send);
 
-                RF_SEND_LEN = g_send_para_pkg.dataLen + DL645_FIX_LEN;
+                RF_SEND_LEN = g_gui_para.dataLen + DL645_FIX_LEN;
                 
                 if(CHANNEL_WIRELESS == g_rom_para.channel)  //无线
                 {
-                    memcpy(&rf_addr[6], g_send_para_pkg.dstAddr, DL645_ADDR_LEN);
+                    memcpy(&rf_addr[6], g_gui_para.dstAddr, DL645_ADDR_LEN);
 
-                    OSSemAccept(g_sem_rf);
+                    while(OSSemAccept(g_sem_rf));
                     
                     GDW_RF_Protocol_2013(rf_addr, 0x00, 0x00, 0x00, (u8 *)&dl645_frame_send, RF_SEND_LEN, RF_SEND_BUF);
 
-                    g_plc_para.sendStatus = PLC_MSG_SENDING;
+                    g_proto_para.sendStatus = PLC_MSG_SENDING;
 
-                    g_plc_para.send_len = RF_SEND_LEN;
+                    g_proto_para.send_len = RF_SEND_LEN;
 
-                    memcpy(g_plc_para.send_buf, (u8 *)&dl645_frame_send, g_plc_para.send_len);                    
+                    memcpy(g_proto_para.send_buf, (u8 *)&dl645_frame_send, g_proto_para.send_len);                    
 
-                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
 
                     OSTimeDly(200);                    
 
                     OSSemPend(g_sem_rf, 5 * OS_TICKS_PER_SEC, &err);
 
-                    g_plc_para.data_len = 0;
+                    g_proto_para.data_len = 0;
 
                     if(OS_ERR_NONE == err)
                     {
                         memcpy(&dl645_frame_recv, &RF_RECV_BUF[RF_RECV_FIX_LEN], RF_RECV_LEN - RF_RECV_FIX_LEN);                                       
-                        memcpy(&g_plc_para.recv_buf,&RF_RECV_BUF[RF_RECV_FIX_LEN], RF_RECV_LEN - RF_RECV_FIX_LEN);
-                        g_plc_para.recv_len = RF_RECV_LEN - RF_RECV_FIX_LEN - RF_PRINT_FIX_LEN;
+                        memcpy(&g_proto_para.recv_buf,&RF_RECV_BUF[RF_RECV_FIX_LEN], RF_RECV_LEN - RF_RECV_FIX_LEN);
+                        g_proto_para.recv_len = RF_RECV_LEN - RF_RECV_FIX_LEN - RF_PRINT_FIX_LEN;
                         PRO_Databuf_Proc();
                     }
                     else
                     {   
-                        g_plc_para.result = PLC_RES_TIMEOUT;                                        
+                        g_proto_para.result = PLC_RES_TIMEOUT;                                        
                     }
                     
-                    g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                    g_proto_para.sendStatus = PLC_MSG_RECEIVED;
                     
-                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
                 }
                 else if(CHANNEL_PLC == g_rom_para.channel)
                 {
-                    g_plc_para.send_len = RF_SEND_LEN;
+                    g_proto_para.send_len = RF_SEND_LEN;
                     
-                    memcpy(&g_plc_para.send_buf[DL645_INDEX], &dl645_frame_send, g_plc_para.send_len);
+                    memcpy(&g_proto_para.send_buf[DL645_INDEX], &dl645_frame_send, g_proto_para.send_len);
                     
-                    g_plc_para.send_buf[FREQ_INDEX] = g_rom_para.preamble;
-                    g_plc_para.send_len += FREQ_LEN;
+                    g_proto_para.send_buf[FREQ_INDEX] = g_rom_para.preamble;
+                    g_proto_para.send_len += FREQ_LEN;
                     
-                    OSSemAccept(g_sem_plc);
+                    while(OSSemAccept(g_sem_plc));
                     
-                    plc_uart_send(g_plc_para.send_buf, g_plc_para.send_len);
+                    plc_uart_send(g_proto_para.send_buf, g_proto_para.send_len);
                     
-                    g_plc_para.sendStatus = PLC_MSG_SENDING;
+                    g_proto_para.sendStatus = PLC_MSG_SENDING;
                     
-                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
 
                     OSTimeDly(200);
                     
                     OSSemPend(g_sem_plc, g_rom_para.bpsSpeed * OS_TICKS_PER_SEC, &err);
 
-                    g_plc_para.data_len = 0;
+                    g_proto_para.data_len = 0;
                     
                     if(OS_ERR_NONE == err)
                     {
@@ -690,58 +689,58 @@ void  App_TaskPLC (void *p_arg)
                     }
                     else
                     {   
-                        g_plc_para.result = PLC_RES_TIMEOUT;                                        
+                        g_proto_para.result = PLC_RES_TIMEOUT;                                        
                     }
                     
-                    g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                    g_proto_para.sendStatus = PLC_MSG_RECEIVED;
                     
-                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
                 }
                 break;
 
             case PLC_CMD_TYPE_ROUTE: 
 #if 0                
                 //读命令
-                if((FRM_CTRW_07_READ_SLVS_DATA == (g_send_para_pkg.ctlCode & CCTT_CONTROL_CODE_MASK)))
+                if((FRM_CTRW_07_READ_SLVS_DATA == (g_gui_para.ctlCode & CCTT_CONTROL_CODE_MASK)))
                 {
                     //中继地址的第一个地址是在帧中的地址项里，而目标地址是在数据项中,所以i+1
                     for(i = 0; i < (g_sys_ctrl.sysAddrLevel-1); i++)
                     {
-                        memcpy(&dl645_frame_send.Data[DL645_ADDR_LEN * i], g_send_para_pkg.relayAddr[i+1], DL645_ADDR_LEN);
+                        memcpy(&dl645_frame_send.Data[DL645_ADDR_LEN * i], g_gui_para.relayAddr[i+1], DL645_ADDR_LEN);
                     }
-                    memcpy(&dl645_frame_send.Data[DL645_ADDR_LEN * (g_sys_ctrl.sysAddrLevel-1)],g_send_para_pkg.dstAddr,DL645_ADDR_LEN);
+                    memcpy(&dl645_frame_send.Data[DL645_ADDR_LEN * (g_sys_ctrl.sysAddrLevel-1)],g_gui_para.dstAddr,DL645_ADDR_LEN);
                     
-                    memcpy(&dl645_frame_send.Data[g_sys_ctrl.sysAddrLevel * DL645_ADDR_LEN], g_send_para_pkg.dataFlag, DL645_07_DATA_ITEM_LEN);
-                    //memcpy(&dl645_frame_send.Data[(g_sys_ctrl.sysAddrLevel * DL645_ADDR_LEN) + DL645_07_DATA_ITEM_LEN], g_send_para_pkg.dataBuf, g_send_para_pkg.dataLen);
-                    g_send_para_pkg.dataLen += (DL645_07_DATA_ITEM_LEN + g_sys_ctrl.sysAddrLevel * DL645_ADDR_LEN);
-                    g_send_para_pkg.ctlCode = c_645ctrlDef[g_rom_para.plcProtocol][1]; 
-                    g_send_para_pkg.ctlCode += g_sys_ctrl.sysAddrLevel * DL645_RELAY_ADDED_VAL;
-                    //memcpy(g_send_para_pkg.relayAddr[g_sys_ctrl.sysAddrLevel],g_send_para_pkg.dstAddr,DL645_ADDR_LEN);
+                    memcpy(&dl645_frame_send.Data[g_sys_ctrl.sysAddrLevel * DL645_ADDR_LEN], g_gui_para.dataFlag, DL645_07_DATA_ITEM_LEN);
+                    //memcpy(&dl645_frame_send.Data[(g_sys_ctrl.sysAddrLevel * DL645_ADDR_LEN) + DL645_07_DATA_ITEM_LEN], g_gui_para.dataBuf, g_gui_para.dataLen);
+                    g_gui_para.dataLen += (DL645_07_DATA_ITEM_LEN + g_sys_ctrl.sysAddrLevel * DL645_ADDR_LEN);
+                    g_gui_para.ctlCode = c_645ctrlDef[g_rom_para.plcProtocol][1]; 
+                    g_gui_para.ctlCode += g_sys_ctrl.sysAddrLevel * DL645_RELAY_ADDED_VAL;
+                    //memcpy(g_gui_para.relayAddr[g_sys_ctrl.sysAddrLevel],g_gui_para.dstAddr,DL645_ADDR_LEN);
                 }
 
-                Create_DL645_Frame(g_send_para_pkg.relayAddr[0], g_send_para_pkg.ctlCode, g_send_para_pkg.dataLen, &dl645_frame_send);
+                Create_DL645_Frame(g_gui_para.relayAddr[0], g_gui_para.ctlCode, g_gui_para.dataLen, &dl645_frame_send);
                 //Create_DL645_LeveFrame(u8 * leve_Addr,u8 leve,u8 * Addr,u8 C,u8 len,u8 * data,u8 * Send_buf)();
                 
-                g_plc_para.send_len = g_send_para_pkg.dataLen + DL645_FIX_LEN;
+                g_proto_para.send_len = g_gui_para.dataLen + DL645_FIX_LEN;
                 
-                memcpy(&g_plc_para.send_buf[DL645_INDEX], &dl645_frame_send, g_plc_para.send_len);
+                memcpy(&g_proto_para.send_buf[DL645_INDEX], &dl645_frame_send, g_proto_para.send_len);
                 
-                g_plc_para.send_buf[FREQ_INDEX] = g_rom_para.preamble;
-                g_plc_para.send_len += FREQ_LEN;
+                g_proto_para.send_buf[FREQ_INDEX] = g_rom_para.preamble;
+                g_proto_para.send_len += FREQ_LEN;
                 
                 OSSemAccept(g_sem_plc);
                 
-                plc_uart_send(g_plc_para.send_buf, g_plc_para.send_len);
+                plc_uart_send(g_proto_para.send_buf, g_proto_para.send_len);
                 
-                g_plc_para.sendStatus = PLC_MSG_SENDING;
+                g_proto_para.sendStatus = PLC_MSG_SENDING;
                 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
 
                 OSTimeDly(200);
                 
                 OSSemPend(g_sem_plc, g_rom_para.bpsSpeed * OS_TICKS_PER_SEC, &err);
 
-                g_plc_para.data_len = 0;
+                g_proto_para.data_len = 0;
                 
                 if(OS_ERR_NONE == err)
                 {
@@ -749,39 +748,39 @@ void  App_TaskPLC (void *p_arg)
                 }
                 else
                 {   
-                    g_plc_para.result = PLC_RES_TIMEOUT;                                        
+                    g_proto_para.result = PLC_RES_TIMEOUT;                                        
                 }
                 
-                g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                g_proto_para.sendStatus = PLC_MSG_RECEIVED;
                 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);   
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);   
 #endif
 
-                memcpy(g_send_para_pkg.relayAddr[g_sys_ctrl.sysAddrLevel], g_send_para_pkg.dstAddr, DL645_ADDR_LEN);
-                g_send_para_pkg.ctlCode = c_645ctrlDef[g_rom_para.plcProtocol][1];
-                g_plc_para.send_len = Create_DL645_LeveFrame(g_send_para_pkg.relayAddr, g_sys_ctrl.sysAddrLevel, g_send_para_pkg.dstAddr,
-                                                            g_send_para_pkg.ctlCode, DL645_07_DATA_ITEM_LEN, g_send_para_pkg.dataFlag, &dl645_frame_send);
+                memcpy(g_gui_para.relayAddr[g_sys_ctrl.sysAddrLevel], g_gui_para.dstAddr, DL645_ADDR_LEN);
+                g_gui_para.ctlCode = c_645ctrlDef[g_rom_para.plcProtocol][1];
+                g_proto_para.send_len = Create_DL645_LeveFrame(g_gui_para.relayAddr, g_sys_ctrl.sysAddrLevel, g_gui_para.dstAddr,
+                                                            g_gui_para.ctlCode, DL645_07_DATA_ITEM_LEN, g_gui_para.dataFlag, &dl645_frame_send);
 
-                //plc_uart_send(g_plc_para.send_buf, g_plc_para.send_len);
+                //plc_uart_send(g_proto_para.send_buf, g_proto_para.send_len);
 
-                memcpy(&g_plc_para.send_buf[DL645_INDEX], &dl645_frame_send, g_plc_para.send_len);
+                memcpy(&g_proto_para.send_buf[DL645_INDEX], &dl645_frame_send, g_proto_para.send_len);
                 
-                g_plc_para.send_buf[FREQ_INDEX] = g_rom_para.preamble;
-                g_plc_para.send_len += FREQ_LEN;
+                g_proto_para.send_buf[FREQ_INDEX] = g_rom_para.preamble;
+                g_proto_para.send_len += FREQ_LEN;
                 
-                OSSemAccept(g_sem_plc);
+                while(OSSemAccept(g_sem_plc));
                 
-                plc_uart_send(g_plc_para.send_buf, g_plc_para.send_len);
+                plc_uart_send(g_proto_para.send_buf, g_proto_para.send_len);
                 
-                g_plc_para.sendStatus = PLC_MSG_SENDING;
+                g_proto_para.sendStatus = PLC_MSG_SENDING;
                 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
 
                 OSTimeDly(200);
                 
                 OSSemPend(g_sem_plc, g_rom_para.bpsSpeed * OS_TICKS_PER_SEC, &err);
 
-                g_plc_para.data_len = 0;
+                g_proto_para.data_len = 0;
                 
                 if(OS_ERR_NONE == err)
                 {
@@ -789,12 +788,12 @@ void  App_TaskPLC (void *p_arg)
                 }
                 else
                 {   
-                    g_plc_para.result = PLC_RES_TIMEOUT;                                        
+                    g_proto_para.result = PLC_RES_TIMEOUT;                                        
                 }
                 
-                g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                g_proto_para.sendStatus = PLC_MSG_RECEIVED;
                 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);
             
                 break;
 
@@ -810,20 +809,21 @@ void  App_TaskPLC (void *p_arg)
 
                 if(OS_ERR_NONE == err)
                 {
-                    g_plc_para.result = PLC_RES_SUCC;
+                    g_proto_para.result = PLC_RES_SUCC;
 
                     if(FALSE == plc_listen_record())
                     {
                         DEBUG_PRINT(("PLC listening record error!\n"));
                     }
 
-                    g_plc_para.sendStatus = PLC_MSG_RECEIVED;
+                    g_proto_para.sendStatus = PLC_MSG_RECEIVED;
                     
-                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);                
+                    OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_proto_para);                
                 }
             }
         }
 #endif
+
     }
 }
 
@@ -871,6 +871,7 @@ void  App_TaskPC (void *p_arg)
                     memcpy(&pc_frame_send, &pc_frame_recv, sizeof(DL645_Frame_C));
                     
                     if((FRM_CTRW_07_READ_SLVS_DATA == (pc_frame_stat.C & CCTT_CONTROL_CODE_MASK)) ||
+                       (FRM_CTRW_07_WRITE_SLVS_DATA == (pc_frame_stat.C & CCTT_CONTROL_CODE_MASK)) || 
                        (FRM_CTRW_07_EXT_READ_SLVS_DATA == (pc_frame_stat.C & CCTT_CONTROL_CODE_MASK)))
                     {
                         pc_data_item = ((INT32U)pc_frame_recv.Data[3] << 24) | ((INT32U)pc_frame_recv.Data[2] << 16) | ((INT32U)pc_frame_recv.Data[1] << 8) | ((INT32U)pc_frame_recv.Data[0] << 0);
@@ -936,7 +937,6 @@ void  App_TaskPC (void *p_arg)
                                 pc_uart_send((u8 *)&pc_frame_send, send_len);                                    
                             } 
 
-
                             f_mount(SD_DRV, NULL);
                             break;
 
@@ -990,10 +990,8 @@ void  App_TaskPC (void *p_arg)
 
                                     f_close(&fp);
                                 } 
-
                                 
                                 f_mount(SD_DRV, NULL);
-                                
                                 break;
 
                             case FRM_CTRW_07_EXT_READ_SLVS_DATA:
@@ -1042,16 +1040,96 @@ void  App_TaskPC (void *p_arg)
 
                                     f_close(&fp);
                                 } 
-
                                 
                                 f_mount(SD_DRV, NULL);
-
                                 break;
                                 
                             default:
                                 break;
                             }
-                          
+                            break;
+
+                        case READ_TIME_CMD:
+                            memcpy(&pc_frame_send.Data[DL645_07_DATA_ITEM_LEN], &g_rtc_time, MAX_RTC_ITEM);
+                            
+                            pc_frame_send.L = DL645_07_DATA_ITEM_LEN + MAX_RTC_ITEM;
+                            
+                            pc_frame_send.C = 0x91;
+                            
+                            Create_DL645_Frame(pc_addr, pc_frame_send.C, pc_frame_send.L, &pc_frame_send);
+                            
+                            send_len = pc_frame_send.L + DL645_FIX_LEN;
+                            
+                            while(OSSemAccept(g_sem_pc));
+                            
+                            pc_uart_send((u8 *)&pc_frame_send, send_len); 
+                            break;
+
+                        case WRITE_TIME_CMD:
+                            u8 new_time[MAX_RTC_ITEM];
+
+                            
+                            new_time[SEC_POS] = Hex2BcdChar(pc_frame_recv.Data[12]);
+                            new_time[MIN_POS] = Hex2BcdChar(pc_frame_recv.Data[13]);
+                            new_time[HOUR_POS] = Hex2BcdChar(pc_frame_recv.Data[14]);
+                            new_time[DAY_POS] = Hex2BcdChar(pc_frame_recv.Data[15]);
+                            new_time[DATE_POS] = Hex2BcdChar(pc_frame_recv.Data[16]);
+                            new_time[MONTH_POS] = Hex2BcdChar(pc_frame_recv.Data[17]);
+                            new_time[YEAR_POS] = Hex2BcdChar(pc_frame_recv.Data[18]);
+
+                            RTC_WriteTime(new_time);
+
+                            pc_frame_send.L = 0;
+                            
+                            pc_frame_send.C = 0x94;
+                            
+                            Create_DL645_Frame(pc_addr, pc_frame_send.C, pc_frame_send.L, &pc_frame_send);
+                            
+                            send_len = pc_frame_send.L + DL645_FIX_LEN;
+                            
+                            while(OSSemAccept(g_sem_pc));
+                            
+                            pc_uart_send((u8 *)&pc_frame_send, send_len); 
+                            break;
+
+                        case READ_VERSION_CMD:
+                            u32 temp;
+
+                            
+                            buf[0] = HARDWARE_VERSION;
+                            buf[1] = SOFTWARE_VERSION;
+                            temp = VERSION_DATE;
+                            memcpy(&buf[2], &temp, sizeof(temp));
+                            
+                            memcpy(&pc_frame_send.Data[DL645_07_DATA_ITEM_LEN], buf, VERSION_LEN);
+                            
+                            pc_frame_send.L = DL645_07_DATA_ITEM_LEN + VERSION_LEN;
+                            
+                            pc_frame_send.C = 0x91;
+                            
+                            Create_DL645_Frame(pc_addr, pc_frame_send.C, pc_frame_send.L, &pc_frame_send);
+                            
+                            send_len = pc_frame_send.L + DL645_FIX_LEN;
+                            
+                            while(OSSemAccept(g_sem_pc));
+                            
+                            pc_uart_send((u8 *)&pc_frame_send, send_len); 
+                            break;
+
+                        case RESET_CMD:
+                            dev_para_recover();
+                            
+                            pc_frame_send.L = 0;
+                            
+                            pc_frame_send.C = 0x94;
+                            
+                            Create_DL645_Frame(pc_addr, pc_frame_send.C, pc_frame_send.L, &pc_frame_send);
+                            
+                            send_len = pc_frame_send.L + DL645_FIX_LEN;
+                            
+                            while(OSSemAccept(g_sem_pc));
+                            
+                            pc_uart_send((u8 *)&pc_frame_send, send_len);
                             break;
                             
                         default:
@@ -1133,7 +1211,7 @@ void  App_TaskRS485 (void *p_arg)
             }
             else
             {
-                OSSemPost(g_sem_fhd);
+                OSSemPost(g_sem_fhdp);
             }
         }
     }
@@ -1141,11 +1219,11 @@ void  App_TaskRS485 (void *p_arg)
 
 /*
 *********************************************************************************************************
-*                                             App_TaskFHD()
+*                                             App_TaskFHDP()
 *
 * Description : This task monitors the state of the push buttons and passes messages to AppTaskUserIF()
 *
-* Argument(s) : p_arg   is the argument passed to 'App_TaskFHD()' by 'OSTaskCreateExt()'.
+* Argument(s) : p_arg   is the argument passed to 'App_TaskFHDP()' by 'OSTaskCreateExt()'.
 *
 * Return(s)  : none.
 *
@@ -1154,7 +1232,7 @@ void  App_TaskRS485 (void *p_arg)
 * Note(s)    : none.
 *********************************************************************************************************
 */
-void  App_TaskFHD (void *p_arg)
+void  App_TaskFHDP (void *p_arg)
 {
     u8 err, index, data_buf[128], *pdata;
     u32 temp;  
@@ -1176,48 +1254,48 @@ void  App_TaskFHD (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF4_ADDR, data_buf, index, g_fhd_para.send_buf);
+                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF4_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
-                while(OSSemAccept(g_sem_fhd));
+                while(OSSemAccept(g_sem_fhdp));
                 
-                rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
+                rs485_uart_send(g_fhdp_para.send_buf, g_fhdp_para.send_len);
 
-                g_fhd_para.msg_state = MSG_STATE_SENDING;
+                g_fhdp_para.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
-                OSSemPend(g_sem_fhd, 2 * OS_TICKS_PER_SEC, &err);
+                OSSemPend(g_sem_fhdp, 2 * OS_TICKS_PER_SEC, &err);
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_para.recv_buf, g_fhd_para.recv_len))
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhd_para.recv_buf);
+                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhd_para.data_len = FHD_GetUserDataLen(g_fhd_para.recv_buf);
+                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
 
                         temp = mb_swap_32(pdata);
 
-                        memcpy(g_fhd_para.data_buf, &temp, g_fhd_para.data_len);
+                        memcpy(g_fhdp_para.data_buf, &temp, g_fhdp_para.data_len);
 
-                        g_fhd_para.recv_result = RECV_RES_SUCC;                     
+                        g_fhdp_para.recv_result = RECV_RES_SUCC;                     
                     }
                     else
                     {
-                        g_fhd_para.recv_result = RECV_RES_INVALID;
+                        g_fhdp_para.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
                 {
-                    g_fhd_para.recv_result = RECV_RES_TIMEOUT;
+                    g_fhdp_para.recv_result = RECV_RES_TIMEOUT;
                 }
 
-                g_fhd_para.msg_state = MSG_STATE_RECEIVED;
+                g_fhdp_para.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
                 break;
 
             case FHD_CMD_CALIBRATE_TRM_VOLTAGE:
@@ -1234,40 +1312,40 @@ void  App_TaskFHD (void *p_arg)
                 memcpy(&data_buf[index], (u8 *)&temp, sizeof(temp));
                 index += 4;
 
-                g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_WRITE_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF4_ADDR, data_buf, index, g_fhd_para.send_buf);
+                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_WRITE_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF4_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
-                while(OSSemAccept(g_sem_fhd));
+                while(OSSemAccept(g_sem_fhdp));
                 
-                rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
+                rs485_uart_send(g_fhdp_para.send_buf, g_fhdp_para.send_len);
 
-                g_fhd_para.msg_state = MSG_STATE_SENDING;
+                g_fhdp_para.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
-                OSSemPend(g_sem_fhd, 2 * OS_TICKS_PER_SEC, &err);
+                OSSemPend(g_sem_fhdp, 2 * OS_TICKS_PER_SEC, &err);
 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_para.recv_buf, g_fhd_para.recv_len))
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        g_fhd_para.recv_result = RECV_RES_SUCC;    
+                        g_fhdp_para.recv_result = RECV_RES_SUCC;    
                     }
                     else
                     {
-                        g_fhd_para.recv_result = RECV_RES_INVALID;
+                        g_fhdp_para.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
                 {
-                    g_fhd_para.recv_result = RECV_RES_TIMEOUT;
+                    g_fhdp_para.recv_result = RECV_RES_TIMEOUT;
                 }
 
-                g_fhd_para.msg_state = MSG_STATE_RECEIVED;
+                g_fhdp_para.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);                 
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                 
                 break;
 
             case FHD_CMD_READ_TRM_TIME:
@@ -1277,46 +1355,46 @@ void  App_TaskFHD (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhd_para.send_len = FHD_MakeFrame(MODBUS_READ_REG, MODBUS_TIME_START_ADDR, data_buf, index, g_fhd_para.send_buf);
+                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_READ_REG, MODBUS_TIME_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
-                while(OSSemAccept(g_sem_fhd));
+                while(OSSemAccept(g_sem_fhdp));
                 
-                rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
+                rs485_uart_send(g_fhdp_para.send_buf, g_fhdp_para.send_len);
 
-                g_fhd_para.msg_state = MSG_STATE_SENDING;
+                g_fhdp_para.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
-                OSSemPend(g_sem_fhd, 2 * OS_TICKS_PER_SEC, &err);
+                OSSemPend(g_sem_fhdp, 2 * OS_TICKS_PER_SEC, &err);
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_para.recv_buf, g_fhd_para.recv_len))
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhd_para.recv_buf);
+                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhd_para.data_len = FHD_GetUserDataLen(g_fhd_para.recv_buf);
+                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
 
-                        memcpy(g_fhd_para.data_buf, pdata, g_fhd_para.data_len);
+                        memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
 
-                        g_fhd_para.recv_result = RECV_RES_SUCC;                   
+                        g_fhdp_para.recv_result = RECV_RES_SUCC;                   
                     }
                     else
                     {
-                        g_fhd_para.recv_result = RECV_RES_INVALID;
+                        g_fhdp_para.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
                 {
-                    g_fhd_para.recv_result = RECV_RES_TIMEOUT;
+                    g_fhdp_para.recv_result = RECV_RES_TIMEOUT;
                 }
 
-                g_fhd_para.msg_state = MSG_STATE_RECEIVED;
+                g_fhdp_para.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);               
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);               
                 break;
 
             case FHD_CMD_CALIBRATE_TRM_TIME:
@@ -1355,40 +1433,40 @@ void  App_TaskFHD (void *p_arg)
                 memcpy(&data_buf[index], (u8 *)&temp, 2); //Msec
                 index += 2;
 
-                g_fhd_para.send_len = FHD_MakeFrame(MODBUS_WRITE_REG, MODBUS_TIME_START_ADDR, data_buf, index, g_fhd_para.send_buf);
+                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_WRITE_REG, MODBUS_TIME_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
-                while(OSSemAccept(g_sem_fhd));
+                while(OSSemAccept(g_sem_fhdp));
                 
-                rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
+                rs485_uart_send(g_fhdp_para.send_buf, g_fhdp_para.send_len);
 
-                g_fhd_para.msg_state = MSG_STATE_SENDING;
+                g_fhdp_para.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
-                OSSemPend(g_sem_fhd, 2 * OS_TICKS_PER_SEC, &err);
+                OSSemPend(g_sem_fhdp, 2 * OS_TICKS_PER_SEC, &err);
 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_para.recv_buf, g_fhd_para.recv_len))
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        g_fhd_para.recv_result = RECV_RES_SUCC;                       
+                        g_fhdp_para.recv_result = RECV_RES_SUCC;                       
                     }
                     else
                     {
-                        g_fhd_para.recv_result = RECV_RES_INVALID;
+                        g_fhdp_para.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
                 {
-                    g_fhd_para.recv_result = RECV_RES_TIMEOUT;
+                    g_fhdp_para.recv_result = RECV_RES_TIMEOUT;
                 }
 
-                g_fhd_para.msg_state = MSG_STATE_RECEIVED;
+                g_fhdp_para.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);                  
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                  
                 break;
 
             case FHD_CMD_READ_TRM_CONF:
@@ -1398,46 +1476,46 @@ void  App_TaskFHD (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR, data_buf, index, g_fhd_para.send_buf);
+                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
-                while(OSSemAccept(g_sem_fhd));
+                while(OSSemAccept(g_sem_fhdp));
                 
-                rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
+                rs485_uart_send(g_fhdp_para.send_buf, g_fhdp_para.send_len);
 
-                g_fhd_para.msg_state = MSG_STATE_SENDING;
+                g_fhdp_para.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
-                OSSemPend(g_sem_fhd, 2 * OS_TICKS_PER_SEC, &err);
+                OSSemPend(g_sem_fhdp, 2 * OS_TICKS_PER_SEC, &err);
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_para.recv_buf, g_fhd_para.recv_len))
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhd_para.recv_buf);
+                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhd_para.data_len = FHD_GetUserDataLen(g_fhd_para.recv_buf);
+                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
 
-                        memcpy(g_fhd_para.data_buf, pdata, g_fhd_para.data_len);
+                        memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
 
-                        g_fhd_para.recv_result = RECV_RES_SUCC;                    
+                        g_fhdp_para.recv_result = RECV_RES_SUCC;                    
                     }
                     else
                     {
-                        g_fhd_para.recv_result = RECV_RES_INVALID;
+                        g_fhdp_para.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
                 {
-                    g_fhd_para.recv_result = RECV_RES_TIMEOUT;
+                    g_fhdp_para.recv_result = RECV_RES_TIMEOUT;
                 }
 
-                g_fhd_para.msg_state = MSG_STATE_RECEIVED;
+                g_fhdp_para.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);    
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);    
                 break;
 
             case FHD_CMD_WRITE_TRM_CONF:
@@ -1475,40 +1553,40 @@ void  App_TaskFHD (void *p_arg)
                 memcpy(&data_buf[index], (u8 *)&temp, 2);
                 index += 2;
 
-                g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_WRITE_REG, MODBUS_CONF_START_ADDR, data_buf, index, g_fhd_para.send_buf);
+                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_WRITE_REG, MODBUS_CONF_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
-                while(OSSemAccept(g_sem_fhd));
+                while(OSSemAccept(g_sem_fhdp));
                 
-                rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
+                rs485_uart_send(g_fhdp_para.send_buf, g_fhdp_para.send_len);
 
-                g_fhd_para.msg_state = MSG_STATE_SENDING;
+                g_fhdp_para.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
-                OSSemPend(g_sem_fhd, 2 * OS_TICKS_PER_SEC, &err);
+                OSSemPend(g_sem_fhdp, 2 * OS_TICKS_PER_SEC, &err);
 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_para.recv_buf, g_fhd_para.recv_len))
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        g_fhd_para.recv_result = RECV_RES_SUCC;
+                        g_fhdp_para.recv_result = RECV_RES_SUCC;
                     }
                     else
                     {
-                        g_fhd_para.recv_result = RECV_RES_INVALID;
+                        g_fhdp_para.recv_result = RECV_RES_INVALID;
                     }
                 }
                 else
                 {
-                    g_fhd_para.recv_result = RECV_RES_TIMEOUT;
+                    g_fhdp_para.recv_result = RECV_RES_TIMEOUT;
                 }
 
-                g_fhd_para.msg_state = MSG_STATE_RECEIVED;
+                g_fhdp_para.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);                
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                
                 break;
 
             case FHD_CMD_READ_TRM_STATE:
@@ -1518,46 +1596,46 @@ void  App_TaskFHD (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF1_ADDR, data_buf, index, g_fhd_para.send_buf);
+                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF1_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
-                while(OSSemAccept(g_sem_fhd));
+                while(OSSemAccept(g_sem_fhdp));
                 
-                rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
+                rs485_uart_send(g_fhdp_para.send_buf, g_fhdp_para.send_len);
 
-                g_fhd_para.msg_state = MSG_STATE_SENDING;
+                g_fhdp_para.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
-                OSSemPend(g_sem_fhd, 2 * OS_TICKS_PER_SEC, &err);
+                OSSemPend(g_sem_fhdp, 2 * OS_TICKS_PER_SEC, &err);
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_para.recv_buf, g_fhd_para.recv_len))
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhd_para.recv_buf);
+                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhd_para.data_len = FHD_GetUserDataLen(g_fhd_para.recv_buf);
+                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
 
-                        memcpy(g_fhd_para.data_buf, pdata, g_fhd_para.data_len);
+                        memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
                         
-                        g_fhd_para.recv_result = RECV_RES_SUCC;
+                        g_fhdp_para.recv_result = RECV_RES_SUCC;
                     }
                     else
                     {
-                        g_fhd_para.recv_result = RECV_RES_INVALID;
+                        g_fhdp_para.recv_result = RECV_RES_INVALID;
                     }
                 }
                 else
                 {
-                    g_fhd_para.recv_result = RECV_RES_TIMEOUT;
+                    g_fhdp_para.recv_result = RECV_RES_TIMEOUT;
                 }
 
-                g_fhd_para.msg_state = MSG_STATE_RECEIVED;
+                g_fhdp_para.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);   
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);   
                 break;
 
             case FHD_CMD_READ_TRM_LOG:
@@ -1567,46 +1645,46 @@ void  App_TaskFHD (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhd_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF2_ADDR, data_buf, index, g_fhd_para.send_buf);
+                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF2_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
-                while(OSSemAccept(g_sem_fhd));
+                while(OSSemAccept(g_sem_fhdp));
                 
-                rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
+                rs485_uart_send(g_fhdp_para.send_buf, g_fhdp_para.send_len);
 
-                g_fhd_para.msg_state = MSG_STATE_SENDING;
+                g_fhdp_para.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
-                OSSemPend(g_sem_fhd, 2 * OS_TICKS_PER_SEC, &err);
+                OSSemPend(g_sem_fhdp, 2 * OS_TICKS_PER_SEC, &err);
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_para.recv_buf, g_fhd_para.recv_len))
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhd_para.recv_buf);
+                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhd_para.data_len = FHD_GetUserDataLen(g_fhd_para.recv_buf);
+                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
                         
-                        memcpy(g_fhd_para.data_buf, pdata, g_fhd_para.data_len);
+                        memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
                         
-                        g_fhd_para.recv_result = RECV_RES_SUCC;
+                        g_fhdp_para.recv_result = RECV_RES_SUCC;
                     }
                     else
                     {
-                        g_fhd_para.recv_result = RECV_RES_INVALID;
+                        g_fhdp_para.recv_result = RECV_RES_INVALID;
                     }
                 }
                 else
                 {
-                    g_fhd_para.recv_result = RECV_RES_TIMEOUT;
+                    g_fhdp_para.recv_result = RECV_RES_TIMEOUT;
                 }
 
-                g_fhd_para.msg_state = MSG_STATE_RECEIVED;
+                g_fhdp_para.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);                
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                
                 break;
 
             case FHD_CMD_RESET_TRM:
@@ -1616,40 +1694,40 @@ void  App_TaskFHD (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
 
-                g_fhd_para.send_len = FHD_MakeFrame(MODBUS_CTRL_OUTPUT, MODBUS_CTRL_START_ADDR + MODBUS_CTRL_RESET_ADDR, data_buf, index, g_fhd_para.send_buf);
+                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_CTRL_OUTPUT, MODBUS_CTRL_START_ADDR + MODBUS_CTRL_RESET_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
-                while(OSSemAccept(g_sem_fhd));
+                while(OSSemAccept(g_sem_fhdp));
                 
-                rs485_uart_send(g_fhd_para.send_buf, g_fhd_para.send_len);
+                rs485_uart_send(g_fhdp_para.send_buf, g_fhdp_para.send_len);
 
-                g_fhd_para.msg_state = MSG_STATE_SENDING;
+                g_fhdp_para.msg_state = MSG_STATE_SENDING;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_plc_para);
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
 
                 OSTimeDlyHMSM(0, 0, 0, 200);
                 
-                OSSemPend(g_sem_fhd, 2 * OS_TICKS_PER_SEC, &err);
+                OSSemPend(g_sem_fhdp, 2 * OS_TICKS_PER_SEC, &err);
 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhd_para.recv_buf, g_fhd_para.recv_len))
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        g_fhd_para.recv_result = RECV_RES_SUCC;    
+                        g_fhdp_para.recv_result = RECV_RES_SUCC;    
                     }
                     else
                     {
-                        g_fhd_para.recv_result = RECV_RES_INVALID;
+                        g_fhdp_para.recv_result = RECV_RES_INVALID;
                     }                    
                 }
                 else
                 {
-                    g_fhd_para.recv_result = RECV_RES_TIMEOUT;
+                    g_fhdp_para.recv_result = RECV_RES_TIMEOUT;
                 }
 
-                g_fhd_para.msg_state = MSG_STATE_RECEIVED;
+                g_fhdp_para.msg_state = MSG_STATE_RECEIVED;
 
-                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhd_para);                
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                
                 break;
                 
             default:
