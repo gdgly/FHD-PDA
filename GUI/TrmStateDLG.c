@@ -53,6 +53,11 @@
 #define ID_TEXT_7  (GUI_ID_USER + 0x1F)
 #define ID_EDIT_7  (GUI_ID_USER + 0x20)
 
+#define ID_TEXT_8  (GUI_ID_USER + 0x21)
+#define ID_EDIT_8  (GUI_ID_USER + 0x22)
+#define ID_TEXT_9  (GUI_ID_USER + 0x23)
+#define ID_EDIT_9  (GUI_ID_USER + 0x24)
+#define ID_BUTTON_3 (GUI_ID_USER + 0x25)
 
 // USER START (Optionally insert additional defines)
 // USER END
@@ -85,27 +90,31 @@
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "SysCtl", ID_WINDOW_0,     0,   0,   240, 295,0, 0x0, 0 },
-  { TEXT_CreateIndirect, "EEPROM",       ID_TEXT_0,   8,   11,  80,  20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "EEPROM",       ID_TEXT_0,   8,   8,  80,  20, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect, RelaySwitch,    ID_TEXT_1,   8,   38,  120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, ContactorState, ID_TEXT_2,   8,   38,  120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, ProtectNum,     ID_TEXT_3,   8,   70,  120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, Voltage,        ID_TEXT_4,   8,   97, 120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_5,   8,   126, 125, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, DevAddr,        ID_TEXT_6,   8,   156, 120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, InterElecPrt,        ID_TEXT_7,   8,   186, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, ContactorState, ID_TEXT_2,   8,   35,  120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, ProtectNum,     ID_TEXT_3,   8,   62,  120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, Voltage,        ID_TEXT_4,   8,   89, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_5,   8,   116, 125, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, DevAddr,        ID_TEXT_6,   8,   143, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, InterElecPrt,   ID_TEXT_7,   8,   170, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, HardVersion,    ID_TEXT_8,   8,   197, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, SoftVersion,    ID_TEXT_9,   8,   224, 120, 20, 0, 0x0, 0 },
 
   
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_0,   153, 6,   80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   //{ EDIT_CreateIndirect, "Edit",         ID_EDIT_1,   153, 35,  80, 20, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_2,   153, 35,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_3,   153, 64,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_4,   153, 93, 80, 20, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_5,   153, 121, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_6,   153, 150, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit",         ID_EDIT_7,   153, 179, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_2,   153, 33,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_3,   153, 60,  80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_4,   153, 87,  80, 20, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_5,   153, 114, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_6,   153, 141, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_7,   153, 168, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_8,   123, 195, 110, 20, EDIT_CF_HCENTER, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit",         ID_EDIT_9,   123, 222, 110, 20, EDIT_CF_HCENTER, 0x64, 0 },
 
   { BUTTON_CreateIndirect, ReadData,         ID_BUTTON_0, 7,   260, 60, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,         ID_BUTTON_2, 172, 260, 60, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 172, 260, 60, 25, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect, ReadSysState,   ID_TEXT_5,   8,   126, 100, 20, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "F1",         ID_BUTTON_1, 153,  126, 80, 20, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
@@ -150,6 +159,14 @@ static void _init_SysCtlDialog(WM_MESSAGE *pMsg)
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_8);
+    EDIT_SetText(hItem, " ");
+    WM_DisableWindow(hItem);
+
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_9);
+    EDIT_SetText(hItem, " ");
+    WM_DisableWindow(hItem);
+
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_4);
     EDIT_SetFloatMode(hItem, 0.00, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
     WM_DisableWindow(hItem);
@@ -159,13 +176,14 @@ static void _init_SysCtlDialog(WM_MESSAGE *pMsg)
     WIDGET_AndState(hItem, WIDGET_STATE_FOCUSSABLE);
 
     hItem = WM_GetDialogItem(pMsg->hWin,ID_BUTTON_1);
-    BUTTON_SetBkColor(hItem, 0, GUI_CYAN);
-    WIDGET_AndState(hItem, WIDGET_STATE_FOCUSSABLE);
-
-    hItem = WM_GetDialogItem(pMsg->hWin,ID_BUTTON_2);
     BUTTON_SetBkColor(hItem, 0, GUI_YELLOW);
     WIDGET_AndState(hItem, WIDGET_STATE_FOCUSSABLE);
 
+#if 0
+    hItem = WM_GetDialogItem(pMsg->hWin,ID_BUTTON_2);
+    BUTTON_SetBkColor(hItem, 0, GUI_CYAN);
+    WIDGET_AndState(hItem, WIDGET_STATE_FOCUSSABLE);
+#endif
 }
 
 WM_HWIN SSD_GetEEPROM(void)
@@ -213,91 +231,21 @@ WM_HWIN SSD_ClearData(void)
 {
     WM_HWIN hItem;
     hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_0);
-    EDIT_SetText(hItem, "");
+    EDIT_SetText(hItem, " ");
     hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_2);
-    EDIT_SetText(hItem, "");
+    EDIT_SetText(hItem, " ");
     hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
-    EDIT_SetText(hItem, "");
+    EDIT_SetText(hItem, " ");
     hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_4);
     EDIT_SetFloatMode(hItem, 0.00, 0, 99999, 2, GUI_EDIT_SUPPRESS_LEADING_ZEROES);
     hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_5);
-    EDIT_SetText(hItem, "");
+    EDIT_SetText(hItem, " ");
     hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_6);
-    EDIT_SetText(hItem, "");
+    EDIT_SetText(hItem, " ");
     hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_7);
-    EDIT_SetText(hItem, "");
+    EDIT_SetText(hItem, " ");
     OSTimeDlyHMSM(0, 0, 0, 20);
 }
-
-#if 0
-static int SSD_KeyCnt = 0;
-
-void SSD_SelectUp(void)
-{
-    WM_HWIN hItem;
-    if(SSD_KeyCnt == 0)
-    {
-        hItem=WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
-        WM_SetFocus(hItem);
-        SSD_KeyCnt = (SYS_EDT_NUMBER - 1);
-    }
-    else
-    {
-        SSD_KeyCnt--;
-        hItem=WM_GetDialogItem(g_hWin_TrmState,(ID_EDIT_0 + SSD_KeyCnt));
-        WM_SetFocus(hItem);
-    }
-}
-
-void SSD_SelectDown(void)
-{
-    WM_HWIN hItem;
-    if(SSD_KeyCnt == (SYS_EDT_NUMBER - 1))
-    {
-        hItem=WM_GetDialogItem(g_hWin_TrmState,ID_EDIT_0);
-        WM_SetFocus(hItem);
-        SSD_KeyCnt = 0;
-    }
-    else
-    {
-        SSD_KeyCnt++;
-        hItem=WM_GetDialogItem(g_hWin_TrmState,(ID_EDIT_0 + SSD_KeyCnt));
-        WM_SetFocus(hItem);
-    }
-}
-void SSD_ColorChange(void)
-{
-    WM_HWIN hItem;
-    int i;
-    for(i = 0;i < SYS_EDT_NUMBER;i++)
-    {
-        hItem =  WM_GetDialogItem(g_hWin_TrmState, (ID_EDIT_0 + i));
-        if( 1 == WM_HasFocus(hItem))
-        {
-            EDIT_SetBkColor(hItem, 0, GUI_GREEN);
-        }
-        else if(0 == WM_HasFocus(hItem))
-        {
-            EDIT_SetBkColor(hItem, 0, 0xC0C0C0);
-        }
-    }
-}
-
-void SSD_FocusSel(void)
-{
-    WM_HWIN hItem;
-    hItem = WM_GetDialogItem(hItem, (ID_EDIT_0 + SSD_KeyCnt));
-    WM_SetFocus(hItem);
-}
-
-
-#endif
-
-
-
-
-
-
 
 /*********************************************************************
 *
@@ -332,8 +280,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     WM_SetFocus(g_hWin_menu);
                     WM_ShowWindow(g_hWin_TimeBar);
                     WM_ShowWindow(g_hWin_Date);
-                    //SSD_KeyCnt = 0;
                     break;
+                    
                 case GUI_KEY_GREEN:
                     g_gui_para.state = FHD_GUI_TRM_STATE;
                     g_gui_para.cmd = FHD_CMD_READ_TRM_STATE;
@@ -344,11 +292,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     SSD_SelectUp();
                     SSD_ColorChange();
                     break;
+                    
                 case GUI_KEY_DOWN:
                     SSD_SelectDown();
                     SSD_ColorChange();
                     break;
 #endif
+
 #if 0 
                 case GUI_KEY_F1:
                     g_gui_para.state = FHD_GUI_SYS_STATE;
@@ -356,10 +306,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                     
                     break;
 #endif     
+
                 case GUI_KEY_F2:
                     break;
+                    
                 case '*':
                     break;
+                    
                 case '#':
                     break;
             }
@@ -397,16 +350,13 @@ WM_HWIN CreateTrmState(void) {
 void GUI_Trm_State_Proc(void)
 {
     WM_HWIN hItem;
-    u8 buf[128];
+    u8 *pdata, buf[128];
+    u32 tmp1, tmp2; 
     
 
     switch(g_gui_para.cmd)
     {
     case FHD_CMD_READ_TRM_STATE:
-        u8 *pdata;
-        u32 tmp1, tmp2;
-        
-
         pdata = (u8 *)g_fhdp_para.data_buf;
         
         tmp1 = mb_swap_32((u8 *)pdata);
@@ -424,22 +374,6 @@ void GUI_Trm_State_Proc(void)
 
         hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_0);
         EDIT_SetText(hItem, buf);
-        
-#if 0
-        tmp2 = (tmp1 >> 3) & 0x00000001; //电容继电器
-        if(tmp2)
-        {
-            sprintf(buf, HaveAction);
-        }
-        else
-        {
-            sprintf(buf, NoneAction);
-        }
-
-
-        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_1);
-        EDIT_SetText(hItem, buf);
-#endif
 
         tmp2 = (tmp1 >> 4) & 0x00000001; //接触器
         if(tmp2)
@@ -463,6 +397,90 @@ void GUI_Trm_State_Proc(void)
         
         hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_3);
         EDIT_SetText(hItem, buf); 
+        break;
+
+    case FHD_CMD_READ_TRM_CONF:
+        pdata = (u8 *)g_fhdp_para.data_buf;
+
+        tmp1 = mb_swap_32((u8 *)pdata);
+        pdata += 4;
+
+        tmp2 = (tmp1 >> 0) & 0x00000001; //晃电保护开关
+
+        if(tmp2)
+        {
+            sprintf(buf, SwitchOn);
+
+            g_sys_ctrl.fhd_sw = ON;
+        }
+        else
+        {
+            sprintf(buf, SwitchOff);
+
+            g_sys_ctrl.fhd_sw = OFF;
+        }
+        
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_5);
+        EDIT_SetText(hItem, buf); 
+        
+        tmp2 = (tmp1 >> 1) & 0x00000001; //晃电保护时长
+        tmp2 = (tmp1 >> 2) & 0x00000001;
+
+        tmp1 = mb_swap(*((u16 *)pdata));
+        pdata += 2;
+
+        sprintf(buf, "%d", tmp1);
+        
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_6);
+        EDIT_SetText(hItem, buf);
+
+        tmp1 = mb_swap(*((u16 *)pdata)); //设备地址
+        pdata += 2;
+
+        tmp1 = mb_swap(*((u16 *)pdata));
+        pdata += 2;        
+
+        tmp1 = mb_swap(*((u16 *)pdata));
+        pdata += 2;
+
+        tmp1 = mb_swap(*((u16 *)pdata));
+        pdata += 2;        
+
+        sprintf(buf, "%d", tmp1);
+        
+        hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_7);
+        EDIT_SetText(hItem, buf);        
+        break;
+
+    case FHD_CMD_READ_TRM_VERSION:
+        if(10 == g_fhdp_para.data_len)
+        {
+            pdata = (u8 *)g_fhdp_para.data_buf;
+            
+            sprintf(buf, "%02x%02x%02x-%02x%02x", 
+                    *((pdata + 0)),
+                    *((pdata + 1)),
+                    *((pdata + 2)),
+                    *((pdata + 3)),
+                    *((pdata + 4)));
+
+            pdata += 5;
+
+            hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_8);
+            EDIT_SetText(hItem, buf); 
+
+            sprintf(buf, "%02x%02x%02x-%02x%02x", 
+                    *((pdata + 0)),
+                    *((pdata + 1)),
+                    *((pdata + 2)),
+                    *((pdata + 3)),
+                    *((pdata + 4)));
+
+            pdata += 5;
+
+            hItem = WM_GetDialogItem(g_hWin_TrmState, ID_EDIT_9);
+            EDIT_SetText(hItem, buf);
+        }
         break;
         
     default:

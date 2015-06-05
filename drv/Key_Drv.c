@@ -3,7 +3,7 @@
 
 
 KEY_CTRL g_key_ctrl;
-OS_EVENT *g_key_mbox; //华兄
+OS_EVENT *g_mbox_chk_key; //华兄
 
 #define ID_WINDOW_0             (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0             (GUI_ID_USER + 0x01)
@@ -128,7 +128,7 @@ void  App_TaskKey (void *p_arg)
             }
             else
             {
-                OSMboxPost(g_key_mbox, &key_msg); //华兄
+                OSMboxPost(g_mbox_chk_key, &key_msg); //华兄
             }
         }
         

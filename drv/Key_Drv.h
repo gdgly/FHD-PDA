@@ -93,7 +93,7 @@ typedef struct _key_ctrl_
 } KEY_CTRL, *P_KEY_CTRL;
 
 extern KEY_CTRL g_key_ctrl;
-extern OS_EVENT *g_key_mbox;
+extern OS_EVENT *g_mbox_chk_key;
 //extern int g_key_press_count;//added on 2014.12.31
 
 void KEY_Init(void);

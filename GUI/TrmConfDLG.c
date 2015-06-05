@@ -382,16 +382,13 @@ WM_HWIN CreateParaConf(void) {
 void GUI_Trm_Conf_Proc(void)
 {
     WM_HWIN hItem;
-    u8 buf[128];
-    
+    u8 *pdata, buf[128];
+    u32 tmp1, tmp2;
+
 
     switch(g_gui_para.cmd)
     {
     case FHD_CMD_READ_TRM_CONF:
-        u8 *pdata;
-        u32 tmp1, tmp2;
-        
-        
         pdata = (u8 *)g_fhdp_para.data_buf;
 
         tmp1 = mb_swap_32((u8 *)pdata);
@@ -412,19 +409,10 @@ void GUI_Trm_Conf_Proc(void)
             g_sys_ctrl.fhd_sw = OFF;
         }
         
-        if(g_hWin_TrmState > 0)
-        {
-            hItem = SSD_GetPrtSwitch();
-        }
-        
-        if(g_hWin_TrmConf > 0)
-        {
-            hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_0);
-        }
-        
+        hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_0);
         EDIT_SetText(hItem, buf); 
         
-        tmp2 = (tmp1 >> 1) & 0x00000001;
+        tmp2 = (tmp1 >> 1) & 0x00000001; //晃电保护时长
         tmp2 = (tmp1 >> 2) & 0x00000001;
 
         tmp1 = mb_swap(*((u16 *)pdata));
@@ -432,19 +420,10 @@ void GUI_Trm_Conf_Proc(void)
 
         sprintf(buf, "%d", tmp1);
         
-        if(g_hWin_TrmState > 0)
-        {
-            hItem = SSD_GetPrtTime();
-        }
-        
-        if(g_hWin_TrmConf > 0)
-        {
-            hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_1);
-        }
-        
+        hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_1);
         EDIT_SetText(hItem, buf);
 
-        tmp1 = mb_swap(*((u16 *)pdata));
+        tmp1 = mb_swap(*((u16 *)pdata)); //设备地址
         pdata += 2;
 
         tmp1 = mb_swap(*((u16 *)pdata));
@@ -458,16 +437,7 @@ void GUI_Trm_Conf_Proc(void)
 
         sprintf(buf, "%d", tmp1);
         
-        if(g_hWin_TrmState > 0)
-        {
-            hItem = SSD_GetDevAddr();
-        }
-        
-        if(g_hWin_TrmConf > 0)
-        {
-            hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_2);
-        }
-        
+        hItem = WM_GetDialogItem(g_hWin_TrmConf, ID_EDIT_2);
         EDIT_SetText(hItem, buf);
         break;
         

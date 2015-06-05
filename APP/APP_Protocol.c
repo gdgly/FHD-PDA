@@ -1234,7 +1234,7 @@ void  App_TaskRS485 (void *p_arg)
 */
 void  App_TaskFHDP (void *p_arg)
 {
-    u8 err, index, data_buf[128], *pdata;
+    u8 err, index, *pdata, data_buf[128];
     u32 temp;  
 
     
@@ -1277,9 +1277,7 @@ void  App_TaskFHDP (void *p_arg)
                                                             
                         g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
 
-                        temp = mb_swap_32(pdata);
-
-                        memcpy(g_fhdp_para.data_buf, &temp, g_fhdp_para.data_len);
+                        memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
 
                         g_fhdp_para.recv_result = RECV_RES_SUCC;                     
                     }
@@ -1714,6 +1712,55 @@ void  App_TaskFHDP (void *p_arg)
                     if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
                         g_fhdp_para.recv_result = RECV_RES_SUCC;    
+                    }
+                    else
+                    {
+                        g_fhdp_para.recv_result = RECV_RES_INVALID;
+                    }                    
+                }
+                else
+                {
+                    g_fhdp_para.recv_result = RECV_RES_TIMEOUT;
+                }
+
+                g_fhdp_para.msg_state = MSG_STATE_RECEIVED;
+
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                
+                break;
+
+            case FHD_CMD_READ_TRM_VERSION:
+                index = 0;
+                
+                temp = mb_swap(0x0005);
+                memcpy(data_buf, (u8 *)&temp, 2);
+                index += 2;
+                
+                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF5_ADDR, data_buf, index, g_fhdp_para.send_buf);
+
+                while(OSSemAccept(g_sem_rs485));
+                while(OSSemAccept(g_sem_fhdp));
+                
+                rs485_uart_send(g_fhdp_para.send_buf, g_fhdp_para.send_len);
+
+                g_fhdp_para.msg_state = MSG_STATE_SENDING;
+
+                OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
+
+                OSTimeDlyHMSM(0, 0, 0, 200);
+                
+                OSSemPend(g_sem_fhdp, 2 * OS_TICKS_PER_SEC, &err);
+                
+                if(OS_ERR_NONE == err)
+                {
+                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    {
+                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
+                                                            
+                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
+
+                        memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
+
+                        g_fhdp_para.recv_result = RECV_RES_SUCC;                     
                     }
                     else
                     {

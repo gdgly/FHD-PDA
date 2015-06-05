@@ -869,10 +869,10 @@ static  void  App_TaskCheck (void *p_arg)
     { 
         GUI_DispStringAtCEOL(key_chk_msg[i], g_check_info_pos[CHECK_INFO_KEY].x1, g_check_info_pos[CHECK_INFO_KEY].y);
 
-        OSMboxAccept(g_key_mbox);
+        OSMboxAccept(g_mbox_chk_key);
 
         do {
-            p_key_msg = (int *)OSMboxPend(g_key_mbox, 0, &err);
+            p_key_msg = (int *)OSMboxPend(g_mbox_chk_key, 0, &err);
         } while((OS_ERR_NONE != err) || (key_chk_map[i] != *p_key_msg));
     }
     
@@ -952,7 +952,7 @@ static  void  App_EventCreate (void)
     g_sys_ctrl.up_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/
     g_sys_ctrl.down_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/   
 
-    g_key_mbox = OSMboxCreate(NULL);
+    g_mbox_chk_key = OSMboxCreate(NULL);
 }
 
 /*

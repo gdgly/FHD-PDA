@@ -302,25 +302,25 @@ WM_HWIN CreateCal(void) {
 void GUI_Trm_Cal_Proc(void)
 {
     WM_HWIN hItem;
-    u8 buf[128];
+    u8 *pdata, buf[128];
+    u32 temp;
     
 
     switch(g_gui_para.cmd)
     {
     case FHD_CMD_READ_TRM_VOLTAGE:
-        u32 *pdata;
-        
-        
-        pdata = (u32 *)g_fhdp_para.data_buf;
+        pdata = (u8 *)g_fhdp_para.data_buf;
+
+        temp = mb_swap_32(pdata);
 
 #if 0                
-        sprintf(buf, "%0.2f", ((float)(*pdata)) / 100);
+        sprintf(buf, "%0.2f", ((float)temp) / 100);
 
         hItem = WM_GetDialogItem(g_hWin_TrmCal, ID_EDIT_1);
         EDIT_SetText(hItem, buf);        
 #else
         hItem = WM_GetDialogItem(g_hWin_TrmCal, ID_EDIT_1);
-        EDIT_SetFloatValue(hItem, ((float)(*pdata)) / 100);
+        EDIT_SetFloatValue(hItem, ((float)temp) / 100);
 #endif
         break;
         
@@ -328,19 +328,16 @@ void GUI_Trm_Cal_Proc(void)
         break;
 
     case FHD_CMD_READ_TRM_TIME:
-        u8 *ptr;
-        
-        
-        ptr = g_fhdp_para.data_buf;
+        pdata = (u8 *)g_fhdp_para.data_buf;
         
         sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d %s", 
-                mb_swap(*((u16 *)((u32)ptr + 0))),
-                *((u8 *)((u32)ptr + 2)),
-                *((u8 *)((u32)ptr + 3)),
-                *((u8 *)((u32)ptr + 5)),
-                *((u8 *)((u32)ptr + 6)),
-                *((u8 *)((u32)ptr + 7)),
-                FHD_WEEK[(*((u8 *)((u32)ptr + 4))) % 7]);
+                mb_swap(*((u16 *)((u32)pdata + 0))),
+                *((u8 *)((u32)pdata + 2)),
+                *((u8 *)((u32)pdata + 3)),
+                *((u8 *)((u32)pdata + 5)),
+                *((u8 *)((u32)pdata + 6)),
+                *((u8 *)((u32)pdata + 7)),
+                FHD_WEEK[(*((u8 *)((u32)pdata + 4))) % 7]);
         
         hItem = WM_GetDialogItem(g_hWin_TrmCal, ID_EDIT_2);
         EDIT_SetText(hItem, buf);

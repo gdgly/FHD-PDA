@@ -39,6 +39,7 @@ typedef double				fp64;				/* double precision floating point variable (64bits) 
 #define MODBUS_CONF2_ADDR		    1000	    //初值寄存器地址
 #define MODBUS_CONF3_ADDR		    2000	    //初值寄存器地址
 #define MODBUS_CONF4_ADDR		    3000		//初值寄存器地址
+#define	MODBUS_CONF5_ADDR		    3500		//初值寄存器地址
 #define MODBUS_CONF_SIZE		    4000
 
 /* 系统状态 */

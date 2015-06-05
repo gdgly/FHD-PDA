@@ -364,8 +364,14 @@ void Msg_Pool_Proc(void)
     switch(g_gui_para.cmd)
     {
     case FHD_CMD_READ_TRM_STATE:
-        g_gui_para.state = FHD_GUI_TRM_CONF;
+        g_gui_para.state = FHD_GUI_TRM_STATE;
         g_gui_para.cmd = FHD_CMD_READ_TRM_CONF;
+        OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);        
+        break;
+
+    case FHD_CMD_READ_TRM_CONF:
+        g_gui_para.state = FHD_GUI_TRM_STATE;
+        g_gui_para.cmd = FHD_CMD_READ_TRM_VERSION;
         OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);        
         break;
 

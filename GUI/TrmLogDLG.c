@@ -180,14 +180,12 @@ WM_HWIN CreateTrmLog(void) {
 void GUI_Trm_Log_Proc(void)
 {
     WM_HWIN hItem;
-    u8 i, row, buf[128];
+    u8 i, row, *pdata, buf[128];
     
 
     switch(g_gui_para.cmd)
     {
     case FHD_CMD_READ_TRM_LOG:
-        u8 *pdata;
-
 #define POWER_DROP_TIMESTAMP_COL       0
 #define POWER_DROP_KEEP_TIME_COL       1
 

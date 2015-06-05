@@ -91,7 +91,7 @@ extern const char F2SwitchOff[];
 
 extern const char ReferVtg[];
 extern const char VtgValue[];
-
+extern const char DevTest[];
 
 extern const char ProtectTime[];
 extern const char ReadPara[]; 
@@ -146,6 +146,7 @@ extern const char FHD_PDA[];
 extern const char SysReset[];
 extern const char CommAddr[];
 extern const char OpNote[];
+extern const char VerInfo[];
 
 extern const char *EditFrameTitle[];
 extern const char *ListViewFrameTitle[];
