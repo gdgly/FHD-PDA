@@ -251,13 +251,13 @@ uint8 iec_checksum(const uint8 ucFrame[], int32 iLen)
 	return checksum;
 }
 
-uint16 FHD_MakeFrame(uint8 ctrl, uint16 reg_addr, uint8 *pdata, uint16 len, uint8 *buf)
+uint16 FHDP_MakeFrame(uint8 ctrl, uint16 reg_addr, uint8 *pdata, uint16 len, uint8 *buf)
 {
     uint8 dev_addr;
     uint16 index = 0, crc;
 
 
-    dev_addr = FHD_GetDevAddr();
+    dev_addr = FHDP_GetDevAddr();
     buf[index] = dev_addr;
     index++;
 
@@ -281,7 +281,7 @@ uint16 FHD_MakeFrame(uint8 ctrl, uint16 reg_addr, uint8 *pdata, uint16 len, uint
     return (index);
 }
 
-uint8 FHD_CheckFrame(uint8 *buf, uint16 len)
+uint8 FHDP_CheckFrame(uint8 *buf, uint16 len)
 {
 #if 0    
     uint16 crc1, crc2;
@@ -292,35 +292,35 @@ uint8 FHD_CheckFrame(uint8 *buf, uint16 len)
 
     if(crc1 == crc2)
     {
-        return (FHD_FRAME_OK);
+        return (FHDP_FRAME_OK);
     }
     else
     {
-        return (FHD_RRAME_ERROR);
+        return (FHDP_RRAME_ERROR);
     }
 #else
     if(0 == mb_crc16(buf, len))
     {
-        return (FHD_FRAME_OK);
+        return (FHDP_FRAME_OK);
     }
     else
     {
-        return (FHD_RRAME_ERROR);
+        return (FHDP_RRAME_ERROR);
     }
 #endif
 }
 
-uint8 FHD_GetDevAddr(void)
+uint8 FHDP_GetDevAddr(void)
 {
     return (g_sys_ctrl.dev_addr);
 }
 
-uint8 *FHD_GetUserData(uint8 *buf)
+uint8 *FHDP_GetUserData(uint8 *buf)
 {
     return (&buf[3]);
 }
 
-uint8 FHD_GetUserDataLen(uint8 *buf)
+uint8 FHDP_GetUserDataLen(uint8 *buf)
 {
     return (buf[2]);
 }

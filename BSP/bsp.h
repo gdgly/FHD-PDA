@@ -383,7 +383,7 @@ void         BSP_IntHandlerCRYP               (void);
 void         BSP_IntHandlerHASH_RNG           (void);
 
 
-#define DEBUG_INFO_PRINT_EN            1u
+#define DEBUG_INFO_PRINT_EN          0u
 
 #if (DEBUG_INFO_PRINT_EN > 0u)
 #define DEBUG_PRINT(s)         printf s

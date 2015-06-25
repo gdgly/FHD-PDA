@@ -109,12 +109,12 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 *
 **********************************************************************
 */
-WM_HWIN MMD_Get_PROGBAR()
+WM_HWIN GUI_Get_FD_Usage_PROGBAR()
 {    
      return WM_GetDialogItem(g_hWin_SysInfo, ID_PROGBAR_0);            
 }
 
-void GUI_Set_FD_PROGBAR(u32 val)
+void GUI_Set_FD_Format_PROGBAR(u32 val)
 {
     WM_HWIN hItem;
 

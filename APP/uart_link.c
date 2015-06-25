@@ -42,9 +42,9 @@ OS_EVENT *g_sem_end;
 
 UART_CCB g_uart_ccb[MAX_COM_PORT];
 
-U8 g_UartPCRxBuf[UART_RECEIVE_BUF_SIZE];
-U8 g_UartRS485RxBuf[UART_RECEIVE_BUF_SIZE];
-U8 g_UartPLCRxBuf[UART_RECEIVE_BUF_SIZE];
+U8 g_UartPCRxBuf[UART_RECV_BUF_SIZE];
+U8 g_UartRS485RxBuf[UART_RECV_BUF_SIZE];
+U8 g_UartPLCRxBuf[UART_RECV_BUF_SIZE];
 
 U8 *pUartRxBuf[] = {
     g_UartPCRxBuf,
@@ -104,7 +104,7 @@ void End_Init(void)
 
         pEndObj->recv_timeout = 0;
 
-        UART_ReceiveData(i, pEndObj->end_recv_buffer, UART_RECEIVE_BUF_SIZE);
+        UART_ReceiveData(i, pEndObj->end_recv_buffer, UART_RECV_BUF_SIZE);
 
         // 所有串口状态转到REVC STATUS
         pEndObj->end_send_status = END_STATUS_IDLE;
@@ -373,9 +373,9 @@ unsigned char End_check_recv(P_END_OBJ pEndObj)
     if(p_uc->gpUartRxReadAddress <= p_uc->gpUartRxAddress)
         pEndObj->receive_len = p_uc->gpUartRxAddress - p_uc->gpUartRxReadAddress;//gIic0RxCnt;
     else
-        pEndObj->receive_len = (USHORT)((ULONG)p_uc->gpUartRxAddress + UART_RECEIVE_BUF_SIZE - (ULONG)p_uc->gpUartRxReadAddress);
+        pEndObj->receive_len = (USHORT)((ULONG)p_uc->gpUartRxAddress + UART_RECV_BUF_SIZE - (ULONG)p_uc->gpUartRxReadAddress);
 
-    if(pEndObj->receive_len > (220))//if(pEndObj->receive_len > (UART_RECEIVE_BUF_SIZE/2))
+    if(pEndObj->receive_len > (220))//if(pEndObj->receive_len > (UART_RECV_BUF_SIZE/2))
     {
         pEndObj->recv_timeout = 0;
         return TRUE;
@@ -495,7 +495,9 @@ void  App_TaskEndTick (void *p_arg)
 
     (void)p_arg;
     
-    while (DEF_TRUE) {    
+    while (DEF_TRUE) { 
+        clr_wdt(); //华兄
+        
         End_tick_check();
         
 #if (LED_UART_EN > 0u)
@@ -504,6 +506,15 @@ void  App_TaskEndTick (void *p_arg)
 
         GUI_Msg_Upload(OFF);
         GUI_Msg_Download(OFF);
+
+        if(GPIO_PIN_RESET == GET_USB_VOL())
+        {
+            g_sys_ctrl.usb_state = TRUE;
+        }
+        else
+        {
+            g_sys_ctrl.usb_state = FALSE;
+        } 
 
         if(g_sys_ctrl.led_count)
         {

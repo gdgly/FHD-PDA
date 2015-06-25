@@ -40,7 +40,7 @@ OS_EVENT *g_sem_check;
 OS_EVENT *g_sem_chk_plc;
 OS_EVENT *g_sem_chk_rf;
 
-u8 g_msg_buf[UART_RECEIVE_BUF_SIZE];
+u8 g_msg_buf[UART_RECV_BUF_SIZE];
 u16 g_msg_len;
 
 u8 g_cplc_read_addr[13];
@@ -1254,7 +1254,7 @@ void  App_TaskFHDP (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF4_ADDR, data_buf, index, g_fhdp_para.send_buf);
+                g_fhdp_para.send_len = FHDP_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF4_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
                 while(OSSemAccept(g_sem_fhdp));
@@ -1271,11 +1271,11 @@ void  App_TaskFHDP (void *p_arg)
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    if(FHDP_FRAME_OK == FHDP_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
+                        pdata = FHDP_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
+                        g_fhdp_para.data_len = FHDP_GetUserDataLen(g_fhdp_para.recv_buf);
 
                         memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
 
@@ -1310,7 +1310,7 @@ void  App_TaskFHDP (void *p_arg)
                 memcpy(&data_buf[index], (u8 *)&temp, sizeof(temp));
                 index += 4;
 
-                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_WRITE_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF4_ADDR, data_buf, index, g_fhdp_para.send_buf);
+                g_fhdp_para.send_len = FHDP_MakeFrame(MODBUS_EXT_WRITE_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF4_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
                 while(OSSemAccept(g_sem_fhdp));
@@ -1327,7 +1327,7 @@ void  App_TaskFHDP (void *p_arg)
 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    if(FHDP_FRAME_OK == FHDP_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
                         g_fhdp_para.recv_result = RECV_RES_SUCC;    
                     }
@@ -1353,7 +1353,7 @@ void  App_TaskFHDP (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_READ_REG, MODBUS_TIME_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
+                g_fhdp_para.send_len = FHDP_MakeFrame(MODBUS_READ_REG, MODBUS_TIME_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
                 while(OSSemAccept(g_sem_fhdp));
@@ -1370,11 +1370,11 @@ void  App_TaskFHDP (void *p_arg)
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    if(FHDP_FRAME_OK == FHDP_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
+                        pdata = FHDP_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
+                        g_fhdp_para.data_len = FHDP_GetUserDataLen(g_fhdp_para.recv_buf);
 
                         memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
 
@@ -1431,7 +1431,7 @@ void  App_TaskFHDP (void *p_arg)
                 memcpy(&data_buf[index], (u8 *)&temp, 2); //Msec
                 index += 2;
 
-                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_WRITE_REG, MODBUS_TIME_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
+                g_fhdp_para.send_len = FHDP_MakeFrame(MODBUS_WRITE_REG, MODBUS_TIME_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
                 while(OSSemAccept(g_sem_fhdp));
@@ -1448,7 +1448,7 @@ void  App_TaskFHDP (void *p_arg)
 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    if(FHDP_FRAME_OK == FHDP_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
                         g_fhdp_para.recv_result = RECV_RES_SUCC;                       
                     }
@@ -1474,7 +1474,7 @@ void  App_TaskFHDP (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
+                g_fhdp_para.send_len = FHDP_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
                 while(OSSemAccept(g_sem_fhdp));
@@ -1491,11 +1491,11 @@ void  App_TaskFHDP (void *p_arg)
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    if(FHDP_FRAME_OK == FHDP_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
+                        pdata = FHDP_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
+                        g_fhdp_para.data_len = FHDP_GetUserDataLen(g_fhdp_para.recv_buf);
 
                         memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
 
@@ -1551,7 +1551,7 @@ void  App_TaskFHDP (void *p_arg)
                 memcpy(&data_buf[index], (u8 *)&temp, 2);
                 index += 2;
 
-                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_WRITE_REG, MODBUS_CONF_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
+                g_fhdp_para.send_len = FHDP_MakeFrame(MODBUS_EXT_WRITE_REG, MODBUS_CONF_START_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
                 while(OSSemAccept(g_sem_fhdp));
@@ -1568,7 +1568,7 @@ void  App_TaskFHDP (void *p_arg)
 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    if(FHDP_FRAME_OK == FHDP_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
                         g_fhdp_para.recv_result = RECV_RES_SUCC;
                     }
@@ -1594,7 +1594,7 @@ void  App_TaskFHDP (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF1_ADDR, data_buf, index, g_fhdp_para.send_buf);
+                g_fhdp_para.send_len = FHDP_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF1_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
                 while(OSSemAccept(g_sem_fhdp));
@@ -1611,11 +1611,11 @@ void  App_TaskFHDP (void *p_arg)
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    if(FHDP_FRAME_OK == FHDP_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
+                        pdata = FHDP_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
+                        g_fhdp_para.data_len = FHDP_GetUserDataLen(g_fhdp_para.recv_buf);
 
                         memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
                         
@@ -1643,7 +1643,7 @@ void  App_TaskFHDP (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF2_ADDR, data_buf, index, g_fhdp_para.send_buf);
+                g_fhdp_para.send_len = FHDP_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF2_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
                 while(OSSemAccept(g_sem_fhdp));
@@ -1660,11 +1660,11 @@ void  App_TaskFHDP (void *p_arg)
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    if(FHDP_FRAME_OK == FHDP_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
+                        pdata = FHDP_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
+                        g_fhdp_para.data_len = FHDP_GetUserDataLen(g_fhdp_para.recv_buf);
                         
                         memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
                         
@@ -1692,7 +1692,7 @@ void  App_TaskFHDP (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
 
-                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_CTRL_OUTPUT, MODBUS_CTRL_START_ADDR + MODBUS_CTRL_RESET_ADDR, data_buf, index, g_fhdp_para.send_buf);
+                g_fhdp_para.send_len = FHDP_MakeFrame(MODBUS_CTRL_OUTPUT, MODBUS_CTRL_START_ADDR + MODBUS_CTRL_RESET_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
                 while(OSSemAccept(g_sem_fhdp));
@@ -1709,7 +1709,7 @@ void  App_TaskFHDP (void *p_arg)
 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    if(FHDP_FRAME_OK == FHDP_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
                         g_fhdp_para.recv_result = RECV_RES_SUCC;    
                     }
@@ -1735,7 +1735,7 @@ void  App_TaskFHDP (void *p_arg)
                 memcpy(data_buf, (u8 *)&temp, 2);
                 index += 2;
                 
-                g_fhdp_para.send_len = FHD_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF5_ADDR, data_buf, index, g_fhdp_para.send_buf);
+                g_fhdp_para.send_len = FHDP_MakeFrame(MODBUS_EXT_READ_REG, MODBUS_CONF_START_ADDR + MODBUS_CONF5_ADDR, data_buf, index, g_fhdp_para.send_buf);
 
                 while(OSSemAccept(g_sem_rs485));
                 while(OSSemAccept(g_sem_fhdp));
@@ -1752,11 +1752,11 @@ void  App_TaskFHDP (void *p_arg)
                 
                 if(OS_ERR_NONE == err)
                 {
-                    if(FHD_FRAME_OK == FHD_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
+                    if(FHDP_FRAME_OK == FHDP_CheckFrame(g_fhdp_para.recv_buf, g_fhdp_para.recv_len))
                     {
-                        pdata = FHD_GetUserData(g_fhdp_para.recv_buf);
+                        pdata = FHDP_GetUserData(g_fhdp_para.recv_buf);
                                                             
-                        g_fhdp_para.data_len = FHD_GetUserDataLen(g_fhdp_para.recv_buf);
+                        g_fhdp_para.data_len = FHDP_GetUserDataLen(g_fhdp_para.recv_buf);
 
                         memcpy(g_fhdp_para.data_buf, pdata, g_fhdp_para.data_len);
 

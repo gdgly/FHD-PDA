@@ -50,16 +50,16 @@ typedef double				fp64;				/* double precision floating point variable (64bits) 
 #define SYS_RELAY_ON_FLAG           0x0010      //接触器是否在闭合状态
 #define SYS_JDQ_ON_FLAG             0x0020      //继电器是否在闭合状态
 
-#define FHD_FRAME_OK                TRUE
-#define FHD_RRAME_ERROR             FALSE
+#define FHDP_FRAME_OK               TRUE
+#define FHDP_RRAME_ERROR            FALSE
 
 uint16 mb_swap(uint16 usData);
 uint32 mb_swap_32(uint8 *usData);
-uint16 FHD_MakeFrame(uint8 ctrl, uint16 reg_addr, uint8 *pdata, uint16 len, uint8 *buf);
-uint8 FHD_CheckFrame(uint8 *buf, uint16 len);
-uint8 FHD_GetDevAddr(void);
-uint8 *FHD_GetUserData(uint8 *buf);
-uint8 FHD_GetUserDataLen(uint8 *buf);
+uint16 FHDP_MakeFrame(uint8 ctrl, uint16 reg_addr, uint8 *pdata, uint16 len, uint8 *buf);
+uint8 FHDP_CheckFrame(uint8 *buf, uint16 len);
+uint8 FHDP_GetDevAddr(void);
+uint8 *FHDP_GetUserData(uint8 *buf);
+uint8 FHDP_GetUserDataLen(uint8 *buf);
 
 
 #endif

@@ -170,7 +170,7 @@ void FM_Format_Disk(void)
 
         if(FR_OK == res)
         {
-            GUI_Set_FD_PROGBAR(100);
+            GUI_Set_FD_Format_PROGBAR(100);
 
             DEBUG_PRINT(("SD format ok!\n"));
         }

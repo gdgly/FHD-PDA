@@ -95,9 +95,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, ContactorState, ID_TEXT_2,   8,   35,  120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ProtectNum,     ID_TEXT_3,   8,   62,  120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, Voltage,        ID_TEXT_4,   8,   89, 120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_5,   8,   116, 125, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, DevAddr,        ID_TEXT_6,   8,   143, 120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, InterElecPrt,   ID_TEXT_7,   8,   170, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, InterElecPrt,   ID_TEXT_5,   8,   116, 120, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_6,   8,   143, 125, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, DevAddr,        ID_TEXT_7,   8,   170, 120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, HardVersion,    ID_TEXT_8,   8,   197, 120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, SoftVersion,    ID_TEXT_9,   8,   224, 120, 20, 0, 0x0, 0 },
 
@@ -147,15 +147,15 @@ static void _init_SysCtlDialog(WM_MESSAGE *pMsg)
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_7);
-    EDIT_SetText(hItem, " ");
-    WM_DisableWindow(hItem);
-
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_5);
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_6);
+    EDIT_SetText(hItem, " ");
+    WM_DisableWindow(hItem);
+
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_7);
     EDIT_SetText(hItem, " ");
     WM_DisableWindow(hItem);
 

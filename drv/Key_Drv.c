@@ -56,19 +56,19 @@ void  App_TaskKey (void *p_arg)
     (void)p_arg;
     
     while (DEF_TRUE) {
-		OSSemPend(g_key_ctrl.key_sem, 0 ,&err);
+		OSSemPend(g_key_ctrl.sem, 0 ,&err);
 
-        if(g_key_ctrl.key_col == 0)
+        if(g_key_ctrl.col == 0)
             goto key_proc_end;
 
-        if(GPIO_PIN_RESET != HAL_GPIO_ReadPin(KEYBOARD_COL_PORT, g_key_ctrl.key_col ))
+        if(GPIO_PIN_RESET != HAL_GPIO_ReadPin(KEYBOARD_COL_PORT, g_key_ctrl.col ))
         {            
             goto key_proc_end;
         }
 
         OSTimeDly(30); //20ms
 
-        if(GPIO_PIN_RESET != HAL_GPIO_ReadPin(KEYBOARD_COL_PORT, g_key_ctrl.key_col ))
+        if(GPIO_PIN_RESET != HAL_GPIO_ReadPin(KEYBOARD_COL_PORT, g_key_ctrl.col ))
         {            
             goto key_proc_end;
         }
@@ -81,16 +81,16 @@ void  App_TaskKey (void *p_arg)
 			GPIO_ResetBits(KEYBOARD_ROW_PORT, KEYBOARD_ROW_BASE << i); 
             OSTimeDly(1);
             
-			if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(KEYBOARD_COL_PORT, g_key_ctrl.key_col))
+			if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(KEYBOARD_COL_PORT, g_key_ctrl.col))
 			{
                 if(SYS_BEEP_ON == g_rom_para.beep_switch)
                 {
                     Beep(); //ЛЊаж
                 }
 
-                LED_KEY_ON();
-
                 g_sys_ctrl.led_count = LED_KEY_DISP_TIME;
+
+                LED_KEY_ON();
 
                 LCD_BL_ON();
 
@@ -100,7 +100,7 @@ void  App_TaskKey (void *p_arg)
 			}		
         }
 
-        switch(g_key_ctrl.key_col)
+        switch(g_key_ctrl.col)
         {
         case GPIO_PIN_6:
             n = 0;
@@ -136,7 +136,7 @@ void  App_TaskKey (void *p_arg)
         {
             OSTimeDly(1);
             
-            if(GPIO_PIN_RESET != HAL_GPIO_ReadPin(KEYBOARD_COL_PORT, g_key_ctrl.key_col))
+            if(GPIO_PIN_RESET != HAL_GPIO_ReadPin(KEYBOARD_COL_PORT, g_key_ctrl.col))
                 break;
         }
 
@@ -153,12 +153,12 @@ void  App_TaskKey (void *p_arg)
 
 key_proc_end:
         GPIO_ResetBits(KEYBOARD_ROW_PORT, KEYBOARD_ROW);
-        if(g_key_ctrl.key_col)
+        if(g_key_ctrl.col)
         {
-            __HAL_GPIO_EXTI_CLEAR_FLAG(g_key_ctrl.key_col);            
+            __HAL_GPIO_EXTI_CLEAR_FLAG(g_key_ctrl.col);            
         }
 
-        g_key_ctrl.key_col = 0;
+        g_key_ctrl.col = 0;
         
  
 	}
@@ -179,10 +179,10 @@ void EXTI9_5_IRQHandler(void)
   *************************************************************************************/
     if(RESET != __HAL_GPIO_EXTI_GET_IT(GPIO_PIN_6)) 
     {   
-        if(g_key_ctrl.key_col==0)
+        if(g_key_ctrl.col==0)
         {
-            g_key_ctrl.key_col = GPIO_PIN_6;		
-            OSSemPost(g_key_ctrl.key_sem);
+            g_key_ctrl.col = GPIO_PIN_6;		
+            OSSemPost(g_key_ctrl.sem);
         }
         else
             __HAL_GPIO_EXTI_CLEAR_FLAG(GPIO_PIN_6);   
@@ -190,10 +190,10 @@ void EXTI9_5_IRQHandler(void)
 
     if(RESET != __HAL_GPIO_EXTI_GET_IT(GPIO_PIN_7)) 
     { 
-        if(g_key_ctrl.key_col==0)
+        if(g_key_ctrl.col==0)
         {
-            g_key_ctrl.key_col = GPIO_PIN_7;		
-            OSSemPost(g_key_ctrl.key_sem);
+            g_key_ctrl.col = GPIO_PIN_7;		
+            OSSemPost(g_key_ctrl.sem);
         }
         else
             __HAL_GPIO_EXTI_CLEAR_FLAG(GPIO_PIN_7);  
@@ -201,10 +201,10 @@ void EXTI9_5_IRQHandler(void)
 
     if(RESET != __HAL_GPIO_EXTI_GET_IT(GPIO_PIN_8)) 
     { 
-        if(g_key_ctrl.key_col==0)
+        if(g_key_ctrl.col==0)
         {
-            g_key_ctrl.key_col = GPIO_PIN_8;		
-            OSSemPost(g_key_ctrl.key_sem);  
+            g_key_ctrl.col = GPIO_PIN_8;		
+            OSSemPost(g_key_ctrl.sem);  
         }
         else
             __HAL_GPIO_EXTI_CLEAR_FLAG(GPIO_PIN_8);        
@@ -212,10 +212,10 @@ void EXTI9_5_IRQHandler(void)
 
     if(RESET != __HAL_GPIO_EXTI_GET_IT(GPIO_PIN_9)) 
     { 
-        if(g_key_ctrl.key_col==0)
+        if(g_key_ctrl.col==0)
         {
-            g_key_ctrl.key_col = GPIO_PIN_9;		
-            OSSemPost(g_key_ctrl.key_sem);  
+            g_key_ctrl.col = GPIO_PIN_9;		
+            OSSemPost(g_key_ctrl.sem);  
         }
         else
             __HAL_GPIO_EXTI_CLEAR_FLAG(GPIO_PIN_9);        

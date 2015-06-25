@@ -34,9 +34,9 @@
 *********************************************************************************************************
 */
 
-#include  <app_cfg.h>
-#include  <includes.h>
-#include  "gui.h"
+#include <app_cfg.h>
+#include <includes.h>
+#include "gui.h"
 #include "DIALOG.h"
 #include "lcdconf.h"
 
@@ -51,9 +51,6 @@
 *                                       LOCAL GLOBAL VARIABLES
 *********************************************************************************************************
 */
-#define VECT_TAB_OFFSET  0x8000 
-
-
                                                                 /* ----------------- APPLICATION GLOBALS ------------------ */
 static  OS_STK         App_TaskStartStk[APP_CFG_TASK_START_STK_SIZE];
 static  OS_STK         App_TaskEndTickStk[APP_CFG_TASK_END_TICK_STK_SIZE];
@@ -67,7 +64,6 @@ static  OS_STK         App_TaskPCStk[APP_CFG_TASK_PC_STK_SIZE];
 static  OS_STK         App_TaskRS485Stk[APP_CFG_TASK_RS485_STK_SIZE];
 static  OS_STK         App_TaskCheckStk[APP_CFG_TASK_CHECK_STK_SIZE];
 static  OS_STK         App_TaskFHDPStk[APP_CFG_TASK_FHDP_STK_SIZE];
-static  OS_STK         App_TaskWDTStk[APP_CFG_TASK_WDT_STK_SIZE];
 
 /*
 *********************************************************************************************************
@@ -80,7 +76,6 @@ static  void           App_TaskGUI                  (void *p_arg); //GUI任务 add
 static  void           App_TaskGMP                  (void *p_arg);
 static  void           App_TaskPower                (void *p_arg);
 static  void           App_TaskCheck                (void *p_arg);
-static  void           App_TaskWDT                  (void *p_arg);
 
 static  void           App_MemAlloc                 (void);
 static  void           App_TaskCreate               (void);
@@ -91,10 +86,6 @@ static void SystemClock_Config(void)
 {
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_OscInitTypeDef RCC_OscInitStruct;
-
-    /* Configure the Vector Table location add offset address ------------------*/
-
-  SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
 
 
   /* Enable HSE Oscillator and activate PLL with HSE as source */
@@ -339,14 +330,14 @@ static  void  App_TaskStart (void *p_arg)
     APP_StartButtonTest();
 #endif
 
+    BSP_IWDG_Init();
+
     App_EventCreate();                                          /* Create Application Events                                */
 
     App_TaskCreate();/* Create application Tasks                                 */ 
 
     /* 挂起不相关的任务 */
     OSTaskSuspend(APP_CFG_TASK_PROTO_PRIO);
-
-    BSP_IWDG_Init();  //4.1
 
     GUI_Init();                                                 /* Init the STemWin GUI Library */
 
@@ -528,16 +519,7 @@ static  void  App_TaskPower (void *p_arg)
                 LCD_BL_OFF();
                 LED_SLEEP_ON();
             }
-        }
-
-        if(GPIO_PIN_RESET == GET_USB_VOL())
-        {
-            g_sys_ctrl.usb_state = TRUE;
-        }
-        else
-        {
-            g_sys_ctrl.usb_state = FALSE;
-        }        
+        }       
 
         g_sys_ctrl.shutdown_timeout++;
         if(g_sys_ctrl.shutdown_timeout > (g_rom_para.auto_shutdown_time * 100))
@@ -659,32 +641,6 @@ static  void  App_TaskGMP (void *p_arg)
 
 /*
 *********************************************************************************************************
-*                                             App_TaskWDT()
-*
-* Description : This task monitors the state of the push buttons and passes messages to AppTaskUserIF()
-*
-* Argument(s) : p_arg   is the argument passed to 'App_TaskWDT()' by 'OSTaskCreateExt()'.
-*
-* Return(s)  : none.
-*
-* Caller(s)  : This is a task.
-*
-* Note(s)    : none.
-*********************************************************************************************************
-*/
-static  void  App_TaskWDT (void *p_arg)
-{
-    (void)p_arg;
-
-    while (DEF_TRUE) {
-        clr_wdt();
-        
-        OSTimeDlyHMSM(0, 0, 0, 500);
-    }
-}
-
-/*
-*********************************************************************************************************
 *                                             App_TaskCheck()
 *
 * Description : This task monitors the state of the push buttons and passes messages to AppTaskUserIF()
@@ -799,6 +755,7 @@ static  void  App_TaskCheck (void *p_arg)
     OSTaskSuspend(APP_CFG_TASK_POWER_PRIO);
     OSTaskSuspend(APP_CFG_TASK_PC_PRIO);
     OSTaskSuspend(APP_CFG_TASK_RS485_PRIO);
+    OSTaskSuspend(APP_CFG_TASK_FHDP_PRIO);
 
     /* 初始化显示环境 */
     WM_HideWin(g_hWin_task);
@@ -947,7 +904,7 @@ static  void  App_EventCreate (void)
 	g_sem_check = OSSemCreate(0);
     g_sem_chk_plc = OSSemCreate(0);
     g_sem_chk_rf = OSSemCreate(0);
-	g_key_ctrl.key_sem = OSSemCreate(0);    
+	g_key_ctrl.sem = OSSemCreate(0);    
     
     g_sys_ctrl.up_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/
     g_sys_ctrl.down_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/   
@@ -1113,20 +1070,6 @@ static  void  App_TaskCreate (void)
 
 #if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_CHECK_PRIO, "Check", &err);    
-#endif
-
-    OSTaskCreateExt((void (*)(void *)) App_TaskWDT,
-                    (void           *) 0,
-                    (OS_STK         *)&App_TaskWDTStk[APP_CFG_TASK_WDT_STK_SIZE - 1],
-                    (INT8U           ) APP_CFG_TASK_WDT_PRIO,
-                    (INT16U          ) APP_CFG_TASK_WDT_PRIO,
-                    (OS_STK         *)&App_TaskWDTStk[0],
-                    (INT32U          ) APP_CFG_TASK_WDT_STK_SIZE,
-                    (void           *) 0,
-                    (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
-
-#if (OS_TASK_NAME_EN > 0)
-    OSTaskNameSet(APP_CFG_TASK_WDT_PRIO, "WDT", &err);    
 #endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskFHDP,
