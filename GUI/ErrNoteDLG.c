@@ -131,8 +131,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 
                 if(g_hWin_TrmConf > 0)
                 {
-                    g_gui_para.state = FHD_GUI_TRM_CONF;
-                    g_gui_para.cmd = FHD_CMD_RESET_TRM;
+                    g_gui_para.state = GUI_STATE_TRM_CONF;
+                    g_gui_para.cmd = GUI_CMD_RESET_TRM;
                     OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);  
                 }
                 

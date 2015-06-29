@@ -269,7 +269,7 @@ void GUI_Recv_Msg_Proc(void)
 {
     switch(g_gui_para.state)
     {
-    case FHD_GUI_TRM_CAL:
+    case GUI_STATE_TRM_CAL:
         if(RECV_RES_SUCC == g_fhdp_para.recv_result)
         {
             if(g_fhdp_para.recv_len)
@@ -287,7 +287,7 @@ void GUI_Recv_Msg_Proc(void)
         }
         break;
 
-    case FHD_GUI_TRM_CONF:
+    case GUI_STATE_TRM_CONF:
         if(RECV_RES_SUCC == g_fhdp_para.recv_result)
         {
             if(g_fhdp_para.recv_len)
@@ -297,21 +297,21 @@ void GUI_Recv_Msg_Proc(void)
         }
         else if(RECV_RES_INVALID == g_fhdp_para.recv_result)
         {
-            if(FHD_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
+            if(GUI_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
             {
                 ERR_NOTE(g_hWin_TrmConf, ERR_RECEIVE_DATA);
             }
         }
         else 
         {   
-            if(FHD_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
+            if(GUI_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
             {
                 ERR_NOTE(g_hWin_TrmConf, ERR_COMMUNICATE);
             }
         }
         break;
 
-    case FHD_GUI_TRM_STATE:
+    case GUI_STATE_TRM_STATE:
         if(RECV_RES_SUCC == g_fhdp_para.recv_result)
         {
             if(g_fhdp_para.recv_len)
@@ -321,21 +321,21 @@ void GUI_Recv_Msg_Proc(void)
         }
         else if(RECV_RES_INVALID == g_fhdp_para.recv_result)
         {
-            if(FHD_CMD_READ_TRM_STATE == g_gui_para.cmd)
+            if(GUI_CMD_READ_TRM_STATE == g_gui_para.cmd)
             {
                 ERR_NOTE(g_hWin_TrmState, ERR_RECEIVE_DATA);
             }
         }
         else 
         {
-            if(FHD_CMD_READ_TRM_STATE == g_gui_para.cmd)
+            if(GUI_CMD_READ_TRM_STATE == g_gui_para.cmd)
             {
                 ERR_NOTE(g_hWin_TrmState, ERR_COMMUNICATE);
             }
         }
         break;
 
-    case FHD_GUI_TRM_LOG:
+    case GUI_STATE_TRM_LOG:
         if(RECV_RES_SUCC == g_fhdp_para.recv_result)
         {
             if(g_fhdp_para.recv_len)
@@ -363,15 +363,15 @@ void Msg_Pool_Proc(void)
 {
     switch(g_gui_para.cmd)
     {
-    case FHD_CMD_READ_TRM_STATE:
-        g_gui_para.state = FHD_GUI_TRM_STATE;
-        g_gui_para.cmd = FHD_CMD_READ_TRM_CONF;
+    case GUI_CMD_READ_TRM_STATE:
+        g_gui_para.state = GUI_STATE_TRM_STATE;
+        g_gui_para.cmd = GUI_CMD_READ_TRM_CONF;
         OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);        
         break;
 
-    case FHD_CMD_READ_TRM_CONF:
-        g_gui_para.state = FHD_GUI_TRM_STATE;
-        g_gui_para.cmd = FHD_CMD_READ_TRM_VERSION;
+    case GUI_CMD_READ_TRM_CONF:
+        g_gui_para.state = GUI_STATE_TRM_STATE;
+        g_gui_para.cmd = GUI_CMD_READ_TRM_VERSION;
         OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);        
         break;
 
@@ -497,7 +497,7 @@ void GUI_Msg_Proc(void)
     {        
         GUI_Msg_Upload(ON);
 
-        fhd_msg_record(FHD_MSG_SEND);
+        trm_msg_record(TRM_MSG_SEND);
 
         GUI_Send_Msg_Proc();
     }    
@@ -507,7 +507,7 @@ void GUI_Msg_Proc(void)
         {
             GUI_Msg_Download(ON);
 
-            fhd_msg_record(FHD_MSG_RECV);
+            trm_msg_record(TRM_MSG_RECV);
         }
 
         GUI_Recv_Msg_Proc();

@@ -63,29 +63,30 @@
 #define OFF                        1
 
 extern const u8 g_self_check_pwd[];
-typedef enum
-{
-    FHD_GUI_TRM_CAL = 0,
-    FHD_GUI_TRM_CONF,
-    FHD_GUI_TRM_STATE,
-    FHD_GUI_TRM_LOG,
-    MAX_FHD_GUI_TYPE
-} FHD_GUI_TYPE; //华兄
 
 typedef enum
 {
-    FHD_CMD_READ_TRM_VOLTAGE = 0,
-    FHD_CMD_CALIBRATE_TRM_VOLTAGE,
-    FHD_CMD_READ_TRM_TIME,
-    FHD_CMD_CALIBRATE_TRM_TIME,
-    FHD_CMD_READ_TRM_CONF,
-    FHD_CMD_WRITE_TRM_CONF,
-    FHD_CMD_READ_TRM_STATE,
-    FHD_CMD_READ_TRM_LOG,
-    FHD_CMD_RESET_TRM,
-    FHD_CMD_READ_TRM_VERSION,
-    MAX_FHD_CMD_TYPE
-} FHD_CMD_TYPE; //华兄
+    GUI_STATE_TRM_CAL = 0,
+    GUI_STATE_TRM_CONF,
+    GUI_STATE_TRM_STATE,
+    GUI_STATE_TRM_LOG,
+    MAX_GUI_STATE_TYPE
+} GUI_STATE_TYPE; //华兄
+
+typedef enum
+{
+    GUI_CMD_READ_TRM_VOLTAGE = 0,
+    GUI_CMD_CALIBRATE_TRM_VOLTAGE,
+    GUI_CMD_READ_TRM_TIME,
+    GUI_CMD_CALIBRATE_TRM_TIME,
+    GUI_CMD_READ_TRM_CONF,
+    GUI_CMD_WRITE_TRM_CONF,
+    GUI_CMD_READ_TRM_STATE,
+    GUI_CMD_READ_TRM_LOG,
+    GUI_CMD_RESET_TRM,
+    GUI_CMD_READ_TRM_VERSION,
+    MAX_GUI_CMD_TYPE
+} GUI_CMD_TYPE; //华兄
 
 
 //#define ERROR_BOX(error_no)     MESSAGEBOX_Create(&gc_messageBoxText[error_no][0],"Error",0)
@@ -111,7 +112,7 @@ typedef struct _gui_para_ {
 	u8 cmd;
 	u8 data_buf[256];
 	u16 data_len;
-} GUI_PARA, P_GUI_PARA; //华兄
+} GUI_PARA, *P_GUI_PARA; //华兄
 
 extern GUI_PARA g_gui_para;
 

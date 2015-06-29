@@ -15,7 +15,7 @@
 #define MAX_SD_FILE_NUM  50
 #define MAX_SD_FILE_NAME_LEN  16
 
-typedef struct file_timestamp
+typedef struct _file_timestamp_
 {
     u32 date;
     u32 time;
@@ -32,7 +32,7 @@ void FatFs_Test(void);
 void FM_Format_Disk(void);
 u32 get_file_num(void);
 u8 plc_listen_record(void);
-u8 fhd_msg_record(u8 msg_type);
+u8 trm_msg_record(u8 msg_type);
 
 
 #ifdef __cplusplus

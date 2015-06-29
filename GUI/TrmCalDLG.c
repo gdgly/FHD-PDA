@@ -207,8 +207,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 sys_time.year += 2000;
                 memcpy(g_gui_para.data_buf, &sys_time, sizeof(sys_time));
                 g_gui_para.data_len = sizeof(sys_time);
-                g_gui_para.state = FHD_GUI_TRM_CAL;
-                g_gui_para.cmd = FHD_CMD_CALIBRATE_TRM_TIME;
+                g_gui_para.state = GUI_STATE_TRM_CAL;
+                g_gui_para.cmd = GUI_CMD_CALIBRATE_TRM_TIME;
                 OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);   
 #if 0
                 WM_DeleteWindow(g_hWin_TrmCal);
@@ -220,8 +220,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
                 
             case GUI_KEY_GREEN:
-                g_gui_para.state = FHD_GUI_TRM_CAL;
-                g_gui_para.cmd = FHD_CMD_READ_TRM_VOLTAGE;
+                g_gui_para.state = GUI_STATE_TRM_CAL;
+                g_gui_para.cmd = GUI_CMD_READ_TRM_VOLTAGE;
                 OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                
                 break;
                 
@@ -235,14 +235,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 temp = atoi(tmpBuf) * 100;
                 memcpy(g_gui_para.data_buf, &temp, sizeof(temp));
                 g_gui_para.data_len = sizeof(temp);
-                g_gui_para.state = FHD_GUI_TRM_CAL;
-                g_gui_para.cmd = FHD_CMD_CALIBRATE_TRM_VOLTAGE;
+                g_gui_para.state = GUI_STATE_TRM_CAL;
+                g_gui_para.cmd = GUI_CMD_CALIBRATE_TRM_VOLTAGE;
                 OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                  
                 break;
                 
             case GUI_KEY_F1:
-                g_gui_para.state = FHD_GUI_TRM_CAL;
-                g_gui_para.cmd = FHD_CMD_READ_TRM_TIME;
+                g_gui_para.state = GUI_STATE_TRM_CAL;
+                g_gui_para.cmd = GUI_CMD_READ_TRM_TIME;
                 OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                 
                 break;
                 
@@ -308,7 +308,7 @@ void GUI_Trm_Cal_Proc(void)
 
     switch(g_gui_para.cmd)
     {
-    case FHD_CMD_READ_TRM_VOLTAGE:
+    case GUI_CMD_READ_TRM_VOLTAGE:
         pdata = (u8 *)g_fhdp_para.data_buf;
 
         temp = mb_swap_32(pdata);
@@ -324,10 +324,10 @@ void GUI_Trm_Cal_Proc(void)
 #endif
         break;
         
-    case FHD_CMD_CALIBRATE_TRM_VOLTAGE:
+    case GUI_CMD_CALIBRATE_TRM_VOLTAGE:
         break;
 
-    case FHD_CMD_READ_TRM_TIME:
+    case GUI_CMD_READ_TRM_TIME:
         pdata = (u8 *)g_fhdp_para.data_buf;
         
         sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d %s", 

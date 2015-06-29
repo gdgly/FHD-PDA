@@ -497,7 +497,7 @@ u8 plc_listen_record(void)
     return (TRUE);
 }
 
-u16 sprintf_fhd_msg_record(u8 msg_type)
+u16 sprintf_trm_msg_record(u8 msg_type)
 {
     u8 *ptr;
     u16 i;
@@ -507,7 +507,7 @@ u16 sprintf_fhd_msg_record(u8 msg_type)
 
     len = 0;
     
-    if(FHD_MSG_NONE != msg_type)
+    if(TRM_MSG_NONE != msg_type)
     {
         memset(g_fhdp_para.fm_buf, ' ', sizeof(g_fhdp_para.fm_buf));
         
@@ -524,7 +524,7 @@ u16 sprintf_fhd_msg_record(u8 msg_type)
         ptr += 21;
         len += 21;
 
-        if(FHD_MSG_SEND == msg_type)      
+        if(TRM_MSG_SEND == msg_type)      
         {
             *ptr++ = 'S';
             *ptr++ = ':';
@@ -541,7 +541,7 @@ u16 sprintf_fhd_msg_record(u8 msg_type)
             
             sprintf(buf, " LEN: %03u", g_fhdp_para.send_len);
         }
-        else if(FHD_MSG_RECV == msg_type)
+        else if(TRM_MSG_RECV == msg_type)
         {
             *ptr++ = 'R';
             *ptr++ = ':';
@@ -580,7 +580,7 @@ u16 sprintf_fhd_msg_record(u8 msg_type)
     return (len);
 }
 
-u8 fhd_msg_record(u8 msg_type)
+u8 trm_msg_record(u8 msg_type)
 {
     FATFS fs;
     FIL fp;
@@ -696,7 +696,7 @@ u8 fhd_msg_record(u8 msg_type)
         return (FALSE);
     }  
 
-    bytes = sprintf_fhd_msg_record(msg_type);
+    bytes = sprintf_trm_msg_record(msg_type);
         
     res = f_write(&fp, g_fhdp_para.fm_buf, bytes, &br); //×·¼ÓÎÄ¼þ
 

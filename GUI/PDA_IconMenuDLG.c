@@ -384,8 +384,8 @@ static void _cbIconWin(WM_MESSAGE * pMsg)
                             WM_SetFocus(hItem);
                             PRW_ColorChange();
                             
-                            g_gui_para.state = FHD_GUI_TRM_CONF;
-                            g_gui_para.cmd = FHD_CMD_READ_TRM_CONF;
+                            g_gui_para.state = GUI_STATE_TRM_CONF;
+                            g_gui_para.cmd = GUI_CMD_READ_TRM_CONF;
                             OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);        
                             
 							break;

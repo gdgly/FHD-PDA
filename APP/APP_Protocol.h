@@ -101,19 +101,19 @@ typedef enum
 
 typedef enum
 {
-    FHD_MSG_NONE = 0,
-    FHD_MSG_SEND,
-    FHD_MSG_RECV,
-    MAX_FHD_MSG_TYPE
-} FHD_MSG_TYPE; //华兄
-
-typedef enum
-{
     RECV_RES_IDLE = 0,
     RECV_RES_SUCC,
     RECV_RES_INVALID,
     RECV_RES_TIMEOUT
 } RECV_RES_TYPE; //华兄
+
+typedef enum
+{
+    TRM_MSG_NONE = 0,
+    TRM_MSG_SEND,
+    TRM_MSG_RECV,
+    MAX_TRM_MSG_TYPE
+} TRM_MSG_TYPE; //华兄
 
 typedef struct _proto_para_ {
     u8 send_buf[256]; //DL645发送帧
@@ -141,7 +141,7 @@ typedef struct _fhdp_para_ {
 	u8 data_buf[256];
 	u16 data_len;
     u8 fm_buf[512];
-} FHDP_PARA, P_FHDP_PARA;
+} FHDP_PARA, *P_FHDP_PARA;
 
 extern OS_EVENT *g_sem_plc;
 extern OS_EVENT *g_sem_rf;

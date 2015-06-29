@@ -278,8 +278,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
 #if 0
             case GUI_KEY_GREEN:
-                g_gui_para.state = FHD_GUI_TRM_CONF;
-                g_gui_para.cmd = FHD_CMD_READ_TRM_CONF;
+                g_gui_para.state = GUI_STATE_TRM_CONF;
+                g_gui_para.cmd = GUI_CMD_READ_TRM_CONF;
                 OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                              
                 break;
 #endif  
@@ -314,8 +314,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 memcpy(&g_gui_para.data_buf[index], (u8 *)&temp, 2);
                 index += 2;
                 
-                g_gui_para.state = FHD_GUI_TRM_CONF;
-                g_gui_para.cmd = FHD_CMD_WRITE_TRM_CONF;
+                g_gui_para.state = GUI_STATE_TRM_CONF;
+                g_gui_para.cmd = GUI_CMD_WRITE_TRM_CONF;
                 OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);    
                 break;
 
@@ -388,7 +388,7 @@ void GUI_Trm_Conf_Proc(void)
 
     switch(g_gui_para.cmd)
     {
-    case FHD_CMD_READ_TRM_CONF:
+    case GUI_CMD_READ_TRM_CONF:
         pdata = (u8 *)g_fhdp_para.data_buf;
 
         tmp1 = mb_swap_32((u8 *)pdata);
@@ -441,7 +441,7 @@ void GUI_Trm_Conf_Proc(void)
         EDIT_SetText(hItem, buf);
         break;
         
-    case FHD_CMD_WRITE_TRM_CONF:
+    case GUI_CMD_WRITE_TRM_CONF:
         g_sys_ctrl.dev_addr = g_sys_ctrl.new_dev_addr;
         break;
         

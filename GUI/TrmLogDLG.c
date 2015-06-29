@@ -126,8 +126,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
                          
             case GUI_KEY_GREEN:    
-                g_gui_para.state = FHD_GUI_TRM_LOG;
-                g_gui_para.cmd = FHD_CMD_READ_TRM_LOG;
+                g_gui_para.state = GUI_STATE_TRM_LOG;
+                g_gui_para.cmd = GUI_CMD_READ_TRM_LOG;
                 OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);                 
                 break;
 #if 0
@@ -185,7 +185,7 @@ void GUI_Trm_Log_Proc(void)
 
     switch(g_gui_para.cmd)
     {
-    case FHD_CMD_READ_TRM_LOG:
+    case GUI_CMD_READ_TRM_LOG:
 #define POWER_DROP_TIMESTAMP_COL       0
 #define POWER_DROP_KEEP_TIME_COL       1
 

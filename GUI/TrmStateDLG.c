@@ -283,8 +283,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     break;
                     
                 case GUI_KEY_GREEN:
-                    g_gui_para.state = FHD_GUI_TRM_STATE;
-                    g_gui_para.cmd = FHD_CMD_READ_TRM_STATE;
+                    g_gui_para.state = GUI_STATE_TRM_STATE;
+                    g_gui_para.cmd = GUI_CMD_READ_TRM_STATE;
                     OSMboxPost(g_sys_ctrl.up_mbox, &g_gui_para);
                     break;
 #if 0
@@ -356,7 +356,7 @@ void GUI_Trm_State_Proc(void)
 
     switch(g_gui_para.cmd)
     {
-    case FHD_CMD_READ_TRM_STATE:
+    case GUI_CMD_READ_TRM_STATE:
         pdata = (u8 *)g_fhdp_para.data_buf;
         
         tmp1 = mb_swap_32((u8 *)pdata);
@@ -399,7 +399,7 @@ void GUI_Trm_State_Proc(void)
         EDIT_SetText(hItem, buf); 
         break;
 
-    case FHD_CMD_READ_TRM_CONF:
+    case GUI_CMD_READ_TRM_CONF:
         pdata = (u8 *)g_fhdp_para.data_buf;
 
         tmp1 = mb_swap_32((u8 *)pdata);
@@ -452,7 +452,7 @@ void GUI_Trm_State_Proc(void)
         EDIT_SetText(hItem, buf);        
         break;
 
-    case FHD_CMD_READ_TRM_VERSION:
+    case GUI_CMD_READ_TRM_VERSION:
         if(10 == g_fhdp_para.data_len)
         {
             pdata = (u8 *)g_fhdp_para.data_buf;

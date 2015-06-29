@@ -1247,7 +1247,7 @@ void  App_TaskFHDP (void *p_arg)
         {
             switch(g_gui_para.cmd)
             {
-            case FHD_CMD_READ_TRM_VOLTAGE:
+            case GUI_CMD_READ_TRM_VOLTAGE:
                 index = 0;
                 
                 temp = mb_swap(0x0002);
@@ -1296,7 +1296,7 @@ void  App_TaskFHDP (void *p_arg)
                 OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);
                 break;
 
-            case FHD_CMD_CALIBRATE_TRM_VOLTAGE:
+            case GUI_CMD_CALIBRATE_TRM_VOLTAGE:
                 index = 0;
                 
                 temp = mb_swap(0x0002);
@@ -1346,7 +1346,7 @@ void  App_TaskFHDP (void *p_arg)
                 OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                 
                 break;
 
-            case FHD_CMD_READ_TRM_TIME:
+            case GUI_CMD_READ_TRM_TIME:
                 index = 0;
                 
                 temp = mb_swap(0x0005);
@@ -1395,7 +1395,7 @@ void  App_TaskFHDP (void *p_arg)
                 OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);               
                 break;
 
-            case FHD_CMD_CALIBRATE_TRM_TIME:
+            case GUI_CMD_CALIBRATE_TRM_TIME:
                 index = 0;
                 
                 temp = mb_swap(0x0005);
@@ -1467,7 +1467,7 @@ void  App_TaskFHDP (void *p_arg)
                 OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                  
                 break;
 
-            case FHD_CMD_READ_TRM_CONF:
+            case GUI_CMD_READ_TRM_CONF:
                 index = 0;
                 
                 temp = mb_swap(0x0007);
@@ -1516,7 +1516,7 @@ void  App_TaskFHDP (void *p_arg)
                 OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);    
                 break;
 
-            case FHD_CMD_WRITE_TRM_CONF:
+            case GUI_CMD_WRITE_TRM_CONF:
                 index = 0;
                 
                 temp = mb_swap(0x0007);
@@ -1587,7 +1587,7 @@ void  App_TaskFHDP (void *p_arg)
                 OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                
                 break;
 
-            case FHD_CMD_READ_TRM_STATE:
+            case GUI_CMD_READ_TRM_STATE:
                 index = 0;
                 
                 temp = mb_swap(0x0006);
@@ -1636,7 +1636,7 @@ void  App_TaskFHDP (void *p_arg)
                 OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);   
                 break;
 
-            case FHD_CMD_READ_TRM_LOG:
+            case GUI_CMD_READ_TRM_LOG:
                 index = 0;
                 
                 temp = mb_swap(0x002E);
@@ -1685,7 +1685,7 @@ void  App_TaskFHDP (void *p_arg)
                 OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                
                 break;
 
-            case FHD_CMD_RESET_TRM:
+            case GUI_CMD_RESET_TRM:
                 index = 0;
                 
                 temp = mb_swap(0xFF00);
@@ -1728,7 +1728,7 @@ void  App_TaskFHDP (void *p_arg)
                 OSMboxPost(g_sys_ctrl.down_mbox, (void *)&g_fhdp_para);                
                 break;
 
-            case FHD_CMD_READ_TRM_VERSION:
+            case GUI_CMD_READ_TRM_VERSION:
                 index = 0;
                 
                 temp = mb_swap(0x0005);
