@@ -129,7 +129,7 @@ unsigned short End_tick_check(void);
 U32 UART_ReceiveData(U8 end_id, UCHAR* rxbuf, USHORT rxnum);
 void App_TaskEndTick(void *p_arg);
 void App_TaskEndProc(void *p_arg);
-void USART_IRQProc(UART_CCB *uccb, UART_HandleTypeDef *huart);
+void UART_IRQProc(UART_CCB *uccb, UART_HandleTypeDef *UARTx);
 void UART4_IRQHandler(void);
 void USART2_IRQHandler(void);   
 void USART1_IRQHandler(void);

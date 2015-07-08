@@ -2137,13 +2137,13 @@
       </file>
     </group>
     <file>
-      <name>$PROJ_DIR$\..\GUI\AboutDLG.c</name>
+      <name>$PROJ_DIR$\..\GUI\EditWidget.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\GUI\ErrNoteDLG.c</name>
+      <name>$PROJ_DIR$\..\GUI\GUI_Public_Fnct.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\GUI\GUI_public_fun.c</name>
+      <name>$PROJ_DIR$\..\GUI\HelpDLG.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\PDA_Bitmap.c</name>
@@ -2152,7 +2152,7 @@
       <name>$PROJ_DIR$\..\GUI\PDA_IconMenuDLG.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\GUI\phrase.c</name>
+      <name>$PROJ_DIR$\..\GUI\Phrase.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\SysInfo.c</name>
@@ -2176,7 +2176,7 @@
       <name>$PROJ_DIR$\..\GUI\TrmStateDLG.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\GUI\WidgetEdit.c</name>
+      <name>$PROJ_DIR$\..\GUI\WarnDLG.c</name>
     </file>
   </group>
   <group>

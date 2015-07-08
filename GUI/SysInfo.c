@@ -94,8 +94,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { EDIT_CreateIndirect,     "vtg",        ID_EDIT_4,    140, 75, 95,  20, 0, 0x64,  0 },
     
   { PROGBAR_CreateIndirect,  "Progbar",    ID_PROGBAR_0, 140, 169, 95, 20, 0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   MemFormat,    ID_BUTTON_1,  10,  260, 65,  25, 0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Quit,         ID_BUTTON_2,  165, 260, 65,  25, 0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   MemFormat,    ID_BUTTON_1,  10,   262, 55, 25, 0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   Quit,         ID_BUTTON_2,  175,  262, 55, 25, 0, 0x0,  0 },
   { PROGBAR_CreateIndirect,  "Progbar",    ID_PROGBAR_1, 9,   228, 222, 20, 0, 0x0,  0 },
     
   // USER START (Optionally insert additional widgets)
@@ -171,8 +171,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             WM_DisableWindow(hItem);
 
             hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-            PROGBAR_SetBarColor(hItem, 0, GUI_RED);
-            //PROGBAR_SetBarColor(hItem, 1, GUI_GREEN);
+            PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
   
             NCode = (100*g_sys_ctrl.sd_free_capacity)/g_sys_ctrl.sd_total_capacity;
             NCode %= 100;
@@ -222,7 +221,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                         //WM_ShowWindow(g_hWin_TimeBar);
                         //WM_ShowWindow(g_hWin_Date);
                         //WM_SetFocus(g_hWin_SysSet);
-                        ERR_NOTE(g_hWin_SysInfo,WARN_FORMAT);
+                        WARN(g_hWin_SysInfo,WARN_FORMAT);
                         break;
                     case GUI_KEY_YELLOW:
                         WM_DeleteWindow(g_hWin_SysInfo);

@@ -56,10 +56,10 @@
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { FRAMEWIN_CreateIndirect, "ErrNote", ID_FRAMEWIN_0, 40,  82,  160, 130, 0, 0x64, 0 },
-  { BUTTON_CreateIndirect,   Confirm,   ID_BUTTON_0,   7,   70, 50,  20,  0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Quit,    ID_BUTTON_1,   96,  70, 50,  20,  0, 0x0,  0 },
-  { TEXT_CreateIndirect,     WrnText,    ID_TEXT_0,    7,   32,  150, 20,  0, 0x0,  0 },
+  { FRAMEWIN_CreateIndirect, "Warn", ID_FRAMEWIN_0, 40,  82,  160, 130, 0, 0x64, 0 },
+  { BUTTON_CreateIndirect,   TextOK,   ID_BUTTON_0,   7,   68, 55,  25,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   Quit,      ID_BUTTON_1,   92,  68, 55,  25,  0, 0x0,  0 },
+  { TEXT_CreateIndirect,     WarnText,   ID_TEXT_0,     7,   32,  150, 20,  0, 0x0,  0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -67,7 +67,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
 WM_HWIN ERR_Get_Text(void)
 {
-    return WM_GetDialogItem(g_hWin_Err,ID_TEXT_0);
+    return WM_GetDialogItem(g_hWin_Warn,ID_TEXT_0);
 }
 
 
@@ -88,7 +88,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     //hItem = pMsg->hWin;
     FRAMEWIN_SetTitleHeight(pMsg->hWin, 16);
-    FRAMEWIN_SetText(pMsg->hWin, Worning);
+    FRAMEWIN_SetText(pMsg->hWin, Warning);
     FRAMEWIN_SetClientColor(pMsg->hWin,GUI_WHITE);
     
     hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_0);
@@ -105,13 +105,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         switch((((WM_KEY_INFO*)(pMsg->Data.p))->Key))
         {
             case GUI_KEY_YELLOW:
-                WM_DeleteWindow(g_hWin_Err);
-                g_hWin_Err = WM_HWIN_NULL;
+                WM_DeleteWindow(g_hWin_Warn);
+                g_hWin_Warn = WM_HWIN_NULL;
                 Select_Focus();
                 break;
             case GUI_KEY_GREEN:
-                WM_DeleteWindow(g_hWin_Err);
-                g_hWin_Err = WM_HWIN_NULL;
+                WM_DeleteWindow(g_hWin_Warn);
+                g_hWin_Warn = WM_HWIN_NULL;
                 
                 if((g_hWin_SysSet > 0) && (g_hWin_SysInfo <= 0))
                 {
@@ -156,10 +156,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 */
 /*********************************************************************
 *
-*       CreateErrNote
+*       CreateWarn
 */
-WM_HWIN CreateErrNote(WM_HWIN paraentWin);
-WM_HWIN CreateErrNote(WM_HWIN paraentWin)
+WM_HWIN CreateWarn(WM_HWIN paraentWin);
+WM_HWIN CreateWarn(WM_HWIN paraentWin)
 {
   WM_HWIN hWin;
 
@@ -167,19 +167,19 @@ WM_HWIN CreateErrNote(WM_HWIN paraentWin)
   return hWin;
 }
 
-void ERR_NOTE(WM_HWIN paraentWin,int err_no)
+void WARN(WM_HWIN paraentWin, int warn_num)
 {
     WM_HWIN hItem;
 
 
-    if(WM_HWIN_NULL == g_hWin_Err)
+    if(WM_HWIN_NULL == g_hWin_Warn)
     {
-        g_hWin_Err = CreateErrNote(paraentWin);
+        g_hWin_Warn = CreateWarn(paraentWin);
         
-        WM_SetFocus(g_hWin_Err);
+        WM_SetFocus(g_hWin_Warn);
         
-        hItem=WM_GetDialogItem(g_hWin_Err, ID_TEXT_0);
-        TEXT_SetText(hItem, &gc_messageBoxText[err_no][0]);
+        hItem=WM_GetDialogItem(g_hWin_Warn, ID_TEXT_0);
+        TEXT_SetText(hItem, &gc_messageBoxText[warn_num][0]);
     }
 }
 

@@ -82,8 +82,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   //{ EDIT_CreateIndirect, "Edit",      ID_EDIT_4, 140, 221, 80, 20, 0, 0x64, 0 },
 
   
-  { BUTTON_CreateIndirect, TimeSet, ID_BUTTON_3, 15, 261, 80, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,      ID_BUTTON_4, 150, 261, 80, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, TimeSet, ID_BUTTON_3, 10,   262, 70, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, Quit,      ID_BUTTON_4, 160,  262, 70, 25, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -240,7 +240,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
               switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key) 
               {
                 case '*':
-                    ERR_NOTE(g_hWin_SysSet,WARN_UPDATE);
+                    WARN(g_hWin_SysSet,WARN_UPDATE);
                     break;
                 case GUI_KEY_YELLOW:
                     memset(g_sys_ctrl.DevCheckCode,0,sizeof(g_sys_ctrl.DevCheckCode));
@@ -248,7 +248,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     g_hWin_SysSet = WM_HWIN_NULL;
                     WM_ShowWindow(g_hWin_TimeBar);
                     WM_ShowWindow(g_hWin_Date);
-                    WM_SetFocus(g_hWin_menu);
+                    WM_SetFocus(g_hWin_Menu);
                     SST_KeyCnt = 0;
                     break;
                     
@@ -292,15 +292,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     {
                         case ID_EDIT_0:
                             g_sys_ctrl.selectWidget = EDT_SRC_TIME;
-                            g_hWin_Input = Create_Edit_Set(g_hWin_SysSet);
+                            g_hWin_Edit = Create_Edit_Set(g_hWin_SysSet);
                             break;
                         case ID_EDIT_1:
                             g_sys_ctrl.selectWidget = EDT_SHUTDOWN;
-                            g_hWin_Input = Create_Edit_Set(g_hWin_SysSet);
+                            g_hWin_Edit = Create_Edit_Set(g_hWin_SysSet);
                             break;
                         case ID_EDIT_2:
                             g_sys_ctrl.selectWidget = EDT_COMMUNICATE_ADDR;
-                            g_hWin_Input = Create_Edit_Set(g_hWin_SysSet);
+                            g_hWin_Edit = Create_Edit_Set(g_hWin_SysSet);
                             break;
                     }
                     break;
@@ -357,7 +357,7 @@ WM_HWIN CreateSysSet(void);
 WM_HWIN CreateSysSet(void) {
   WM_HWIN hWin;
 
-  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_menu, 0, 0);
+  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_Menu, 0, 0);
   return hWin;
 }
 

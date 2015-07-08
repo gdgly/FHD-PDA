@@ -93,27 +93,25 @@
 
 typedef enum
 {
-    MSG_STATE_NONE = 0,
+    MSG_STATE_IDLE = 0,
     MSG_STATE_SENDING,
     MSG_STATE_RECEIVED,
-    MAX_MSG_STATE_TYPE
-} MSG_STATE_TYPE; //华兄
+} MSG_STATE; //华兄
 
 typedef enum
 {
-    RECV_RES_IDLE = 0,
+    RECV_RES_NONE = 0,
     RECV_RES_SUCC,
     RECV_RES_INVALID,
     RECV_RES_TIMEOUT
-} RECV_RES_TYPE; //华兄
+} RECV_RES; //华兄
 
 typedef enum
 {
     TRM_MSG_NONE = 0,
     TRM_MSG_SEND,
     TRM_MSG_RECV,
-    MAX_TRM_MSG_TYPE
-} TRM_MSG_TYPE; //华兄
+} TRM_MSG; //华兄
 
 typedef struct _proto_para_ {
     u8 send_buf[256]; //DL645发送帧

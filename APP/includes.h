@@ -138,10 +138,10 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 #include "FM.h"
 #include "rtc.h"
 #include "FHDP.h" //华兄
-#include "GUI_public_fun.h"
+#include "GUI_Public_Fnct.h"
 #include "lcdconf.h"
-#include "phrase.h"
-#include "WidgetEdit.h"
+#include "Phrase.h"
+#include "EditWidget.h"
 
 #define WM_MSG_CLOSE                  (WM_USER + 0x80)
 
@@ -150,18 +150,18 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 #define TEXT_LEN  10     //???????????????????10???
 #define EWARM_OPTIMIZATION_EN          1u
 
-extern WM_HWIN g_hWin_menu;
+extern WM_HWIN g_hWin_Menu;
 
-extern WM_HWIN g_hWin_task;
+extern WM_HWIN g_hWin_Task;
 extern WM_HWIN g_hWin_TimeSet; //时间设置
 
-extern WM_HWIN g_hWin_Err;
-extern WM_HWIN g_hWin_about;
+extern WM_HWIN g_hWin_Warn;
+extern WM_HWIN g_hWin_Help;
 
 extern WM_HWIN g_hWin_TimeBar;
 extern WM_HWIN g_hWin_Date;
 
-extern WM_HWIN g_hWin_Input;
+extern WM_HWIN g_hWin_Edit;
 extern WM_HWIN g_hWin_SysSet;   //系统设置
 extern WM_HWIN g_hWin_SysInfo;
 

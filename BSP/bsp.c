@@ -489,14 +489,6 @@ void BSP_UART_Init(void)
 
 void  BSP_Init (void)
 {
-    /* At this stage the microcontroller clock setting is already configured,
-       this is done through SystemInit() function which is called from startup
-       file (startup_stm32f2xx.s) before to branch to application main.
-       To reconfigure the default setting of SystemInit() function, refer to
-       system_stm32f2xx.c file
-     */
-
-
     BSP_NVIC_Configuration();
 
 	BSP_RCC_Configuration();
@@ -517,8 +509,6 @@ void  BSP_Init (void)
     BSP_UART_Init();
 
     PLC_PWR_ON();
-
-    KEY_LED_OFF();
 }
 
 void BSP_RCC_Configuration(void)

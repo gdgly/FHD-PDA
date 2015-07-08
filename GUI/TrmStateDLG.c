@@ -89,7 +89,7 @@
 
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { WINDOW_CreateIndirect, "SysCtl", ID_WINDOW_0,     0,   0,   240, 295,0, 0x0, 0 },
+  { WINDOW_CreateIndirect, "TrmState", ID_WINDOW_0,     0,   0,   240, 295,0, 0x0, 0 },
   { TEXT_CreateIndirect, "EEPROM",       ID_TEXT_0,   8,   8,  80,  20, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect, RelaySwitch,    ID_TEXT_1,   8,   38,  120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ContactorState, ID_TEXT_2,   8,   35,  120, 20, 0, 0x0, 0 },
@@ -113,8 +113,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_8,   123, 195, 110, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_9,   123, 222, 110, 20, EDIT_CF_HCENTER, 0x64, 0 },
 
-  { BUTTON_CreateIndirect, ReadData,         ID_BUTTON_0, 7,   260, 60, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 172, 260, 60, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, ReadData,         ID_BUTTON_0, 10,   262, 55, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 175,  262, 55, 25, 0, 0x0, 0 },
   //{ TEXT_CreateIndirect, ReadSysState,   ID_TEXT_5,   8,   126, 100, 20, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "F1",         ID_BUTTON_1, 153,  126, 80, 20, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
@@ -277,7 +277,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 case GUI_KEY_YELLOW:
                     WM_DeleteWindow(g_hWin_TrmState);
                     g_hWin_TrmState=WM_HWIN_NULL;
-                    WM_SetFocus(g_hWin_menu);
+                    WM_SetFocus(g_hWin_Menu);
                     WM_ShowWindow(g_hWin_TimeBar);
                     WM_ShowWindow(g_hWin_Date);
                     break;
@@ -333,13 +333,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 */
 /*********************************************************************
 *
-*       CreateSysState
+*       CreateTrmState
 */
 WM_HWIN CreateTrmState(void);
 WM_HWIN CreateTrmState(void) {
   WM_HWIN hWin;
 
-  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_menu, 0, 0);
+  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_Menu, 0, 0);
   return hWin;
 }
 

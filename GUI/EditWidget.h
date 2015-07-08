@@ -1,5 +1,6 @@
-#ifndef _WIDGETEDIT_
-#define _WIDGETEDIT_
+#ifndef __EDITWIDGET__
+#define __EDITWIDGET__
+
 
 typedef WM_HWIN (*pGetHandler)(void);
 
@@ -55,56 +56,4 @@ void SDI_SetVoltage(void);
 WM_HWIN SSD_ClearData(void);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif /*_WIDGETEDIT_*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif /*__EDITWIDGET__*/

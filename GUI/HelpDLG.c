@@ -20,7 +20,7 @@
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, NULL, ID_WINDOW_0, 0, 0, 240, 295, 0, 0x0, 0 },
   { MULTIEDIT_CreateIndirect, NULL, ID_MULTIEDIT_0, 1, 2, 238, 255, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,    ID_BUTTON_0, 175, 264, 55, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, Quit,    ID_BUTTON_0, 175,  262, 55, 25, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "OK",  ID_BUTTON_1,  8,  264, 55, 25, 0, 0x0, 0 },
 };
 
@@ -50,7 +50,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //MULTIEDIT_SetText(hItem, FHD_PDA);
     for(i = 0;i < 14;i++)
     {
-        MULTIEDIT_AddText(hItem, aboutText[i]);
+        MULTIEDIT_AddText(hItem, helpText[i]);
     }
     hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_0);
     BUTTON_SetBkColor(hItem,0,GUI_YELLOW);
@@ -71,15 +71,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch(((WM_KEY_INFO*)(pMsg->Data.p))->Key)
             {
                 case GUI_KEY_YELLOW:
-                    WM_DeleteWindow(g_hWin_about);
-                    g_hWin_about=WM_HWIN_NULL;
+                    WM_DeleteWindow(g_hWin_Help);
+                    g_hWin_Help=WM_HWIN_NULL;
                     WM_ShowWindow(g_hWin_TimeBar);
                     WM_ShowWindow(g_hWin_Date);
-                    WM_SetFocus(g_hWin_menu);
+                    WM_SetFocus(g_hWin_Menu);
                     break;
                 case GUI_KEY_GREEN:
-                    //ERR_NOTE(g_hWin_about, GUI_MSBOX_UPDATE_CFM);
-                    //ERR_NOTE(g_hWin_about,8);
+                    //WARN(g_hWin_Help, GUI_MSBOX_UPDATE_CFM);
+                    //WARN(g_hWin_Help,8);
                     
                     //DEV_Power_Off();
 
@@ -97,13 +97,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
 /*********************************************************************
 *
-*       Createabout
+*       CreateHelp
 */
-WM_HWIN Createabout(void);
-WM_HWIN Createabout(void) {
+WM_HWIN CreateHelp(void);
+WM_HWIN CreateHelp(void) {
   WM_HWIN hWin;
 
-  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_menu, 0, 0);
+  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_Menu, 0, 0);
   return hWin;
 }
 

@@ -125,9 +125,7 @@ static void SystemClock_Config(void)
 
 int  main(void)
 {
-#if (OS_TASK_NAME_EN > 0)
     INT8U  err;
-#endif   
 
 
     BSP_IntDisAll();                                            /* Disable all interrupts.                              */
@@ -148,9 +146,7 @@ int  main(void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_START_PRIO, "Start", &err);
-#endif
 
     OSStart();                                                  /* Start multitasking (i.e. give control to uC/OS-II)   */
 }
@@ -171,32 +167,22 @@ int  main(void)
 *********************************************************************************************************
 */
 
-WM_HWIN g_hWin_menu;
-
-
-WM_HWIN g_hWin_task;//任务栏
-WM_HWIN g_hWin_TimeSet; //时间设置
-WM_HWIN g_hWin_about;
-WM_HWIN g_hWin_Err;
-
-WM_HWIN g_hWin_TimeBar;  //主页时间
-WM_HWIN g_hWin_Date;     //显示日期
-WM_HWIN g_hWin_Input;    //各种输入小框体
+WM_HWIN g_hWin_Menu;
+WM_HWIN g_hWin_Task;
+WM_HWIN g_hWin_TimeSet;
+WM_HWIN g_hWin_Help;
+WM_HWIN g_hWin_Warn;
+WM_HWIN g_hWin_TimeBar;
+WM_HWIN g_hWin_Date;
+WM_HWIN g_hWin_Edit;
 WM_HWIN g_hWin_SysSet;
 WM_HWIN g_hWin_SysInfo;
-
-/**********
-
-防晃电
-
-**********/
 
 WM_HWIN g_hWin_TrmCal;
 WM_HWIN g_hWin_TrmConf;
 WM_HWIN g_hWin_TrmState;
 WM_HWIN g_hWin_TrmLog;
 
-//int test_multiedit;
 
 u8 rf_int_status[8];
 u8 rf_part_info[8];
@@ -260,22 +246,27 @@ void APP_StartButtonTest()
     while(1)
     {
         OSTimeDly(20);
+        
         if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
         {
             keyCnt++;
+            
             if(keyCnt > 80)
             {
                 SYS_PWR_ON();
+                
                 OSTimeDly(20);
+                
                 return;                
             }
         }
         else
         {
             APP_Shutdown();
+            
             keyCnt = 0;
 
-            if(GET_USB_VOL() == 0)
+            if(0 == GET_USB_STATE())
             {
                 return;
             }
@@ -326,24 +317,22 @@ static  void  App_TaskStart (void *p_arg)
     OSStatInit();                                               /* Determine CPU capacity                                   */
 #endif
 
-#if 1
     APP_StartButtonTest();
-#endif
 
     BSP_IWDG_Init();
 
     App_EventCreate();                                          /* Create Application Events                                */
 
-    App_TaskCreate();/* Create application Tasks                                 */ 
+    App_TaskCreate();                                           /* Create application Tasks                                 */ 
 
     /* 挂起不相关的任务 */
     OSTaskSuspend(APP_CFG_TASK_PROTO_PRIO);
 
     GUI_Init();                                                 /* Init the STemWin GUI Library */
 
-	KEY_Init();
-
     End_Init();
+    
+	KEY_Init();
 
     RF_Init();
     
@@ -402,9 +391,9 @@ static  void  App_TaskGUI (void *p_arg)
 
     (void)p_arg;
 
-    g_hWin_menu = CreatePDA_IconMenu();
-    WM_ShowWindow(g_hWin_menu);
-    WM_SetFocus(g_hWin_menu);
+    g_hWin_Menu = CreatePDA_IconMenu();
+    WM_ShowWindow(g_hWin_Menu);
+    WM_SetFocus(g_hWin_Menu);
 
     while (DEF_TRUE) {                                          /* Task body, always written as an infinite loop.           */
         GUI_Exec();
@@ -413,7 +402,7 @@ static  void  App_TaskGUI (void *p_arg)
         {
             val += BSP_ADC_ReadPwr();
             //检测到USB并且电没有充满的时候，充电标志闪烁,
-            if((GPIO_PIN_RESET == GET_USB_VOL())&&(GPIO_PIN_SET == GET_CHARG_CHK()))
+            if((GPIO_PIN_RESET == GET_USB_STATE())&&(GPIO_PIN_SET == USB_CHARGE_CHK()))
             {
                 TSK_Battery_Charge(n);
             }
@@ -422,7 +411,7 @@ static  void  App_TaskGUI (void *p_arg)
         else if(n >= 10)
         {
             g_sys_ctrl.pwr_val = val/10;
-            if((GPIO_PIN_SET == GET_USB_VOL())||(GPIO_PIN_RESET == GET_CHARG_CHK()))
+            if((GPIO_PIN_SET == GET_USB_STATE())||(GPIO_PIN_RESET == USB_CHARGE_CHK()))
             {
                 Battery_State(g_sys_ctrl.pwr_val);
             }
@@ -436,7 +425,7 @@ static  void  App_TaskGUI (void *p_arg)
            
             if((((float)g_sys_ctrl.pwr_val * 3.3) / 2048 * 10) <= 30)
             {
-                //ERR_NOTE(g_hWin_menu,11);
+                //WARN(g_hWin_Menu,11);
                 //APP_Shutdown();
             }
         }
@@ -758,7 +747,7 @@ static  void  App_TaskCheck (void *p_arg)
     OSTaskSuspend(APP_CFG_TASK_FHDP_PRIO);
 
     /* 初始化显示环境 */
-    WM_HideWin(g_hWin_task);
+    WM_HideWin(g_hWin_Task);
     WM_HideWin(g_hWin_SysSet);
     WM_SetFocus(WM_HBKWIN);
     GUI_SetFont(&GUI_Font_Song_16);
@@ -906,8 +895,8 @@ static  void  App_EventCreate (void)
     g_sem_chk_rf = OSSemCreate(0);
 	g_key_ctrl.sem = OSSemCreate(0);    
     
-    g_sys_ctrl.up_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/
-    g_sys_ctrl.down_mbox = OSMboxCreate(NULL); /*创建消息邮箱用来发送调试参数的结构体*/   
+    g_sys_ctrl.up_mbox = OSMboxCreate(NULL);
+    g_sys_ctrl.down_mbox = OSMboxCreate(NULL);  
 
     g_mbox_chk_key = OSMboxCreate(NULL);
 }
@@ -942,9 +931,7 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_GUI_PRIO, "GUI", &err);
-#endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskGMP,
                     (void           *) 0,
@@ -956,9 +943,7 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
     
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_GMP_PRIO, "GMP", &err);
-#endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskKey,              
                     (void           *) 0,
@@ -970,9 +955,7 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_KEY_PRIO, "Key", &err);
-#endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskEndTick,
                     (void           *) 0,
@@ -984,9 +967,7 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_END_TICK_PRIO, "EndTick", &err);
-#endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskEndProc,
                     (void           *) 0,
@@ -998,9 +979,7 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_END_PROC_PRIO, "EndProc", &err);      
-#endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskProto,
                     (void           *) 0,
@@ -1012,9 +991,7 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_PROTO_PRIO, "Protocol", &err);    
-#endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskPower,
                     (void           *) 0,
@@ -1026,9 +1003,7 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_POWER_PRIO, "Power", &err);    
-#endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskPC,
                     (void           *) 0,
@@ -1040,9 +1015,7 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_PC_PRIO, "PC", &err);    
-#endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskRS485,
                     (void           *) 0,
@@ -1054,9 +1027,7 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_RS485_PRIO, "RS485", &err);    
-#endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskCheck,
                     (void           *) 0,
@@ -1068,9 +1039,7 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_CHECK_PRIO, "Check", &err);    
-#endif
 
     OSTaskCreateExt((void (*)(void *)) App_TaskFHDP,
                     (void           *) 0,
@@ -1082,8 +1051,6 @@ static  void  App_TaskCreate (void)
                     (void           *) 0,
                     (INT16U          )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
 
-#if (OS_TASK_NAME_EN > 0)
     OSTaskNameSet(APP_CFG_TASK_FHDP_PRIO, "FHDP", &err);    
-#endif
 }
 

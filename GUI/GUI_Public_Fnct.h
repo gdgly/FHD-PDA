@@ -1,5 +1,5 @@
-#ifndef __GUI_PUBLIC_FUN__
-#define __GUI_PUBLIC_FUN__
+#ifndef __GUI_PUBLIC_FNCT__
+#define __GUI_PUBLIC_FNCT__
 
 
 #define GUI_645_ADDR_LENGTH 12
@@ -70,8 +70,7 @@ typedef enum
     GUI_STATE_TRM_CONF,
     GUI_STATE_TRM_STATE,
     GUI_STATE_TRM_LOG,
-    MAX_GUI_STATE_TYPE
-} GUI_STATE_TYPE; //华兄
+} GUI_STATE; //华兄
 
 typedef enum
 {
@@ -85,8 +84,7 @@ typedef enum
     GUI_CMD_READ_TRM_LOG,
     GUI_CMD_RESET_TRM,
     GUI_CMD_READ_TRM_VERSION,
-    MAX_GUI_CMD_TYPE
-} GUI_CMD_TYPE; //华兄
+} GUI_CMD; //华兄
 
 
 //#define ERROR_BOX(error_no)     MESSAGEBOX_Create(&gc_messageBoxText[error_no][0],"Error",0)
@@ -163,4 +161,4 @@ void GUI_Fill_Zero(u8 *tempbuf); //自动补全零
 void GUI_Set_FD_Format_PROGBAR(u32 val);
 
 
-#endif /*__GUI_PUBLIC_FUN__*/
+#endif

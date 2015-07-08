@@ -1,5 +1,5 @@
 #include "includes.h"
-#include "lcdconf.h"
+
 
 END_OBJ g_EndObjectPool[MAX_COM_PORT] =
 {
@@ -54,9 +54,7 @@ U8 *pUartRxBuf[] = {
 
 U32 UART_ReceiveData(U8 end_id, UCHAR* rxbuf, USHORT rxnum)
 {
-#if OS_CRITICAL_METHOD == 3                                /* Allocate storage for CPU status register     */
-    OS_CPU_SR  cpu_sr = 0;
-#endif
+    OS_CPU_SR  cpu_sr;
     P_UART_CCB p_uc = &g_uart_ccb[end_id];
 
     if( (rxnum < 1) || (end_id >= MAX_COM_PORT) )
@@ -119,9 +117,7 @@ Tick任务调用，检查每个END接口是否有新的frame收完
 ************************************************************/
 unsigned short End_tick_check(void)
 {
-#if OS_CRITICAL_METHOD == 3                                /* Allocate storage for CPU status register     */
-    OS_CPU_SR  cpu_sr = 0;
-#endif
+    OS_CPU_SR  cpu_sr;
     unsigned char i;
     U16 cp_len, msg_len;
 
@@ -250,7 +246,7 @@ P_END_OBJ End_get_end_obj(UCHAR end_id)
 
 U32 End_uart_send(UCHAR end_id,  UCHAR* txbuf, USHORT    txnum )
 {
-    UART_HandleTypeDef huart;
+    UART_HandleTypeDef *UARTx;
     P_UART_CCB p_uc;
     UCHAR      send_byte=0;
 
@@ -262,15 +258,15 @@ U32 End_uart_send(UCHAR end_id,  UCHAR* txbuf, USHORT    txnum )
     switch(end_id)
     {    
     case PC_COM_PORT:      
-        huart = PC_UART;
+        UARTx = &PC_UART;
         break; 
         
     case RS485_COM_PORT:      
-        huart= RS485_UART;
+        UARTx= &RS485_UART;
         break; 
         
     case PLC_COM_PORT:      
-        huart = PLC_UART;
+        UARTx = &PLC_UART;
         break; 
         
     default:
@@ -287,14 +283,14 @@ U32 End_uart_send(UCHAR end_id,  UCHAR* txbuf, USHORT    txnum )
     p_uc->gpUartTxAddress++;
     p_uc->gUartTxCnt--;
 
-    while(RESET == __HAL_UART_GET_FLAG(&huart, UART_FLAG_TXE)); //关键
+    while(RESET == __HAL_UART_GET_FLAG(UARTx, UART_FLAG_TXE)); //关键
 
-    huart.Instance->DR = (send_byte & (uint8_t)0xFF);
+    UARTx->Instance->DR = (send_byte & (uint8_t)0xFF);
 
-    while(RESET == __HAL_UART_GET_FLAG(&huart, UART_FLAG_TC)); //关键
+    while(RESET == __HAL_UART_GET_FLAG(UARTx, UART_FLAG_TC)); //关键
 
     if(p_uc->gUartTxCnt)
-        __HAL_UART_ENABLE_IT(&huart, UART_IT_TXE);
+        __HAL_UART_ENABLE_IT(UARTx, UART_IT_TXE);
         
     return TRUE;
 };
@@ -507,7 +503,7 @@ void  App_TaskEndTick (void *p_arg)
         GUI_Msg_Upload(OFF);
         GUI_Msg_Download(OFF);
 
-        if(GPIO_PIN_RESET == GET_USB_VOL())
+        if(GPIO_PIN_RESET == GET_USB_STATE())
         {
             g_sys_ctrl.usb_state = TRUE;
         }
@@ -592,60 +588,60 @@ void  App_TaskEndProc (void *p_arg)
     }
 }
 
-void USART_IRQProc(UART_CCB *uccb, UART_HandleTypeDef *huart)
+void UART_IRQProc(UART_CCB *uccb, UART_HandleTypeDef *UARTx)
 {
   uint32_t tmp1 = 0, tmp2 = 0;
 
     
-  tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_PE);
-  tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_PE); 
+  tmp1 = __HAL_UART_GET_FLAG(UARTx, UART_FLAG_PE);
+  tmp2 = __HAL_UART_GET_IT_SOURCE(UARTx, UART_IT_PE); 
 
   /* UART parity error interrupt occurred ------------------------------------*/
   if((tmp1 != RESET) && (tmp2 != RESET))
   { 
-    __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_PE);
+    __HAL_UART_CLEAR_FLAG(UARTx, UART_FLAG_PE);
     
-    huart->ErrorCode |= HAL_UART_ERROR_PE;
+    UARTx->ErrorCode |= HAL_UART_ERROR_PE;
   }
   
-  tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_FE);
-  tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_ERR);
+  tmp1 = __HAL_UART_GET_FLAG(UARTx, UART_FLAG_FE);
+  tmp2 = __HAL_UART_GET_IT_SOURCE(UARTx, UART_IT_ERR);
   /* UART frame error interrupt occurred -------------------------------------*/
   if((tmp1 != RESET) && (tmp2 != RESET))
   { 
-    __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_FE);
+    __HAL_UART_CLEAR_FLAG(UARTx, UART_FLAG_FE);
     
-    huart->ErrorCode |= HAL_UART_ERROR_FE;
+    UARTx->ErrorCode |= HAL_UART_ERROR_FE;
   }
   
-  tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_NE);
-  tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_ERR);
+  tmp1 = __HAL_UART_GET_FLAG(UARTx, UART_FLAG_NE);
+  tmp2 = __HAL_UART_GET_IT_SOURCE(UARTx, UART_IT_ERR);
   /* UART noise error interrupt occurred -------------------------------------*/
   if((tmp1 != RESET) && (tmp2 != RESET))
   { 
-    __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_NE);
+    __HAL_UART_CLEAR_FLAG(UARTx, UART_FLAG_NE);
     
-    huart->ErrorCode |= HAL_UART_ERROR_NE;
+    UARTx->ErrorCode |= HAL_UART_ERROR_NE;
   }
   
-  tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_ORE);
-  tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_ERR);
+  tmp1 = __HAL_UART_GET_FLAG(UARTx, UART_FLAG_ORE);
+  tmp2 = __HAL_UART_GET_IT_SOURCE(UARTx, UART_IT_ERR);
   /* UART Over-Run interrupt occurred ----------------------------------------*/
   if((tmp1 != RESET) && (tmp2 != RESET))
   { 
-    __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_ORE);
+    __HAL_UART_CLEAR_FLAG(UARTx, UART_FLAG_ORE);
     
-    huart->ErrorCode |= HAL_UART_ERROR_ORE;
+    UARTx->ErrorCode |= HAL_UART_ERROR_ORE;
   }
   
-  tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_RXNE);
-  tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_RXNE);
+  tmp1 = __HAL_UART_GET_FLAG(UARTx, UART_FLAG_RXNE);
+  tmp2 = __HAL_UART_GET_IT_SOURCE(UARTx, UART_IT_RXNE);
   /* UART in mode Receiver ---------------------------------------------------*/
   if((tmp1 != RESET) && (tmp2 != RESET))
   { 
-    //UART_Receive_IT(huart);
+    //UART_Receive_IT(UARTx);
     
-    *uccb->gpUartRxAddress++ = (uint8_t)(huart->Instance->DR & (uint8_t)0x00FF);
+    *uccb->gpUartRxAddress++ = (uint8_t)(UARTx->Instance->DR & (uint8_t)0x00FF);
     
     if(uccb->gpUartRxAddress == uccb->gpUartRxEndAddress)
     {
@@ -658,58 +654,58 @@ void USART_IRQProc(UART_CCB *uccb, UART_HandleTypeDef *huart)
       //可以考虑加错误统计
     } 
     
-    __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_RXNE);
+    __HAL_UART_CLEAR_FLAG(UARTx, UART_FLAG_RXNE);
 
 #if (LED_UART_EN > 0u)
     LED_UART_ON();
 #endif    
   }
   
-  tmp1 = __HAL_UART_GET_FLAG(huart, UART_FLAG_TXE);
-  tmp2 = __HAL_UART_GET_IT_SOURCE(huart, UART_IT_TXE);
+  tmp1 = __HAL_UART_GET_FLAG(UARTx, UART_FLAG_TXE);
+  tmp2 = __HAL_UART_GET_IT_SOURCE(UARTx, UART_IT_TXE);
   /* UART in mode Transmitter ------------------------------------------------*/
   if((tmp1 != RESET) && (tmp2 != RESET))
   {
-    //UART_Transmit_IT(huart);
+    //UART_Transmit_IT(UARTx);
 
     if(uccb->gUartTxCnt > 0)
     { 
-      huart->Instance->DR = (uint8_t)(*uccb->gpUartTxAddress++ & (uint8_t)0x00FF);
+      UARTx->Instance->DR = (uint8_t)(*uccb->gpUartTxAddress++ & (uint8_t)0x00FF);
       uccb->gUartTxCnt--;
     }
     else
     {
-      __HAL_UART_DISABLE_IT(huart, UART_IT_TXE);
+      __HAL_UART_DISABLE_IT(UARTx, UART_IT_TXE);
     }
 
-    __HAL_UART_CLEAR_FLAG(huart, UART_FLAG_TXE);
+    __HAL_UART_CLEAR_FLAG(UARTx, UART_FLAG_TXE);
 
 #if (LED_UART_EN > 0u)
     LED_UART_ON();
 #endif	    
   }
   
-  if(huart->ErrorCode != HAL_UART_ERROR_NONE)
+  if(UARTx->ErrorCode != HAL_UART_ERROR_NONE)
   {
     /* Set the UART state ready to be able to start again the process */
-    huart->State = HAL_UART_STATE_READY;
+    UARTx->State = HAL_UART_STATE_READY;
     
-    HAL_UART_ErrorCallback(huart);
+    HAL_UART_ErrorCallback(UARTx);
   }    
 }
 
 void UART4_IRQHandler(void)
 {
-    USART_IRQProc(&g_uart_ccb[PC_COM_PORT], &huart4);    
+    UART_IRQProc(&g_uart_ccb[PC_COM_PORT], &huart4);    
 }
 
 void USART2_IRQHandler(void)
 {
-    USART_IRQProc(&g_uart_ccb[PLC_COM_PORT], &huart2);    
+    UART_IRQProc(&g_uart_ccb[PLC_COM_PORT], &huart2);    
 }
 
 void USART1_IRQHandler(void)
 {
-    USART_IRQProc(&g_uart_ccb[RS485_COM_PORT], &huart1);    
+    UART_IRQProc(&g_uart_ccb[RS485_COM_PORT], &huart1);    
 }
 

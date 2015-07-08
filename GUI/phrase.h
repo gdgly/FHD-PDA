@@ -7,8 +7,8 @@
 
 
 //ERR_BOX
-extern const char Worning[];
-extern const char WrnText[];
+extern const char Warning[];
+extern const char WarnText[];
 extern const char ReadOutTime[];
 
 extern const char BeepOff[];
@@ -159,7 +159,7 @@ extern const char *TextSwitch[];
 extern const char *TextEEPROM[];
 
 extern const char *gc_messageBoxText[];
-extern const char *aboutText[];
+extern const char *helpText[];
 extern const char *TextWeek[];
 extern const char *FHD_WEEK[];
 //extern 

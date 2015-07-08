@@ -70,7 +70,7 @@
     *       _aDialogCreate
     */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { WINDOW_CreateIndirect, "CommSet",   ID_WINDOW_0, 0,   0,   240, 295, 0, 0x0, 0 },
+  { WINDOW_CreateIndirect, "TrmCal",   ID_WINDOW_0, 0,   0,   240, 295, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   ReferVtg,    ID_TEXT_0,   15,  17,  120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   VtgValue,    ID_TEXT_1,   15,  50,  120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   RdSysTime,   ID_TEXT_2,   15,  82,  120, 20, 0, 0x0, 0 },
@@ -84,8 +84,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     
   { BUTTON_CreateIndirect, "F1",        ID_BUTTON_0, 142, 80,  80, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "F2",        ID_BUTTON_1, 142, 113, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, VoltageRead, ID_BUTTON_2, 6,   261, 80, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,        ID_BUTTON_3, 151, 261, 80, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, VoltageRead, ID_BUTTON_2, 10,   262, 55, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, Quit,        ID_BUTTON_3, 175,  262, 55, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "*",         ID_BUTTON_4, 142, 146, 80, 20, 0, 0x0, 0 },
 };
 
@@ -195,7 +195,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case GUI_KEY_YELLOW:
                 WM_DeleteWindow(g_hWin_TrmCal);
                 g_hWin_TrmCal=WM_HWIN_NULL;
-                WM_SetFocus(g_hWin_menu);
+                WM_SetFocus(g_hWin_Menu);
                 WM_ShowWindow(g_hWin_TimeBar);
                 WM_ShowWindow(g_hWin_Date);
                 break;
@@ -213,7 +213,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 #if 0
                 WM_DeleteWindow(g_hWin_TrmCal);
                 g_hWin_TrmCal=WM_HWIN_NULL;
-                WM_SetFocus(g_hWin_menu);
+                WM_SetFocus(g_hWin_Menu);
                 WM_ShowWindow(g_hWin_TimeBar);
                 WM_ShowWindow(g_hWin_Date);
 #endif
@@ -266,7 +266,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 {
                     case ID_EDIT_0:
                         g_sys_ctrl.selectWidget = EDT_VOLTAGE_REFER;
-                        g_hWin_Input = Create_Edit_Set(g_hWin_TrmCal);
+                        g_hWin_Edit = Create_Edit_Set(g_hWin_TrmCal);
                         break;
                 }
                 break;
@@ -287,13 +287,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 */
 /*********************************************************************
 *
-*       CreateCommSet
+*       CreateTrmCal
 */
-WM_HWIN CreateCal(void);
-WM_HWIN CreateCal(void) {
+WM_HWIN CreateTrmCal(void);
+WM_HWIN CreateTrmCal(void) {
   WM_HWIN hWin;
 
-  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_menu, 0, 0);
+  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_Menu, 0, 0);
   return hWin;
 }
 

@@ -279,11 +279,11 @@ void GUI_Recv_Msg_Proc(void)
         }
         else if(RECV_RES_INVALID == g_fhdp_para.recv_result)
         {
-            ERR_NOTE(g_hWin_TrmCal, ERR_RECEIVE_DATA);
+            WARN(g_hWin_TrmCal, ERR_RECEIVE_DATA);
         }
         else 
         {
-            ERR_NOTE(g_hWin_TrmCal, ERR_COMMUNICATE);
+            WARN(g_hWin_TrmCal, ERR_COMMUNICATE);
         }
         break;
 
@@ -299,14 +299,14 @@ void GUI_Recv_Msg_Proc(void)
         {
             if(GUI_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
             {
-                ERR_NOTE(g_hWin_TrmConf, ERR_RECEIVE_DATA);
+                WARN(g_hWin_TrmConf, ERR_RECEIVE_DATA);
             }
         }
         else 
         {   
             if(GUI_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
             {
-                ERR_NOTE(g_hWin_TrmConf, ERR_COMMUNICATE);
+                WARN(g_hWin_TrmConf, ERR_COMMUNICATE);
             }
         }
         break;
@@ -323,14 +323,14 @@ void GUI_Recv_Msg_Proc(void)
         {
             if(GUI_CMD_READ_TRM_STATE == g_gui_para.cmd)
             {
-                ERR_NOTE(g_hWin_TrmState, ERR_RECEIVE_DATA);
+                WARN(g_hWin_TrmState, ERR_RECEIVE_DATA);
             }
         }
         else 
         {
             if(GUI_CMD_READ_TRM_STATE == g_gui_para.cmd)
             {
-                ERR_NOTE(g_hWin_TrmState, ERR_COMMUNICATE);
+                WARN(g_hWin_TrmState, ERR_COMMUNICATE);
             }
         }
         break;
@@ -345,11 +345,11 @@ void GUI_Recv_Msg_Proc(void)
         }
         else if(RECV_RES_INVALID == g_fhdp_para.recv_result)
         {
-            ERR_NOTE(g_hWin_TrmLog, ERR_RECEIVE_DATA);
+            WARN(g_hWin_TrmLog, ERR_RECEIVE_DATA);
         }
         else
         {
-            ERR_NOTE(g_hWin_TrmLog, ERR_COMMUNICATE);
+            WARN(g_hWin_TrmLog, ERR_COMMUNICATE);
         }
         break;
 
@@ -444,7 +444,7 @@ void GUI_Msg_Proc()
     if((g_proto_para.result == PLC_RES_FAIL) || (g_proto_para.result == PLC_RES_TIMEOUT))
     {
         g_proto_para.result = PLC_RES_NONE;
-        //ERR_NOTE(g_hWin_menu, 10);
+        //WARN(g_hWin_Menu, 10);
         hItem = GUI_Get_PROGBAR();
         PROGBAR_SetBarColor(hItem, 0, GUI_RED);
         return;
@@ -512,8 +512,8 @@ void GUI_Msg_Proc(void)
 
         GUI_Recv_Msg_Proc();
 
-        g_fhdp_para.msg_state = MSG_STATE_NONE;
-        g_fhdp_para.recv_result = RECV_RES_IDLE;
+        g_fhdp_para.msg_state = MSG_STATE_IDLE;
+        g_fhdp_para.recv_result = RECV_RES_NONE;
 
         Msg_Pool_Proc();             
     }

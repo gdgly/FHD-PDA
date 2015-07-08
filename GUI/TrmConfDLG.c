@@ -66,15 +66,15 @@
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { WINDOW_CreateIndirect, "ParaRdWt",       ID_WINDOW_0, 0, 1, 240, 295, 0, 0x0, 0 },
+  { WINDOW_CreateIndirect, "TrmConf",       ID_WINDOW_0, 0, 1, 240, 295, 0, 0x0, 0 },
   { EDIT_CreateIndirect,   "edit", ID_EDIT_0, 155, 10, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { EDIT_CreateIndirect,   "edit",          ID_EDIT_1, 155, 40, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { EDIT_CreateIndirect, "addr",             ID_EDIT_2, 155, 70, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { TEXT_CreateIndirect, InterElecPrt,          ID_TEXT_0, 7, 10, 122, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_1,   5,   40,  128, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, DevAddr,          ID_TEXT_2, 5, 71, 120, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, SetPara,         ID_BUTTON_0, 8,   262, 70, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 160, 262, 70, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, SetPara,         ID_BUTTON_0, 10,   262, 55, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 175,  262, 55, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "F1",     ID_BUTTON_2, 155, 100, 80, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, SysReset,        ID_TEXT_3,   5, 101,  110, 20, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "F1",         ID_BUTTON_3, 155,   101, 80, 20, 0, 0x0, 0 },
@@ -253,7 +253,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case GUI_KEY_YELLOW:
                  WM_DeleteWindow(g_hWin_TrmConf);
                  g_hWin_TrmConf = WM_HWIN_NULL;
-                 WM_SetFocus(g_hWin_menu);
+                 WM_SetFocus(g_hWin_Menu);
                  WM_ShowWindow(g_hWin_TimeBar);
                  WM_ShowWindow(g_hWin_Date);
                  PRW_KeyCnt = 0;
@@ -262,7 +262,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case GUI_KEY_GREEN:
                 WM_DeleteWindow(g_hWin_ParaRdWt);
                 g_hWin_ParaRdWt=WM_HWIN_NULL;
-                WM_SetFocus(g_hWin_menu);
+                WM_SetFocus(g_hWin_Menu);
                 WM_ShowWindow(g_hWin_TimeBar);
                 WM_ShowWindow(g_hWin_Date);
                 PRW_KeyCnt = 0;
@@ -320,7 +320,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
 
             case GUI_KEY_F1:
-                ERR_NOTE(g_hWin_TrmConf, WARN_CONFIRM_RESET);
+                WARN(g_hWin_TrmConf, WARN_CONFIRM_RESET);
                 break;
                 
             case '*':
@@ -332,17 +332,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 {
                     case ID_EDIT_0:
                         g_sys_ctrl.selectWidget = LST_ANIP_SWITCH;
-                        g_hWin_Input = Create_ListBox_Set(g_hWin_TrmConf);
+                        g_hWin_Edit = Create_ListBox_Set(g_hWin_TrmConf);
                         break;
                     case ID_EDIT_1:
                         //g_sys_ctrl.selectWidget = EDT_ANIP_TIME;
-                        g_hWin_Input = Create_EditPrt(g_hWin_TrmConf);
-                        hItem = WM_GetDialogItem(g_hWin_Input, ID_EDIT_0);
+                        g_hWin_Edit = Create_EditPrt(g_hWin_TrmConf);
+                        hItem = WM_GetDialogItem(g_hWin_Edit, ID_EDIT_0);
                         WM_SetFocus(hItem);
                         break;
                     case ID_EDIT_2:
                         g_sys_ctrl.selectWidget = EDT_DEV_ADDR;
-                        g_hWin_Input = Create_Edit_Set(g_hWin_TrmConf);
+                        g_hWin_Edit = Create_Edit_Set(g_hWin_TrmConf);
                         break;
                 }
                 break;
@@ -367,13 +367,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 */
 /*********************************************************************
 *
-*       CreateParaRdWt
+*       CreateTrmConf
 */
-WM_HWIN CreateParaConf(void);
-WM_HWIN CreateParaConf(void) {
+WM_HWIN CreateTrmConf(void);
+WM_HWIN CreateTrmConf(void) {
   WM_HWIN hWin;
 
-  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_menu, 0, 0);
+  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, g_hWin_Menu, 0, 0);
   return hWin;
 }
 

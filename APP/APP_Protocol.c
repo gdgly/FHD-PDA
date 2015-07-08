@@ -82,7 +82,7 @@ u16 pc_uart_send(u8 *buf, u16 len)
 
     pMsg->msg_header.need_buffer_free = TRUE;
 
-    return End_send(pMsg);
+    return (End_send(pMsg));
 }
 
 u16 rs485_uart_send(u8 *buf, u16 len)
@@ -108,17 +108,18 @@ u16 rs485_uart_send(u8 *buf, u16 len)
 
     pMsg->msg_header.need_buffer_free = TRUE;
     
-    return End_send(pMsg);
+    return (End_send(pMsg));
 }
 
 u16 plc_uart_send(u8 *buf, u16 len)
 {
     P_MSG_INFO  pMsg = NULL;
 
-#if OS_CRITICAL_METHOD == 3u
-    OS_CPU_SR  cpu_sr = 0u;
-#endif  
 
+    if((NULL == buf) || (0 == len))
+    {
+        return (FALSE);
+    }
 
     if(!(pMsg = (P_MSG_INFO)alloc_send_buffer(MSG_SHORT)))
     {
@@ -133,7 +134,67 @@ u16 plc_uart_send(u8 *buf, u16 len)
 
     pMsg->msg_header.need_buffer_free = TRUE;
     
-    return End_send(pMsg);
+    return (End_send(pMsg));
+}
+
+unsigned int PC_postProcess(pvoid h)
+{
+    P_MSG_INFO  pMsg = (P_MSG_INFO)h;
+    u8  *pBuf = (UCHAR *)(pMsg->msg_buffer);
+    u16  mLen = pMsg->msg_header.msg_len;
+    OS_CPU_SR  cpu_sr;   
+
+
+    OS_ENTER_CRITICAL();
+
+    memcpy(&pc_frame_recv, pBuf, mLen);
+    OS_EXIT_CRITICAL();
+
+    OSSemPost(g_sem_pc);
+
+    return (TRUE);
+}
+
+unsigned int RS485_postProcess(pvoid h)
+{
+    P_MSG_INFO  pMsg = (P_MSG_INFO)h;
+    u8  *pBuf = (UCHAR *)(pMsg->msg_buffer);
+    u16  mLen = pMsg->msg_header.msg_len;
+    OS_CPU_SR  cpu_sr;   
+
+
+    OS_ENTER_CRITICAL();
+    memcpy(&rs485_frame_recv, pBuf, mLen);
+    memcpy(g_fhdp_para.recv_buf, pBuf, mLen);
+    g_fhdp_para.recv_len = mLen;
+    OS_EXIT_CRITICAL();
+
+    OSSemPost(g_sem_rs485);
+
+    return (TRUE);
+}
+
+#if (EWARM_OPTIMIZATION_EN > 0u)
+#pragma optimize = low
+#endif
+unsigned int PLC_postProcess(pvoid h)
+{
+    P_MSG_INFO  pMsg = (P_MSG_INFO)h;
+    u8  *pBuf = (UCHAR *)(pMsg->msg_buffer);
+    u16  mLen = pMsg->msg_header.msg_len;
+    OS_CPU_SR  cpu_sr;
+    
+
+    OS_ENTER_CRITICAL();
+    memcpy(&dl645_frame_recv, pBuf, mLen);
+    memcpy(g_proto_para.recv_buf, pBuf, mLen);
+    g_proto_para.recv_len = mLen;
+    OS_EXIT_CRITICAL();
+
+    OSSemPost(g_sem_plc);
+    OSSemPost(g_sem_chk_plc);
+
+    return (TRUE);
 }
 
 u16 uart_link_reply(void)
@@ -156,16 +217,13 @@ u16 uart_link_reply(void)
 
     pMsg->msg_header.need_buffer_free = TRUE;
     
-    return End_send(pMsg);
+    return (End_send(pMsg));
 }
 
 u16 cplc_read_addr(void)
 {
     P_MSG_INFO  pMsg = NULL;
-
-#if OS_CRITICAL_METHOD == 3u
-    OS_CPU_SR  cpu_sr = 0u;
-#endif  
+    OS_CPU_SR  cpu_sr;  
 
 
     if(!(pMsg = (P_MSG_INFO)alloc_send_buffer(MSG_SHORT)))
@@ -194,50 +252,7 @@ u16 cplc_read_addr(void)
 
     pMsg->msg_header.need_buffer_free = TRUE;
     
-    return End_send(pMsg);
-}
-
-unsigned int PC_postProcess(pvoid h)
-{
-    P_MSG_INFO  pMsg = (P_MSG_INFO)h;
-    u8  *pBuf = (UCHAR *)(pMsg->msg_buffer);
-    u16  mLen = pMsg->msg_header.msg_len;
-    
-#if OS_CRITICAL_METHOD == 3u
-    OS_CPU_SR  cpu_sr = 0u;
-#endif   
-
-
-    OS_ENTER_CRITICAL();
-
-    memcpy(&pc_frame_recv, pBuf, mLen);
-    OS_EXIT_CRITICAL();
-
-    OSSemPost(g_sem_pc);
-
-    return (TRUE);
-}
-
-unsigned int RS485_postProcess(pvoid h)
-{
-    P_MSG_INFO  pMsg = (P_MSG_INFO)h;
-    u8  *pBuf = (UCHAR *)(pMsg->msg_buffer);
-    u16  mLen = pMsg->msg_header.msg_len;
-
-#if OS_CRITICAL_METHOD == 3u
-    OS_CPU_SR  cpu_sr = 0u;
-#endif   
-
-
-    OS_ENTER_CRITICAL();
-    memcpy(&rs485_frame_recv, pBuf, mLen);
-    memcpy(g_fhdp_para.recv_buf, pBuf, mLen);
-    g_fhdp_para.recv_len = mLen;
-    OS_EXIT_CRITICAL();
-
-    OSSemPost(g_sem_rs485);
-
-    return (TRUE);
+    return (End_send(pMsg));
 }
 
 u32 PRO_DL645_Proc()
@@ -265,31 +280,6 @@ u32 PRO_DL645_Proc()
         }
     }
     return g_proto_para.result;
-}
-
-#if (EWARM_OPTIMIZATION_EN > 0u)
-#pragma optimize = low
-#endif
-unsigned int PLC_postProcess(pvoid h)
-{
-    P_MSG_INFO  pMsg = (P_MSG_INFO)h;
-    u8  *pBuf = (UCHAR *)(pMsg->msg_buffer);
-    u16  mLen = pMsg->msg_header.msg_len;
-    
-#if OS_CRITICAL_METHOD == 3u
-    OS_CPU_SR  cpu_sr = 0u;
-#endif
-
-    OS_ENTER_CRITICAL();
-    memcpy(&dl645_frame_recv, pBuf, mLen);
-    memcpy(g_proto_para.recv_buf, pBuf, mLen);
-    g_proto_para.recv_len = mLen;
-    OS_EXIT_CRITICAL();
-
-    OSSemPost(g_sem_plc);
-    OSSemPost(g_sem_chk_plc);
-
-    return (TRUE);
 }
 
 void  PRO_Databuf_Proc() 

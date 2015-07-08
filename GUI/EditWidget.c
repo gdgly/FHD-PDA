@@ -18,22 +18,22 @@
 
 static const GUI_WIDGET_CREATE_INFO _aListBoxCreate[] = {
   { FRAMEWIN_CreateIndirect,  "ListBox",  ID_FRAMEWIN_0,  20,  40,  200, 200,  0, 0x0, 0 },
-  { LISTBOX_CreateIndirect,   "Listbox",  ID_LISTBOX_0,   5,   7,   182, 120,  0, 0x0, 0 },
-  { BUTTON_CreateIndirect,    TextOK,     ID_BUTTON_0,    5,   140, 55,  25,   0, 0x0, 0 },
-  { BUTTON_CreateIndirect,    Quit,       ID_BUTTON_1,    138, 140, 55,  25,   0, 0x0, 0 },
+  { LISTBOX_CreateIndirect,   "Listbox",  ID_LISTBOX_0,   6,   7,   182, 120,  0, 0x0, 0 },
+  { BUTTON_CreateIndirect,    Confirm,     ID_BUTTON_0,    7,   138, 55,  25,   0, 0x0, 0 },
+  { BUTTON_CreateIndirect,    Cancel,       ID_BUTTON_1,    132, 138, 55,  25,   0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aEditCreate[] = {
   { FRAMEWIN_CreateIndirect, "Edit",  ID_FRAMEWIN_0, 20,  60, 200, 160, 0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   TextOK,  ID_BUTTON_0,   5,   82, 55,  25,  0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Quit,    ID_BUTTON_1,   138, 82, 55,  25,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   Confirm,  ID_BUTTON_0,   7,   82, 55,  25,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   Cancel,    ID_BUTTON_1,   132, 82, 55,  25,  0, 0x0,  0 },
   { EDIT_CreateIndirect,     "Edit",  ID_EDIT_0,     14,  38, 165, 25,  0, 0x64, 0 },
 };
 static const GUI_WIDGET_CREATE_INFO _aPrtCreate[] = {
   { FRAMEWIN_CreateIndirect, "Edit",  ID_FRAMEWIN_0, 20,  60, 200, 160, 0, 0x0,  0 },
-  { TEXT_CreateIndirect,     OpNote,  ID_TEXT_0,     13,  5,  180, 20,  0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   TextOK,  ID_BUTTON_0,   5,   82, 55,  25,  0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Quit,    ID_BUTTON_1,   138, 82, 55,  25,  0, 0x0,  0 },
+  { TEXT_CreateIndirect,     OpNote,  ID_TEXT_0,     17,  5,  180, 20,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   Confirm,  ID_BUTTON_0,   7,   82, 55,  25,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   Cancel,    ID_BUTTON_1,   132, 82, 55,  25,  0, 0x0,  0 },
   { EDIT_CreateIndirect,     "Edit",  ID_EDIT_0,     14,  38, 165, 25,  0, 0x64, 0 },
 };
 
@@ -94,7 +94,7 @@ static void SelectInputEdit(int  EditNum)
     u8 tmpListBuf[32];
     int tmp;
     
-    hItem=WM_GetDialogItem(g_hWin_Input,ID_EDIT_0);
+    hItem=WM_GetDialogItem(g_hWin_Edit,ID_EDIT_0);
     switch(EditNum)
     {
         case EDT_VOLTAGE_REFER:
@@ -330,15 +330,15 @@ static void _cbEditDlg(WM_MESSAGE *pMsg)
             switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key)
             {
               case GUI_KEY_YELLOW:
-                  WM_DeleteWindow(g_hWin_Input);
-                  g_hWin_Input = WM_HWIN_NULL;
+                  WM_DeleteWindow(g_hWin_Edit);
+                  g_hWin_Edit = WM_HWIN_NULL;
                   Select_Focus();
                   break;
               case GUI_KEY_GREEN:
                   SelectInputEdit(g_sys_ctrl.selectWidget);
-                  WM_DeleteWindow(g_hWin_Input);
+                  WM_DeleteWindow(g_hWin_Edit);
                   Select_Focus();
-                  g_hWin_Input = WM_HWIN_NULL;
+                  g_hWin_Edit = WM_HWIN_NULL;
                   break;
             }
         }
@@ -389,7 +389,7 @@ static void SelectLSTRow(int  WidgetNum)
     int  SelNum;
 
     
-    hItem=WM_GetDialogItem(g_hWin_Input,ID_LISTBOX_0);
+    hItem=WM_GetDialogItem(g_hWin_Edit,ID_LISTBOX_0);
     SelNum=LISTBOX_GetSel(hItem);
     
     switch(WidgetNum) /*WidgetNum是为了把不同的页面的不同Edit工具句柄传回来*/
@@ -443,12 +443,12 @@ static void _cbListBoxDlg(WM_MESSAGE *pMsg)
               switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key)
               {
                 case GUI_KEY_YELLOW:
-                    WM_DeleteWindow(g_hWin_Input);
+                    WM_DeleteWindow(g_hWin_Edit);
                     Select_Focus();
                     break;
                 case GUI_KEY_GREEN:
                     SelectLSTRow(g_sys_ctrl.selectWidget);
-                    WM_DeleteWindow(g_hWin_Input);
+                    WM_DeleteWindow(g_hWin_Edit);
                     Select_Focus();
                     break;
 
@@ -467,7 +467,7 @@ void EdtValDown(void)
     WM_HWIN hItem;
     u32 tmp;
     u8 tmpBuf[8];
-    hItem = WM_GetDialogItem(g_hWin_Input, ID_EDIT_0);
+    hItem = WM_GetDialogItem(g_hWin_Edit, ID_EDIT_0);
     EDIT_GetText(hItem, tmpBuf, 5);
     tmp = atoi(tmpBuf);
     if(tmp < 100)
@@ -490,7 +490,7 @@ void EdtValUp(void)
     WM_HWIN hItem;
     u32 tmp;
     u8 tmpBuf[8];
-    hItem = WM_GetDialogItem(g_hWin_Input, ID_EDIT_0);
+    hItem = WM_GetDialogItem(g_hWin_Edit, ID_EDIT_0);
     EDIT_GetText(hItem, tmpBuf, 5);
     tmp = atoi(tmpBuf);
     if(tmp < 100)
@@ -534,7 +534,7 @@ static void _cbProtWin(WM_MESSAGE *pMsg)
                 switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key)
                 {
                     case GUI_KEY_YELLOW:
-                        WM_DeleteWindow(g_hWin_Input);
+                        WM_DeleteWindow(g_hWin_Edit);
                         Select_Focus();
                         break;
                     case GUI_KEY_GREEN:
@@ -542,7 +542,7 @@ static void _cbProtWin(WM_MESSAGE *pMsg)
                         EDIT_GetText(hItem, tmpBuf, 5);
                         hItem = PRW_GetPrtTime();
                         EDIT_SetText(hItem, tmpBuf);
-                        WM_DeleteWindow(g_hWin_Input);
+                        WM_DeleteWindow(g_hWin_Edit);
                         Select_Focus();
                         break;
                     case GUI_KEY_UP:
