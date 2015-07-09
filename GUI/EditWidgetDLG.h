@@ -1,5 +1,5 @@
-#ifndef __EDITWIDGET__
-#define __EDITWIDGET__
+#ifndef __EDITWIDGETDLG_H__
+#define __EDITWIDGETDLG_H__
 
 
 typedef WM_HWIN (*pGetHandler)(void);
@@ -32,13 +32,13 @@ typedef WM_HWIN (*pGetHandler)(void);
 
 #define WARN_UPDATE                  0
 #define WARN_FORMAT                  1
-#define ERR_PROTECT_TIME             2
+#define WARN_PROTECT_TIME            2
 #define WARN_SET_PARA_SUCESS         3
 #define WARN_SET_PARA_FAIL           4
-#define ERR_SRC_TIME                 5
-#define ERR_SHUTDOWN_TIME            6
-#define ERR_COMMUNICATE              7
-#define ERR_RECEIVE_DATA             8
+#define WARN_SLEEP_TIME              5
+#define WARN_SHUTDOWN_TIME           6
+#define WARN_COMMUNICATE             7
+#define WARN_RECEIVE_DATA            8
 #define WARN_CONFIRM_RESET           9
 
 WM_HWIN CPS_GetCheck(void);
@@ -56,4 +56,4 @@ void SDI_SetVoltage(void);
 WM_HWIN SSD_ClearData(void);
 
 
-#endif /*__EDITWIDGET__*/
+#endif

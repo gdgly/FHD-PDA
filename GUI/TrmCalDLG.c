@@ -85,7 +85,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { BUTTON_CreateIndirect, "F1",        ID_BUTTON_0, 142, 80,  80, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "F2",        ID_BUTTON_1, 142, 113, 80, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, VoltageRead, ID_BUTTON_2, 10,   262, 55, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,        ID_BUTTON_3, 175,  262, 55, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, TextBack,        ID_BUTTON_3, 175,  262, 55, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "*",         ID_BUTTON_4, 142, 146, 80, 20, 0, 0x0, 0 },
 };
 
@@ -266,7 +266,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 {
                     case ID_EDIT_0:
                         g_sys_ctrl.selectWidget = EDT_VOLTAGE_REFER;
-                        g_hWin_Edit = Create_Edit_Set(g_hWin_TrmCal);
+                        g_hWin_Edit = Create_Edit_Inpt(g_hWin_TrmCal);
                         break;
                 }
                 break;

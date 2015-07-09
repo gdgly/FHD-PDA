@@ -114,8 +114,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { EDIT_CreateIndirect, "Edit",         ID_EDIT_9,   123, 222, 110, 20, EDIT_CF_HCENTER, 0x64, 0 },
 
   { BUTTON_CreateIndirect, ReadData,         ID_BUTTON_0, 10,   262, 55, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 175,  262, 55, 25, 0, 0x0, 0 },
-  //{ TEXT_CreateIndirect, ReadSysState,   ID_TEXT_5,   8,   126, 100, 20, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, TextBack,         ID_BUTTON_1, 175,  262, 55, 25, 0, 0x0, 0 },
+  //{ TEXT_CreateIndirect, ReadTrmState,   ID_TEXT_5,   8,   126, 100, 20, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "F1",         ID_BUTTON_1, 153,  126, 80, 20, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END

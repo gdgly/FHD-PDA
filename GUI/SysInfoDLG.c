@@ -95,7 +95,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     
   { PROGBAR_CreateIndirect,  "Progbar",    ID_PROGBAR_0, 140, 169, 95, 20, 0, 0x0,  0 },
   { BUTTON_CreateIndirect,   MemFormat,    ID_BUTTON_1,  10,   262, 55, 25, 0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Quit,         ID_BUTTON_2,  175,  262, 55, 25, 0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   TextBack,         ID_BUTTON_2,  175,  262, 55, 25, 0, 0x0,  0 },
   { PROGBAR_CreateIndirect,  "Progbar",    ID_PROGBAR_1, 9,   228, 222, 20, 0, 0x0,  0 },
     
   // USER START (Optionally insert additional widgets)
@@ -221,7 +221,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                         //WM_ShowWindow(g_hWin_TimeBar);
                         //WM_ShowWindow(g_hWin_Date);
                         //WM_SetFocus(g_hWin_SysSet);
-                        WARN(g_hWin_SysInfo,WARN_FORMAT);
+                        GUI_WARN(g_hWin_SysInfo,WARN_FORMAT);
                         break;
                     case GUI_KEY_YELLOW:
                         WM_DeleteWindow(g_hWin_SysInfo);

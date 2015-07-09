@@ -522,7 +522,7 @@ void  App_TaskEndTick (void *p_arg)
             }
         }        
         
-        if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
+        if(GPIO_PIN_RESET == GET_KEY_PWR_STATE())
         {
             key_press_count++;
             
@@ -581,9 +581,7 @@ void  App_TaskEndProc (void *p_arg)
                 {
                     free_send_buffer(pMsg);
                 }
-            }
-
-            
+            }            
         }
     }
 }

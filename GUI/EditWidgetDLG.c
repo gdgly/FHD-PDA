@@ -16,25 +16,25 @@
 
 #define ID_TEXT_0      (GUI_ID_USER + 0x07)
 
-static const GUI_WIDGET_CREATE_INFO _aListBoxCreate[] = {
-  { FRAMEWIN_CreateIndirect,  "ListBox",  ID_FRAMEWIN_0,  20,  40,  200, 200,  0, 0x0, 0 },
-  { LISTBOX_CreateIndirect,   "Listbox",  ID_LISTBOX_0,   6,   7,   182, 120,  0, 0x0, 0 },
-  { BUTTON_CreateIndirect,    Confirm,     ID_BUTTON_0,    7,   138, 55,  25,   0, 0x0, 0 },
-  { BUTTON_CreateIndirect,    Cancel,       ID_BUTTON_1,    132, 138, 55,  25,   0, 0x0, 0 },
+static const GUI_WIDGET_CREATE_INFO _aSelCreate[] = {
+  { FRAMEWIN_CreateIndirect,  "Select", ID_FRAMEWIN_0,  20,  40,  200, 200,  0, 0x0, 0 },
+  { LISTBOX_CreateIndirect,   "Select", ID_LISTBOX_0,   6,   7,   182, 120,  0, 0x0, 0 },
+  { BUTTON_CreateIndirect,    TextOK,   ID_BUTTON_0,    7,   138, 55,  25,   0, 0x0, 0 },
+  { BUTTON_CreateIndirect,    TextBack, ID_BUTTON_1,    132, 138, 55,  25,   0, 0x0, 0 },
 };
 
-static const GUI_WIDGET_CREATE_INFO _aEditCreate[] = {
-  { FRAMEWIN_CreateIndirect, "Edit",  ID_FRAMEWIN_0, 20,  60, 200, 160, 0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Confirm,  ID_BUTTON_0,   7,   82, 55,  25,  0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Cancel,    ID_BUTTON_1,   132, 82, 55,  25,  0, 0x0,  0 },
-  { EDIT_CreateIndirect,     "Edit",  ID_EDIT_0,     14,  38, 165, 25,  0, 0x64, 0 },
+static const GUI_WIDGET_CREATE_INFO _aInptCreate[] = {
+  { FRAMEWIN_CreateIndirect, "Input",   ID_FRAMEWIN_0, 20,  60, 200, 160, 0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   TextOK,    ID_BUTTON_0,   7,   82, 55,  25,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   TextBack,  ID_BUTTON_1,   132, 82, 55,  25,  0, 0x0,  0 },
+  { EDIT_CreateIndirect,     "Input",   ID_EDIT_0,     14,  38, 165, 25,  0, 0x64, 0 },
 };
-static const GUI_WIDGET_CREATE_INFO _aPrtCreate[] = {
-  { FRAMEWIN_CreateIndirect, "Edit",  ID_FRAMEWIN_0, 20,  60, 200, 160, 0, 0x0,  0 },
-  { TEXT_CreateIndirect,     OpNote,  ID_TEXT_0,     17,  5,  180, 20,  0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Confirm,  ID_BUTTON_0,   7,   82, 55,  25,  0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Cancel,    ID_BUTTON_1,   132, 82, 55,  25,  0, 0x0,  0 },
-  { EDIT_CreateIndirect,     "Edit",  ID_EDIT_0,     14,  38, 165, 25,  0, 0x64, 0 },
+static const GUI_WIDGET_CREATE_INFO _aChgCreate[] = {
+  { FRAMEWIN_CreateIndirect, "Change",  ID_FRAMEWIN_0, 20,  60, 200, 160, 0, 0x0,  0 },
+  { TEXT_CreateIndirect,     PTChgNote, ID_TEXT_0,     17,  5,  180, 20,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   TextOK,    ID_BUTTON_0,   7,   82, 55,  25,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   TextBack,  ID_BUTTON_1,   132, 82, 55,  25,  0, 0x0,  0 },
+  { EDIT_CreateIndirect,     "Change",  ID_EDIT_0,     14,  38, 165, 25,  0, 0x64, 0 },
 };
 
 void Select_Focus(void)
@@ -566,34 +566,34 @@ static void _cbProtWin(WM_MESSAGE *pMsg)
 
 //listbox对话框
 
-WM_HWIN Create_ListBox_Set(WM_HWIN parentWin);
+WM_HWIN Create_Edit_Sel(WM_HWIN parentWin);
 
-WM_HWIN Create_ListBox_Set(WM_HWIN parentWin)
+WM_HWIN Create_Edit_Sel(WM_HWIN parentWin)
 {
     WM_HWIN hWin;
-    hWin=GUI_CreateDialogBox(_aListBoxCreate , GUI_COUNTOF(_aListBoxCreate),_cbListBoxDlg,parentWin,0,0);
+    hWin=GUI_CreateDialogBox(_aSelCreate , GUI_COUNTOF(_aSelCreate),_cbListBoxDlg,parentWin,0,0);
     return hWin;
 }
 
 
 
 //edit对话框
-WM_HWIN Create_Edit_Set(WM_HWIN parentWin);
+WM_HWIN Create_Edit_Inpt(WM_HWIN parentWin);
 
-WM_HWIN Create_Edit_Set(WM_HWIN parentWin)
+WM_HWIN Create_Edit_Inpt(WM_HWIN parentWin)
 {
     WM_HWIN hWin;
-    hWin=GUI_CreateDialogBox(_aEditCreate , GUI_COUNTOF(_aEditCreate), _cbEditDlg ,parentWin,0,0);
+    hWin=GUI_CreateDialogBox(_aInptCreate , GUI_COUNTOF(_aInptCreate), _cbEditDlg ,parentWin,0,0);
     return hWin;
 }
 
 
 
-WM_HWIN Create_EditPrt(WM_HWIN parentWin);
+WM_HWIN Create_Edit_Chg(WM_HWIN parentWin);
 
-WM_HWIN Create_EditPrt(WM_HWIN parentWin)
+WM_HWIN Create_Edit_Chg(WM_HWIN parentWin)
 {
     WM_HWIN hWin;
-    hWin=GUI_CreateDialogBox(_aPrtCreate , GUI_COUNTOF(_aPrtCreate), _cbProtWin ,parentWin,0,0);
+    hWin=GUI_CreateDialogBox(_aChgCreate , GUI_COUNTOF(_aChgCreate), _cbProtWin ,parentWin,0,0);
     return hWin;
 }

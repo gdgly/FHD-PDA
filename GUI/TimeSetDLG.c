@@ -73,7 +73,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { EDIT_CreateIndirect,   "min",     ID_EDIT_4,   110, 185, 80,  20, 0, 2, 0 },
   { EDIT_CreateIndirect,   "sec",     ID_EDIT_5,   110, 220, 80,  20, 0, 2, 0 },
   { BUTTON_CreateIndirect, Save,   ID_BUTTON_0, 10,  259, 80,  25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,    ID_BUTTON_1, 150, 261, 80,  25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, TextBack,    ID_BUTTON_1, 150, 261, 80,  25, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   TimeSet_24,ID_TEXT_7,   60,  12,  150, 20, 0, 0x0, 0 },
  
 };
@@ -114,7 +114,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { EDIT_CreateIndirect,   "sec",     ID_EDIT_5,   110, 180, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { EDIT_CreateIndirect,   "week",    ID_EDIT_6,   110, 210, 80, 20, EDIT_CF_HCENTER, 0x64, 0 },
   { BUTTON_CreateIndirect, Save,  ID_BUTTON_0, 10,   262, 55, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,  ID_BUTTON_1, 175,  262, 55, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, TextBack,  ID_BUTTON_1, 175,  262, 55, 25, 0, 0x0, 0 },
 };
 
 /*********************************************************************
@@ -141,7 +141,7 @@ u32 Time_From_Widget(unsigned char *time)
     EDIT_GetText(hItem,TimeBuf,TIME_CH_LEN);
     //if(atoi(TimeBuf)>59)
     {
-       // WARN(g_hWin_TimeSet,GUI_MSBOX_MIN_ERROR);
+       // GUI_WARN(g_hWin_TimeSet,GUI_MSBOX_MIN_ERROR);
         //WM_SetFocus(hItem);
         //return DEV_ERROR;
     }
@@ -153,7 +153,7 @@ u32 Time_From_Widget(unsigned char *time)
     EDIT_GetText(hItem,TimeBuf,TIME_CH_LEN);
     //if(atoi(TimeBuf)>23)
     {
-        //WARN(g_hWin_TimeSet,GUI_MSBOX_HOUR_ERROR);
+        //GUI_WARN(g_hWin_TimeSet,GUI_MSBOX_HOUR_ERROR);
         //WM_SetFocus(hItem);
         //return DEV_ERROR;
     }
@@ -166,7 +166,7 @@ u32 Time_From_Widget(unsigned char *time)
     EDIT_GetText(hItem,TimeBuf,TIME_CH_LEN);
     //if(atoi(TimeBuf)>31)
     {
-        //WARN(g_hWin_TimeSet,GUI_MSBOX_DAY_ERROR);
+        //GUI_WARN(g_hWin_TimeSet,GUI_MSBOX_DAY_ERROR);
         //WM_SetFocus(hItem);
        // return DEV_ERROR;
     }
@@ -179,7 +179,7 @@ u32 Time_From_Widget(unsigned char *time)
     EDIT_GetText(hItem,TimeBuf,TIME_CH_LEN);
     if(atoi(TimeBuf)>12)
     {
-        //WARN(g_hWin_TimeSet,GUI_MSBOX_MONTH_ERROR);
+        //GUI_WARN(g_hWin_TimeSet,GUI_MSBOX_MONTH_ERROR);
         //WM_SetFocus(hItem);
        // return DEV_ERROR;
     }
@@ -432,38 +432,38 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                     {
                         case ID_EDIT_0:
                             g_sys_ctrl.selectWidget=EDT_YEAR;
-                            g_hWin_Edit=Create_Edit_Set(g_hWin_TimeSet);                   
+                            g_hWin_Edit=Create_Edit_Inpt(g_hWin_TimeSet);                   
                             WM_SetFocus(g_hWin_Edit);
                             break;
                         case ID_EDIT_1:
                             g_sys_ctrl.selectWidget=EDT_MONTH;
-                            g_hWin_Edit=Create_Edit_Set(g_hWin_TimeSet);                   
+                            g_hWin_Edit=Create_Edit_Inpt(g_hWin_TimeSet);                   
                             WM_SetFocus(g_hWin_Edit);
                             break;
                             
                         case ID_EDIT_2:
                             g_sys_ctrl.selectWidget=EDT_DAY;
-                            g_hWin_Edit=Create_Edit_Set(g_hWin_TimeSet);                   
+                            g_hWin_Edit=Create_Edit_Inpt(g_hWin_TimeSet);                   
                             WM_SetFocus(g_hWin_Edit);
                             break;
                         case ID_EDIT_3:
                             g_sys_ctrl.selectWidget=EDT_HOUR;
-                            g_hWin_Edit=Create_Edit_Set(g_hWin_TimeSet);                   
+                            g_hWin_Edit=Create_Edit_Inpt(g_hWin_TimeSet);                   
                             WM_SetFocus(g_hWin_Edit);
                             break;
                         case ID_EDIT_4:
                             g_sys_ctrl.selectWidget=EDT_MINITE;
-                            g_hWin_Edit=Create_Edit_Set(g_hWin_TimeSet);                   
+                            g_hWin_Edit=Create_Edit_Inpt(g_hWin_TimeSet);                   
                             WM_SetFocus(g_hWin_Edit);
                             break;
                         case ID_EDIT_5:
                             g_sys_ctrl.selectWidget=EDT_SECOND;
-                            g_hWin_Edit=Create_Edit_Set(g_hWin_TimeSet);                   
+                            g_hWin_Edit=Create_Edit_Inpt(g_hWin_TimeSet);                   
                             WM_SetFocus(g_hWin_Edit);
                             break;
                         case ID_EDIT_6:
                             g_sys_ctrl.selectWidget = LST_WEEK;
-                            g_hWin_Edit = Create_ListBox_Set(g_hWin_TimeSet);
+                            g_hWin_Edit = Create_Edit_Sel(g_hWin_TimeSet);
                             break;
                    }
                     break;

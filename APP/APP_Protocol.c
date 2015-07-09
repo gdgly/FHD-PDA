@@ -146,7 +146,6 @@ unsigned int PC_postProcess(pvoid h)
 
 
     OS_ENTER_CRITICAL();
-
     memcpy(&pc_frame_recv, pBuf, mLen);
     OS_EXIT_CRITICAL();
 

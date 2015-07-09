@@ -32,8 +32,8 @@
 
 #define RF_SEND_BUF         rf_send_buf
 #define RF_SEND_LEN         rf_send_len
-#define RF_RECV_BUF         g_rf_param.rx.buf
-#define RF_RECV_LEN         g_rf_param.rx.rx_len
+#define RF_RECV_BUF         g_rf_para.rx.buf
+#define RF_RECV_LEN         g_rf_para.rx.rx_len
 
 #define PLC_270_III              0
 #define PLC_270_III_5            1

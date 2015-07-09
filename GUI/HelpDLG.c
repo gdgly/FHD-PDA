@@ -20,7 +20,7 @@
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, NULL, ID_WINDOW_0, 0, 0, 240, 295, 0, 0x0, 0 },
   { MULTIEDIT_CreateIndirect, NULL, ID_MULTIEDIT_0, 1, 2, 238, 255, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,    ID_BUTTON_0, 175,  262, 55, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, TextBack,    ID_BUTTON_0, 175,  262, 55, 25, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "OK",  ID_BUTTON_1,  8,  264, 55, 25, 0, 0x0, 0 },
 };
 
@@ -78,8 +78,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     WM_SetFocus(g_hWin_Menu);
                     break;
                 case GUI_KEY_GREEN:
-                    //WARN(g_hWin_Help, GUI_MSBOX_UPDATE_CFM);
-                    //WARN(g_hWin_Help,8);
+                    //GUI_WARN(g_hWin_Help, GUI_MSBOX_UPDATE_CFM);
+                    //GUI_WARN(g_hWin_Help,8);
                     
                     //DEV_Power_Off();
 

@@ -83,7 +83,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
   
   { BUTTON_CreateIndirect, TimeSet, ID_BUTTON_3, 10,   262, 70, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,      ID_BUTTON_4, 160,  262, 70, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, TextBack,      ID_BUTTON_4, 160,  262, 70, 25, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -240,7 +240,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
               switch(((WM_KEY_INFO *)(pMsg->Data.p))->Key) 
               {
                 case '*':
-                    WARN(g_hWin_SysSet,WARN_UPDATE);
+                    GUI_WARN(g_hWin_SysSet,WARN_UPDATE);
                     break;
                 case GUI_KEY_YELLOW:
                     memset(g_sys_ctrl.DevCheckCode,0,sizeof(g_sys_ctrl.DevCheckCode));
@@ -292,15 +292,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     {
                         case ID_EDIT_0:
                             g_sys_ctrl.selectWidget = EDT_SRC_TIME;
-                            g_hWin_Edit = Create_Edit_Set(g_hWin_SysSet);
+                            g_hWin_Edit = Create_Edit_Inpt(g_hWin_SysSet);
                             break;
                         case ID_EDIT_1:
                             g_sys_ctrl.selectWidget = EDT_SHUTDOWN;
-                            g_hWin_Edit = Create_Edit_Set(g_hWin_SysSet);
+                            g_hWin_Edit = Create_Edit_Inpt(g_hWin_SysSet);
                             break;
                         case ID_EDIT_2:
                             g_sys_ctrl.selectWidget = EDT_COMMUNICATE_ADDR;
-                            g_hWin_Edit = Create_Edit_Set(g_hWin_SysSet);
+                            g_hWin_Edit = Create_Edit_Inpt(g_hWin_SysSet);
                             break;
                     }
                     break;

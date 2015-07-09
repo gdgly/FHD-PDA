@@ -123,7 +123,7 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 #include  <wm.h>
 
 #include "app_device.h"
-#include "key_drv.h"
+#include "keyboard.h"
 #include "si4438.h"
 #include "si4438_sub.h"
 #include "DL645.h" //华兄
@@ -140,8 +140,8 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 #include "FHDP.h" //华兄
 #include "GUI_Public_Fnct.h"
 #include "lcdconf.h"
-#include "Phrase.h"
-#include "EditWidget.h"
+#include "TextEncode.h"
+#include "EditWidgetDLG.h"
 
 #define WM_MSG_CLOSE                  (WM_USER + 0x80)
 
@@ -149,36 +149,6 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 
 #define TEXT_LEN  10     //???????????????????10???
 #define EWARM_OPTIMIZATION_EN          1u
-
-extern WM_HWIN g_hWin_Menu;
-
-extern WM_HWIN g_hWin_Task;
-extern WM_HWIN g_hWin_TimeSet; //时间设置
-
-extern WM_HWIN g_hWin_Warn;
-extern WM_HWIN g_hWin_Help;
-
-extern WM_HWIN g_hWin_TimeBar;
-extern WM_HWIN g_hWin_Date;
-
-extern WM_HWIN g_hWin_Edit;
-extern WM_HWIN g_hWin_SysSet;   //系统设置
-extern WM_HWIN g_hWin_SysInfo;
-
-
-
-/**********
-
-防晃电
-
-***********/
-
-extern WM_HWIN g_hWin_TrmCal;
-extern WM_HWIN g_hWin_TrmConf;
-extern WM_HWIN g_hWin_TrmLog;
-extern WM_HWIN g_hWin_TrmState;
-
-
 
 //extern GUI_CONST_STORAGE GUI_BITMAP bm_Upload;
 

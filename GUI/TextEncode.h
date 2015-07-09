@@ -1,14 +1,13 @@
-#ifndef __PHRASE_H__
+#ifndef __TEXTENCODE_H__
+#define __TEXTENCODE_H__
 
-#define __PHRASE_H__
 
 #include "GUI_Type.h"
 
 
-
 //ERR_BOX
-extern const char Warning[];
-extern const char WarnText[];
+extern const char TextWarning[];
+extern const char TextWarn[];
 extern const char ReadOutTime[];
 
 extern const char BeepOff[];
@@ -30,7 +29,7 @@ extern const char SD_Unmount[];
 extern const char TSK_Wireless[];
 
 extern const char Clear[];
-extern const char Back[];
+extern const char TextBack[];
 extern const char Log[];
 //保存
 extern const char Save[];
@@ -68,7 +67,7 @@ extern const char Week[];
 extern const char TimeCrt[];
 
 //系统设置
-extern const char TrmChk[];
+extern const char TextTrmCal[];
 extern const char DevAddr[]; 
 extern const char MsgClear[];
 
@@ -79,7 +78,7 @@ extern const char TrmTime[];
 
 extern const char EEPROM[];
 
-extern const char TrmRdWt[];
+extern const char TextTrmConf[];
 extern const char SysTime[];
 extern const char SysCofigure[];
 extern const char UseSysTick[];
@@ -96,7 +95,7 @@ extern const char DevTest[];
 extern const char ProtectTime[];
 extern const char ReadPara[]; 
 extern const char WritePara[]; 
-extern const char SysState[];
+extern const char TextTrmState[];
 extern const char WorkRight[]; 
 extern const char WorkWrong[]; 
 extern const char RelaySwitch[];
@@ -108,7 +107,7 @@ extern const char Voltage[];
 extern const char ProtectNum[]; 
 extern const char RestartNum[]; 
 extern const char ReadState[];
-extern const char SysLog[]; 
+extern const char TextTrmLog[]; 
 extern const char AntiLog[]; 
 extern const char OccurTime[]; 
 extern const char Period[]; 
@@ -125,10 +124,10 @@ extern const char FactorySet[];
 extern const char MemFormat[];
 extern const char MemReturn[];
 extern const char VersionNum[];
-extern const char SysSet[];
+extern const char TextSysSet[];
 extern const char TimeSet[];
 extern const char SetPara[];
-extern const char ReadSysState[];
+extern const char ReadTrmState[];
 extern const char PdaInfo[];
 
 extern const char Promotion[];
@@ -145,7 +144,7 @@ extern const char TextHelp[];
 extern const char FHD_PDA[];
 extern const char SysReset[];
 extern const char CommAddr[];
-extern const char OpNote[];
+extern const char PTChgNote[];
 extern const char VerInfo[];
 
 extern const char *EditFrameTitle[];
@@ -162,8 +161,6 @@ extern const char *gc_messageBoxText[];
 extern const char *helpText[];
 extern const char *TextWeek[];
 extern const char *FHD_WEEK[];
-//extern 
-
-#endif /*__PHRASE_H__*/
 
 
+#endif

@@ -56,10 +56,10 @@
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { FRAMEWIN_CreateIndirect, "Warn", ID_FRAMEWIN_0, 40,  82,  160, 130, 0, 0x64, 0 },
-  { BUTTON_CreateIndirect,   TextOK,   ID_BUTTON_0,   7,   68, 55,  25,  0, 0x0,  0 },
-  { BUTTON_CreateIndirect,   Quit,      ID_BUTTON_1,   92,  68, 55,  25,  0, 0x0,  0 },
-  { TEXT_CreateIndirect,     WarnText,   ID_TEXT_0,     7,   32,  150, 20,  0, 0x0,  0 },
+  { FRAMEWIN_CreateIndirect, "Warn",    ID_FRAMEWIN_0, 40,  82,  160, 130, 0, 0x64, 0 },
+  { BUTTON_CreateIndirect,   Confirm,   ID_BUTTON_0,   7,   68, 55,  25,  0, 0x0,  0 },
+  { BUTTON_CreateIndirect,   Cancel,    ID_BUTTON_1,   92,  68, 55,  25,  0, 0x0,  0 },
+  { TEXT_CreateIndirect,     TextWarn,  ID_TEXT_0,     7,   32,  150, 20,  0, 0x0,  0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -88,7 +88,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     //hItem = pMsg->hWin;
     FRAMEWIN_SetTitleHeight(pMsg->hWin, 16);
-    FRAMEWIN_SetText(pMsg->hWin, Warning);
+    FRAMEWIN_SetText(pMsg->hWin, TextWarning);
     FRAMEWIN_SetClientColor(pMsg->hWin,GUI_WHITE);
     
     hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_0);
@@ -167,7 +167,7 @@ WM_HWIN CreateWarn(WM_HWIN paraentWin)
   return hWin;
 }
 
-void WARN(WM_HWIN paraentWin, int warn_num)
+void GUI_WARN(WM_HWIN paraentWin, int warn_num)
 {
     WM_HWIN hItem;
 

@@ -58,7 +58,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "TrmLog",     ID_WINDOW_0,   0,   0,   240, 295, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   AntiLog,  ID_TEXT_0, 8, 9, 80, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, ReadData,    ID_BUTTON_0, 10,   262, 55, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,     ID_BUTTON_1, 175,  262, 55, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, TextBack,     ID_BUTTON_1, 175,  262, 55, 25, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, ReadData, ID_BUTTON_2, 160, 233, 70, 25, 0, 0x0, 0 },
   { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 8, 35, 225, 214, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)

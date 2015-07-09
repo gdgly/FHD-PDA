@@ -56,14 +56,14 @@
 //extern GUI_CONST_STORAGE GUI_BITMAP _bmmonitor;
 //extern GUI_CONST_STORAGE GUI_BITMAP bmmeter;
 //extern GUI_CONST_STORAGE GUI_BITMAP bmwave;
-extern GUI_CONST_STORAGE GUI_BITMAP bmprotocal;
+extern GUI_CONST_STORAGE GUI_BITMAP bmTrmLog;
 extern GUI_CONST_STORAGE GUI_BITMAP bmabout;
-extern GUI_CONST_STORAGE GUI_BITMAP bmhelp;
+extern GUI_CONST_STORAGE GUI_BITMAP bmHelp;
 extern GUI_CONST_STORAGE GUI_BITMAP bmTFcard; 
 extern GUI_CONST_STORAGE GUI_BITMAP bmtime;
-extern GUI_CONST_STORAGE GUI_BITMAP bmRdWt;
-extern GUI_CONST_STORAGE GUI_BITMAP bmSysState; 
-extern GUI_CONST_STORAGE GUI_BITMAP bmCalPara;
+extern GUI_CONST_STORAGE GUI_BITMAP bmTrmConf;
+extern GUI_CONST_STORAGE GUI_BITMAP bmTrmState; 
+extern GUI_CONST_STORAGE GUI_BITMAP bmTrmCal;
 extern GUI_CONST_STORAGE GUI_BITMAP bmSysSet;
 
 //icon信息结构体
@@ -80,21 +80,21 @@ typedef struct {
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {/* x    y  长度 高度 */
   { WINDOW_CreateIndirect,  NULL,           ID_WINDOW_0,   0,   0, 240, 25, 0, 0x0, 0 }, //任务栏
   { TEXT_CreateIndirect,    "00:00:00",     ID_TEXT_0,     3,   4, 66,  15, 0, 0x0, 0 }, //时间
-  { TEXT_CreateIndirect,    "" ,          ID_TEXT_1,     111, 5, 40,  15, 0, 0x0, 0 }, //内存卡
-  { TEXT_CreateIndirect,    "",           ID_TEXT_10,    70,  5, 40,  15, 0, 0x0, 0 }, //声音
+  { TEXT_CreateIndirect,    "" ,            ID_TEXT_1,     111, 5, 40,  15, 0, 0x0, 0 }, //内存卡
+  { TEXT_CreateIndirect,    "",             ID_TEXT_10,    70,  5, 40,  15, 0, 0x0, 0 }, //声音
   { TEXT_CreateIndirect,    DownloadIcon,   ID_TEXT_5,     156, 4, 17,  17, 0, 0x0, 0 }, //下行 
   { TEXT_CreateIndirect,    UploadIcon,     ID_TEXT_6,     166, 4, 17,  17, 0, 0x0, 0 }, //上行
-  { TEXT_CreateIndirect,    "",           ID_TEXT_7,     196, 4, 42,  25, 0, 0x0, 0 }, //电池
+  { TEXT_CreateIndirect,    "",             ID_TEXT_7,     196, 4, 42,  25, 0, 0x0, 0 }, //电池
 };
 
 static const BITMAP_ITEM _aBitmapItem[] = 
 {
-  { &bmSysState,  SysState },  
-  { &bmRdWt,      TrmRdWt },  
-  { &bmCalPara,   TrmChk }, 
-  { &bmprotocal,  SysLog }, 
-  { &bmSysSet,    SysSet },
-  { &bmhelp,      TextHelp },
+  { &bmTrmState,  TextTrmState },  
+  { &bmTrmConf,   TextTrmConf },  
+  { &bmTrmCal,    TextTrmCal }, 
+  { &bmTrmLog,    TextTrmLog }, 
+  { &bmSysSet,    TextSysSet },
+  { &bmHelp,      TextHelp },
 };
 
 

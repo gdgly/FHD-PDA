@@ -168,9 +168,9 @@
         <debug>1</debug>
         <option>
           <name>CCDefines</name>
-          <state>OS_SUPPORT</state>
           <state>USE_HAL_DRIVER</state>
           <state>STM32F207xx</state>
+          <state>OS_SUPPORT</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -304,7 +304,7 @@
           <state>$PROJ_DIR$\..\BSP\CMSIS</state>
           <state>$PROJ_DIR$\..\BSP\CMSIS\Device_Support</state>
           <state>$PROJ_DIR$\..\BSP\OS\uCOS-II</state>
-          <state>$PROJ_DIR$\..\BSP\STM32F2xx\inc</state>
+          <state>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Inc</state>
           <state>$PROJ_DIR$\..\uC-CPU</state>
           <state>$PROJ_DIR$\..\uC-CPU\ARM-Cortex-M3\IAR</state>
           <state>$PROJ_DIR$\..\uC-LIB</state>
@@ -313,8 +313,6 @@
           <state>$PROJ_DIR$\..\uCOS-II\Ports\ARM-Cortex-M3\Generic\IAR</state>
           <state>$PROJ_DIR$\..\STemWin\inc</state>
           <state>$PROJ_DIR$\..\STemWin\Config</state>
-          <state>$PROJ_DIR$\..\drv\Inc</state>
-          <state>$PROJ_DIR$\..\drv</state>
           <state>$PROJ_DIR$\..\FatFs</state>
           <state>$PROJ_DIR$\..\GUI</state>
         </option>
@@ -1939,7 +1937,145 @@
       </file>
     </group>
     <group>
-      <name>STM32F2xx</name>
+      <name>STM32F2xx_HAL_Driver</name>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_adc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_adc_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_can.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_cortex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_crc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_cryp.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_dac.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_dac_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_dcmi.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_dma.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_dma_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_eth.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_flash.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_flash_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_gpio.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_hash.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_hcd.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_i2c.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_i2s.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_irda.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_iwdg.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_msp_template.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_nand.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_nor.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_pccard.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_pcd.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_pwr.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_pwr_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_rcc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_rcc_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_rng.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_rtc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_rtc_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_sd.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_smartcard.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_spi.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_sram.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_tim.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_tim_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_uart.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_usart.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_hal_wwdg.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_ll_fsmc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_ll_sdmmc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\BSP\STM32F2xx_HAL_Driver\Src\stm32f2xx_ll_usb.c</name>
+      </file>
     </group>
     <file>
       <name>$PROJ_DIR$\..\BSP\bsp.c</name>
@@ -1950,164 +2086,20 @@
     <file>
       <name>$PROJ_DIR$\..\BSP\IAR\cstartup.c</name>
     </file>
-  </group>
-  <group>
-    <name>DRV</name>
-    <group>
-      <name>SRC</name>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_adc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_adc_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_can.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_cortex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_crc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_cryp.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_dac.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_dac_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_dcmi.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_dma.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_dma_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_eth.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_flash.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_flash_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_gpio.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_hash.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_hcd.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_i2c.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_i2s.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_irda.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_iwdg.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_msp_template.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_nand.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_nor.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_pccard.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_pcd.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_pwr.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_pwr_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_rcc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_rcc_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_rng.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_rtc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_rtc_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_sd.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_smartcard.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_spi.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_sram.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_tim.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_tim_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_uart.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_usart.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_hal_wwdg.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_ll_fsmc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_ll_sdmmc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\drv\Src\stm32f2xx_ll_usb.c</name>
-      </file>
-    </group>
     <file>
-      <name>$PROJ_DIR$\..\drv\Key_Drv.c</name>
+      <name>$PROJ_DIR$\..\BSP\keyboard.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\drv\rtc.c</name>
+      <name>$PROJ_DIR$\..\BSP\rtc.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\drv\sd.c</name>
+      <name>$PROJ_DIR$\..\BSP\sd.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\drv\SI4438.c</name>
+      <name>$PROJ_DIR$\..\BSP\SI4438.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\drv\SI4438_Sub.c</name>
+      <name>$PROJ_DIR$\..\BSP\SI4438_Sub.c</name>
     </file>
   </group>
   <group>
@@ -2130,14 +2122,14 @@
   </group>
   <group>
     <name>GUI</name>
-    <group>
-      <name>FONT</name>
-      <file>
-        <name>$PROJ_DIR$\..\GUI\FONT\new_song_16.c</name>
-      </file>
-    </group>
     <file>
-      <name>$PROJ_DIR$\..\GUI\EditWidget.c</name>
+      <name>$PROJ_DIR$\..\GUI\Bitmap.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\GUI\EditWidgetDLG.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\GUI\Font.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\GUI_Public_Fnct.c</name>
@@ -2146,22 +2138,19 @@
       <name>$PROJ_DIR$\..\GUI\HelpDLG.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\GUI\PDA_Bitmap.c</name>
+      <name>$PROJ_DIR$\..\GUI\MainMenuDLG.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\GUI\PDA_IconMenuDLG.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\GUI\Phrase.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\GUI\SysInfo.c</name>
+      <name>$PROJ_DIR$\..\GUI\SysInfoDLG.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\SysSetDLG.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\GUI\TimeSet.c</name>
+      <name>$PROJ_DIR$\..\GUI\TextEncode.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\GUI\TimeSetDLG.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\GUI\TrmCalDLG.c</name>

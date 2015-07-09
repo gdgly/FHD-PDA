@@ -2,6 +2,23 @@
 #define __GUI_PUBLIC_FNCT__
 
 
+extern WM_HWIN g_hWin_Menu;
+extern WM_HWIN g_hWin_Task;
+extern WM_HWIN g_hWin_TimeSet;
+extern WM_HWIN g_hWin_Warn;
+extern WM_HWIN g_hWin_Help;
+extern WM_HWIN g_hWin_TimeBar;
+extern WM_HWIN g_hWin_Date;
+extern WM_HWIN g_hWin_Edit;
+extern WM_HWIN g_hWin_SysSet;
+extern WM_HWIN g_hWin_SysInfo;
+
+extern WM_HWIN g_hWin_TrmCal;
+extern WM_HWIN g_hWin_TrmConf;
+extern WM_HWIN g_hWin_TrmLog;
+extern WM_HWIN g_hWin_TrmState;
+
+
 #define GUI_645_ADDR_LENGTH 12
 
 /*dropdown中下拉列表中的量，备用*/

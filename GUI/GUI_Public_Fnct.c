@@ -3,6 +3,23 @@
 #include "DIALOG.h"
 
 
+WM_HWIN g_hWin_Menu;
+WM_HWIN g_hWin_Task;
+WM_HWIN g_hWin_TimeSet;
+WM_HWIN g_hWin_Help;
+WM_HWIN g_hWin_Warn;
+WM_HWIN g_hWin_TimeBar;
+WM_HWIN g_hWin_Date;
+WM_HWIN g_hWin_Edit;
+WM_HWIN g_hWin_SysSet;
+WM_HWIN g_hWin_SysInfo;
+
+WM_HWIN g_hWin_TrmCal;
+WM_HWIN g_hWin_TrmConf;
+WM_HWIN g_hWin_TrmState;
+WM_HWIN g_hWin_TrmLog;
+
+
 u8 g_gui_time[MAX_RTC_ITEM];
 u8 s_prbf[512];
 
@@ -279,11 +296,11 @@ void GUI_Recv_Msg_Proc(void)
         }
         else if(RECV_RES_INVALID == g_fhdp_para.recv_result)
         {
-            WARN(g_hWin_TrmCal, ERR_RECEIVE_DATA);
+            GUI_WARN(g_hWin_TrmCal, WARN_RECEIVE_DATA);
         }
         else 
         {
-            WARN(g_hWin_TrmCal, ERR_COMMUNICATE);
+            GUI_WARN(g_hWin_TrmCal, WARN_COMMUNICATE);
         }
         break;
 
@@ -299,14 +316,14 @@ void GUI_Recv_Msg_Proc(void)
         {
             if(GUI_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
             {
-                WARN(g_hWin_TrmConf, ERR_RECEIVE_DATA);
+                GUI_WARN(g_hWin_TrmConf, WARN_RECEIVE_DATA);
             }
         }
         else 
         {   
             if(GUI_CMD_WRITE_TRM_CONF == g_gui_para.cmd)
             {
-                WARN(g_hWin_TrmConf, ERR_COMMUNICATE);
+                GUI_WARN(g_hWin_TrmConf, WARN_COMMUNICATE);
             }
         }
         break;
@@ -323,14 +340,14 @@ void GUI_Recv_Msg_Proc(void)
         {
             if(GUI_CMD_READ_TRM_STATE == g_gui_para.cmd)
             {
-                WARN(g_hWin_TrmState, ERR_RECEIVE_DATA);
+                GUI_WARN(g_hWin_TrmState, WARN_RECEIVE_DATA);
             }
         }
         else 
         {
             if(GUI_CMD_READ_TRM_STATE == g_gui_para.cmd)
             {
-                WARN(g_hWin_TrmState, ERR_COMMUNICATE);
+                GUI_WARN(g_hWin_TrmState, WARN_COMMUNICATE);
             }
         }
         break;
@@ -345,11 +362,11 @@ void GUI_Recv_Msg_Proc(void)
         }
         else if(RECV_RES_INVALID == g_fhdp_para.recv_result)
         {
-            WARN(g_hWin_TrmLog, ERR_RECEIVE_DATA);
+            GUI_WARN(g_hWin_TrmLog, WARN_RECEIVE_DATA);
         }
         else
         {
-            WARN(g_hWin_TrmLog, ERR_COMMUNICATE);
+            GUI_WARN(g_hWin_TrmLog, WARN_COMMUNICATE);
         }
         break;
 
@@ -444,7 +461,7 @@ void GUI_Msg_Proc()
     if((g_proto_para.result == PLC_RES_FAIL) || (g_proto_para.result == PLC_RES_TIMEOUT))
     {
         g_proto_para.result = PLC_RES_NONE;
-        //WARN(g_hWin_Menu, 10);
+        //GUI_WARN(g_hWin_Menu, 10);
         hItem = GUI_Get_PROGBAR();
         PROGBAR_SetBarColor(hItem, 0, GUI_RED);
         return;

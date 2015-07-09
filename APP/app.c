@@ -167,23 +167,6 @@ int  main(void)
 *********************************************************************************************************
 */
 
-WM_HWIN g_hWin_Menu;
-WM_HWIN g_hWin_Task;
-WM_HWIN g_hWin_TimeSet;
-WM_HWIN g_hWin_Help;
-WM_HWIN g_hWin_Warn;
-WM_HWIN g_hWin_TimeBar;
-WM_HWIN g_hWin_Date;
-WM_HWIN g_hWin_Edit;
-WM_HWIN g_hWin_SysSet;
-WM_HWIN g_hWin_SysInfo;
-
-WM_HWIN g_hWin_TrmCal;
-WM_HWIN g_hWin_TrmConf;
-WM_HWIN g_hWin_TrmState;
-WM_HWIN g_hWin_TrmLog;
-
-
 u8 rf_int_status[8];
 u8 rf_part_info[8];
 u8 rf_device_state[2];
@@ -238,24 +221,24 @@ void APP_Wakeup()
 #if (EWARM_OPTIMIZATION_EN > 0u)
 #pragma optimize = low
 #endif
-void APP_StartButtonTest()
+void APP_BootProc(void)
 {
-    u32 keyCnt = 0;
+    INT32U key_press_count = 0;
 
     
     while(1)
     {
-        OSTimeDly(20);
+        OSTimeDlyHMSM(0, 0, 0, 20);
         
-        if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
+        if(GPIO_PIN_RESET == GET_KEY_PWR_STATE())
         {
-            keyCnt++;
+            key_press_count++;
             
-            if(keyCnt > 80)
+            if(key_press_count > 80)
             {
                 SYS_PWR_ON();
                 
-                OSTimeDly(20);
+                OSTimeDlyHMSM(0, 0, 0, 20);
                 
                 return;                
             }
@@ -264,15 +247,15 @@ void APP_StartButtonTest()
         {
             APP_Shutdown();
             
-            keyCnt = 0;
+            key_press_count = 0;
 
-            if(0 == GET_USB_STATE())
+            if(GPIO_PIN_RESET == GET_USB_STATE())
             {
                 return;
             }
             else
             {
-                DEBUG_PRINT(("Power error!\n")); //错误处理
+                DEBUG_PRINT(("Boot error!\n"));
                 
                 while(1)
                 {
@@ -317,7 +300,7 @@ static  void  App_TaskStart (void *p_arg)
     OSStatInit();                                               /* Determine CPU capacity                                   */
 #endif
 
-    APP_StartButtonTest();
+    APP_BootProc();
 
     BSP_IWDG_Init();
 
@@ -402,7 +385,7 @@ static  void  App_TaskGUI (void *p_arg)
         {
             val += BSP_ADC_ReadPwr();
             //检测到USB并且电没有充满的时候，充电标志闪烁,
-            if((GPIO_PIN_RESET == GET_USB_STATE())&&(GPIO_PIN_SET == USB_CHARGE_CHK()))
+            if((GPIO_PIN_RESET == GET_USB_STATE())&&(GPIO_PIN_SET == USB_CRG_CHK()))
             {
                 TSK_Battery_Charge(n);
             }
@@ -411,7 +394,7 @@ static  void  App_TaskGUI (void *p_arg)
         else if(n >= 10)
         {
             g_sys_ctrl.pwr_val = val/10;
-            if((GPIO_PIN_SET == GET_USB_STATE())||(GPIO_PIN_RESET == USB_CHARGE_CHK()))
+            if((GPIO_PIN_SET == GET_USB_STATE())||(GPIO_PIN_RESET == USB_CRG_CHK()))
             {
                 Battery_State(g_sys_ctrl.pwr_val);
             }
@@ -425,7 +408,7 @@ static  void  App_TaskGUI (void *p_arg)
            
             if((((float)g_sys_ctrl.pwr_val * 3.3) / 2048 * 10) <= 30)
             {
-                //WARN(g_hWin_Menu,11);
+                //GUI_WARN(g_hWin_Menu,11);
                 //APP_Shutdown();
             }
         }
@@ -488,19 +471,19 @@ static  void  App_TaskPower (void *p_arg)
 {
     (void)p_arg;
 
-    while(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
+    while(GPIO_PIN_RESET == GET_KEY_PWR_STATE())
     {
         OSTimeDlyHMSM(0, 0, 0, 10);
     }
         
     while (DEF_TRUE) {
-        if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
+        if(GPIO_PIN_RESET == GET_KEY_PWR_STATE())
         {
             OSTimeDlyHMSM(0, 0, 0, 30);
 
-            if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
+            if(GPIO_PIN_RESET == GET_KEY_PWR_STATE())
             {
-                while(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
+                while(GPIO_PIN_RESET == GET_KEY_PWR_STATE())
                 {
                     OSTimeDlyHMSM(0, 0, 0, 10);
                 }
@@ -828,11 +811,11 @@ static  void  App_TaskCheck (void *p_arg)
     {
         OSTimeDlyHMSM(0, 0, 0, 10);
         
-        if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
+        if(GPIO_PIN_RESET == GET_KEY_PWR_STATE())
         {
             OSTimeDlyHMSM(0, 0, 0, 30);
 
-            if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_11))
+            if(GPIO_PIN_RESET == GET_KEY_PWR_STATE())
             {
                 break;
             }

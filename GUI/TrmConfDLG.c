@@ -74,7 +74,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, ProtectTime,    ID_TEXT_1,   5,   40,  128, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, DevAddr,          ID_TEXT_2, 5, 71, 120, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, SetPara,         ID_BUTTON_0, 10,   262, 55, 25, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, Quit,         ID_BUTTON_1, 175,  262, 55, 25, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, TextBack,         ID_BUTTON_1, 175,  262, 55, 25, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "F1",     ID_BUTTON_2, 155, 100, 80, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, SysReset,        ID_TEXT_3,   5, 101,  110, 20, 0, 0x0, 0 },
   //{ BUTTON_CreateIndirect, "F1",         ID_BUTTON_3, 155,   101, 80, 20, 0, 0x0, 0 },
@@ -320,7 +320,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
 
             case GUI_KEY_F1:
-                WARN(g_hWin_TrmConf, WARN_CONFIRM_RESET);
+                GUI_WARN(g_hWin_TrmConf, WARN_CONFIRM_RESET);
                 break;
                 
             case '*':
@@ -332,17 +332,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 {
                     case ID_EDIT_0:
                         g_sys_ctrl.selectWidget = LST_ANIP_SWITCH;
-                        g_hWin_Edit = Create_ListBox_Set(g_hWin_TrmConf);
+                        g_hWin_Edit = Create_Edit_Sel(g_hWin_TrmConf);
                         break;
                     case ID_EDIT_1:
                         //g_sys_ctrl.selectWidget = EDT_ANIP_TIME;
-                        g_hWin_Edit = Create_EditPrt(g_hWin_TrmConf);
+                        g_hWin_Edit = Create_Edit_Chg(g_hWin_TrmConf);
                         hItem = WM_GetDialogItem(g_hWin_Edit, ID_EDIT_0);
                         WM_SetFocus(hItem);
                         break;
                     case ID_EDIT_2:
                         g_sys_ctrl.selectWidget = EDT_DEV_ADDR;
-                        g_hWin_Edit = Create_Edit_Set(g_hWin_TrmConf);
+                        g_hWin_Edit = Create_Edit_Inpt(g_hWin_TrmConf);
                         break;
                 }
                 break;

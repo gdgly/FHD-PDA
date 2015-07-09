@@ -1,5 +1,5 @@
-#ifndef __KEY_DRV_H__
-#define __KEY_DRV_H__
+#ifndef __KEYBOARD_H__
+#define __KEYBOARD_H__
 
 
 #define KEYBOARD_ROW_PORT           GPIOC
@@ -26,10 +26,10 @@
 #define KEYBOARD_COL_NUM            4
 #define KEYBOARD_ROW_NUM            6
 
-#define KEYBOARD_COL0_CODE          0
-#define KEYBOARD_COL1_CODE         (KEYBOARD_ROW_NUM * 1)//6
-#define KEYBOARD_COL2_CODE         (KEYBOARD_ROW_NUM * 2)//12
-#define KEYBOARD_COL3_CODE         (KEYBOARD_ROW_NUM * 3)//18
+#define KEYBOARD_COL0_CODE         (KEYBOARD_ROW_NUM * 0)
+#define KEYBOARD_COL1_CODE         (KEYBOARD_ROW_NUM * 1)
+#define KEYBOARD_COL2_CODE         (KEYBOARD_ROW_NUM * 2)
+#define KEYBOARD_COL3_CODE         (KEYBOARD_ROW_NUM * 3)
 
 #define LED_KEY_ON()                LED_On(LED_RED)
 #define LED_KEY_OFF()               LED_Off(LED_RED)
